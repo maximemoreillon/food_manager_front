@@ -26,11 +26,6 @@ const routes = [
     component: () => import('../views/Food.vue')
   },
   {
-    path: '/menu_builder',
-    name: 'menu_builder',
-    component: () => import('../views/MenuBuilder.vue')
-  },
-  {
     path: '/meal_plans',
     name: 'meal_plans',
     component: () => import('../views/MealPlans.vue')

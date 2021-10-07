@@ -2,7 +2,7 @@
   <v-card>
 
     <v-toolbar flat>
-      <v-toolbar-title>Meal plan builder</v-toolbar-title>
+      <v-toolbar-title>Meal plan {{meal_plan_id}}</v-toolbar-title>
       <v-spacer/>
       <v-btn
         icon
@@ -12,7 +12,7 @@
       <v-btn
         icon
         color="#c00000"
-        v-if="meal_plan_id !== 'new'"
+        v-if="meal_plan_id"
         @click="delete_meal_plan()">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
@@ -107,7 +107,12 @@ export default {
   }),
   mounted(){
     this.get_foods()
-    if(this.meal_plan_id !== 'new') this.get_meal_plan()
+    if(this.meal_plan_id) this.get_meal_plan()
+  },
+  watch: {
+    meal_plan_id(){
+      if(this.meal_plan_id) this.get_meal_plan()
+    }
   },
   methods: {
     get_meal_plan(){
@@ -137,10 +142,11 @@ export default {
       }
       this.axios.post(url,body)
       .then(({data}) => {
-        console.log(data)
+        this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}})
       })
       .catch(error => {
         console.error(error)
+        alert('Failed')
       })
     },
     update_meal_plan(){
@@ -152,6 +158,7 @@ export default {
       })
       .catch(error => {
         console.error(error)
+        alert('Failed')
       })
     },
     delete_meal_plan(){
@@ -166,8 +173,8 @@ export default {
       })
     },
     save_meal_plan(){
-      if(this.meal_plan_id === 'new') this.create_meal_plan()
-      else this.update_meal_plan()
+      if(this.meal_plan_id) this.update_meal_plan()
+      else this.create_meal_plan()
     },
     select_food(food){
       this.meal_plan.foods.push(food._id)
@@ -180,7 +187,6 @@ export default {
   computed: {
     meal_plan_id(){
       return this.$route.params.meal_plan_id
-
     },
     food_list_headers(){
       return [

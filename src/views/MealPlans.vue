@@ -24,7 +24,7 @@
           <v-spacer/>
 
 
-          <v-btn :to="{name: 'menu_builder'}">New meal plan</v-btn>
+          <v-btn :to="{name: 'new_meal_plan'}">New meal plan</v-btn>
 
         </v-toolbar>
       </template>

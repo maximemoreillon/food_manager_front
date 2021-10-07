@@ -1,7 +1,6 @@
 <template>
   <AppTemplate
-    :options="options"
-    @user="get_user($event)">
+    :options="options">
 
     <template v-slot:nav>
       <v-list
@@ -47,7 +46,6 @@ export default {
     nav: [
       {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
       {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'mdi-format-list-bulleted'},
-      {title: 'Meal plan builder', to: {name: 'menu_builder'}, icon: 'mdi-playlist-plus'},
     ]
   }),
 
