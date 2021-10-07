@@ -37,10 +37,12 @@ export default {
 
   data: () => ({
     options: {
-      title: "Vuetify example",
+      title: "Food manager",
       authenticate: true,
       login_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`,
       identification_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/v2/whoami`,
+      main_class: 'grey lighten-3',
+      footer_color: 'grey lighten-3',
     },
     nav: [
       {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-home'},
