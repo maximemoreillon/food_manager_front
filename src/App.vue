@@ -46,8 +46,8 @@ export default {
     },
     nav: [
       {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
-      {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'format-list-bulleted'},
-      {title: 'Meal plan builder', to: {name: 'menu_builder'}, icon: 'playlist-plus'},
+      {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'mdi-format-list-bulleted'},
+      {title: 'Meal plan builder', to: {name: 'menu_builder'}, icon: 'mdi-playlist-plus'},
     ]
   }),
 
