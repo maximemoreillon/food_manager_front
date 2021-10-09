@@ -45,6 +45,23 @@
         </v-row>
         <v-row>
           <v-col>
+            <v-text-field
+              label="Protein [g]"
+              v-model="food.protein" />
+          </v-col>
+          <v-col>
+            <v-text-field
+              label="Fat [g]"
+              v-model="food.fat" />
+          </v-col>
+          <v-col>
+            <v-text-field
+              label="Carbs [g]"
+              v-model="food.carbohydrates" />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
             <v-combobox
               label="Vendor"
               :items="vendors"
