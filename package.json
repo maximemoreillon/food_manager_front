@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@moreillon/vue_application_template_vuetify": "^1.1.0",
+    "apexcharts": "^3.28.3",
     "axios": "^0.22.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
+    "vue-apexcharts": "^1.6.2",
     "vue-axios": "^3.3.7",
     "vue-router": "^3.2.0",
     "vuetify": "^2.4.0",

@@ -42,23 +42,15 @@
 </template>
 
 <script>
+import headers from '../table_headers.js'
+
 export default {
   name: 'Foods',
 
   data: () => ({
     search: '',
     foods: [],
-    headers: [
-      {text: 'Name', value: 'name'},
-      {text: 'Calories [kcal]', value: 'calories_per_serving'},
-      {text: 'Protein [g]', value: 'protein'},
-      {text: 'Fat [g]', value: 'fat'},
-      {text: 'Carbs [g]', value: 'carbohydrates'},
-      {text: 'Price [JPY]', value: 'price_per_serving'},
-      {text: 'Vendor', value: 'vendor'},
-      {text: 'Keto friendly', value: 'keto_friendly'},
-
-    ]
+    headers,
   }),
   mounted(){
     this.get_foodd()
@@ -67,9 +59,7 @@ export default {
     get_foodd(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
       this.axios.get(url)
-      .then(({data}) => {
-        this.foods = data
-      })
+      .then(({data}) => { this.foods = data })
       .catch(error => {
         console.error(error)
       })

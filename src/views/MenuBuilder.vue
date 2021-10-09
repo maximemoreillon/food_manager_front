@@ -32,6 +32,29 @@
     <v-card-text>
       <v-row>
         <v-col>
+          <v-card outlined>
+            <v-card-title>Protein</v-card-title>
+            <v-card-text>{{total_protein}}g</v-card-text>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card outlined>
+            <v-card-title>Fat</v-card-title>
+            <v-card-text>{{total_fat}}g</v-card-text>
+          </v-card>
+        </v-col>
+        <v-col>
+          <v-card outlined>
+            <v-card-title>Carbohydrates</v-card-title>
+            <v-card-text>{{total_carbohydrates}}g</v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-card-text>
+
+    <v-card-text>
+      <v-row>
+        <v-col>
           <v-data-table
             height="500"
             class="elevation-1"
@@ -100,8 +123,11 @@ export default {
     },
     base_headers: [
       {text: 'Name', value: 'name'},
-      {text: 'Calories per serving', value: 'calories_per_serving'},
-      {text: 'Keto friendly', value: 'keto_friendly'},
+      {text: 'Calories [kcal]', value: 'calories_per_serving'},
+      //{text: 'Keto friendly', value: 'keto_friendly'},
+      {text: 'Fat [g]', value: 'fat'},
+      {text: 'Carbs [g]', value: 'carbohydrates'},
+      {text: 'Price [JPY]', value: 'price_per_serving'},
 
     ]
   }),
@@ -201,11 +227,24 @@ export default {
       ]
     },
     total_calories(){
-      return this.mapped_selected_foods.reduce((acc,food) => acc + food.calories_per_serving, 0)
+      if(!this.mapped_selected_foods.length) return 0
+      return this.mapped_selected_foods.reduce((acc,{calories_per_serving}) => acc + calories_per_serving, 0)
     },
     mapped_selected_foods(){
       return this.meal_plan.foods.map(f => this.foods.find(({_id}) => _id === f))
-    }
+    },
+    total_protein(){
+      const total = this.mapped_selected_foods.reduce((acc, {protein}) => acc + protein, 0)
+      return Math.round(total)
+    },
+    total_fat(){
+      const total = this.mapped_selected_foods.reduce((acc, {fat}) => acc + fat, 0)
+      return Math.round(total)
+    },
+    total_carbohydrates(){
+      const total = this.mapped_selected_foods.reduce((acc, {carbohydrates}) => acc + carbohydrates, 0)
+      return Math.round(total)
+    },
   }
 }
 </script>
