@@ -46,6 +46,7 @@ export default {
     nav: [
       {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
       {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'mdi-format-list-bulleted'},
+      {title: 'About', to: {name: 'about'}, icon: 'mdi-information-outline'},
     ]
   }),
 
