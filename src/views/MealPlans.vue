@@ -49,6 +49,7 @@ export default {
     search: '',
     meal_plans: [],
     headers: [
+      {text: 'Name', value: 'name'},
       {text: 'Date', value: 'date'},
 
     ]

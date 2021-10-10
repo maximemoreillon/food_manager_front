@@ -2,7 +2,7 @@
   <v-card>
 
     <v-toolbar flat>
-      <v-toolbar-title>Meal plan {{meal_plan_id}}</v-toolbar-title>
+      <v-toolbar-title>Meal plan</v-toolbar-title>
       <v-spacer/>
       <v-btn
         icon
@@ -20,7 +20,20 @@
     <v-divider/>
 
     <v-card-text>
+      <v-row align="center">
+        <v-col>
+          Date: {{meal_plan.date}}
+        </v-col>
+        <v-col>
+          <v-text-field
+            label="Name"
+            v-model="meal_plan.name"/>
+        </v-col>
+      </v-row>
+    </v-card-text>
 
+
+    <v-card-text>
       <v-progress-linear
         :value="100 * total_calories / calories_target"
         height="50">
@@ -45,7 +58,7 @@
         </v-col>
         <v-col>
           <v-card outlined>
-            <v-card-title>Carbohydrates</v-card-title>
+            <v-card-title>Carbs</v-card-title>
             <v-card-text>{{total_carbohydrates}}g</v-card-text>
           </v-card>
         </v-col>
@@ -125,9 +138,10 @@ export default {
       {text: 'Name', value: 'name'},
       {text: 'Calories [kcal]', value: 'calories_per_serving'},
       //{text: 'Keto friendly', value: 'keto_friendly'},
+      {text: 'Protein [g]', value: 'protein'},
       {text: 'Fat [g]', value: 'fat'},
       {text: 'Carbs [g]', value: 'carbohydrates'},
-      {text: 'Price [JPY]', value: 'price_per_serving'},
+      //{text: 'Price [JPY]', value: 'price_per_serving'},
 
     ]
   }),
@@ -167,9 +181,7 @@ export default {
         foods: this.meal_plan.foods,
       }
       this.axios.post(url,body)
-      .then(({data}) => {
-        this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}})
-      })
+      .then(({data}) => { this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}}) })
       .catch(error => {
         console.error(error)
         alert('Failed')
@@ -191,9 +203,7 @@ export default {
       if(!confirm('Really?')) return
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
       this.axios.delete(url)
-      .then(() => {
-        this.$router.push({name: 'meal_plans'})
-      })
+      .then(() => { this.$router.push({name: 'meal_plans'}) })
       .catch(error => {
         console.error(error)
       })
@@ -226,12 +236,16 @@ export default {
         {text: 'Remove', value: 'remove'},
       ]
     },
-    total_calories(){
-      if(!this.mapped_selected_foods.length) return 0
-      return this.mapped_selected_foods.reduce((acc,{calories_per_serving}) => acc + calories_per_serving, 0)
-    },
+
     mapped_selected_foods(){
       return this.meal_plan.foods.map(f => this.foods.find(({_id}) => _id === f))
+    },
+    total_calories(){
+      if(!this.mapped_selected_foods.length) return 0
+      return this.mapped_selected_foods.reduce((acc,item) => {
+        if(!item) return acc
+        return acc + item.calories_per_serving
+      }, 0)
     },
     total_protein(){
       const total = this.mapped_selected_foods.reduce((acc, {protein}) => acc + protein, 0)
