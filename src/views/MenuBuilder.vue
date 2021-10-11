@@ -74,7 +74,8 @@
             :search="search"
             :headers="food_list_headers"
             :items="foods"
-            :items-per-page="-1">
+            :items-per-page="-1"
+            sort-by="name">
 
             <template v-slot:top>
               <v-toolbar flat>
@@ -117,6 +118,23 @@
       </v-row>
     </v-card-text>
 
+    <v-snackbar
+      :color="snackbar.color"
+      v-model="snackbar.show">
+      {{ snackbar.text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+
+          text
+          dark
+          v-bind="attrs"
+          @click="snackbar.show = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
 
 
 
@@ -132,7 +150,13 @@ export default {
     search: '',
     foods: [],
     meal_plan: {
+      name: '',
       foods: []
+    },
+    snackbar: {
+      show: false,
+      text: null,
+      color: 'green',
     },
     base_headers: [
       {text: 'Name', value: 'name'},
@@ -148,6 +172,10 @@ export default {
   mounted(){
     this.get_foods()
     if(this.meal_plan_id) this.get_meal_plan()
+    document.addEventListener("keydown", this.handle_keydown)
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.handle_keydown)
   },
   watch: {
     meal_plan_id(){
@@ -155,6 +183,16 @@ export default {
     }
   },
   methods: {
+    handle_keydown(e){
+      // Keyboard events
+
+      // CTRL S
+      if (e.key === 's' && e.ctrlKey) {
+        e.preventDefault()
+        this.save_meal_plan()
+      }
+
+    },
     get_meal_plan(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
       this.axios.get(url)
@@ -177,11 +215,13 @@ export default {
     },
     create_meal_plan(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
-      const body = {
-        foods: this.meal_plan.foods,
-      }
+      const body = this.meal_plan
       this.axios.post(url,body)
-      .then(({data}) => { this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}}) })
+      .then(({data}) => {
+        this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}})
+        this.snackbar.text = 'Meal plan saved'
+        this.snackbar.show = true
+      })
       .catch(error => {
         console.error(error)
         alert('Failed')
@@ -192,7 +232,8 @@ export default {
       const body = this.meal_plan
       this.axios.patch(url,body)
       .then(() => {
-        alert('OK')
+        this.snackbar.text = 'Meal plan saved'
+        this.snackbar.show = true
       })
       .catch(error => {
         console.error(error)
