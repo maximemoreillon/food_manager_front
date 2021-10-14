@@ -28,6 +28,14 @@
         </v-btn>
       </v-toolbar>
       <v-divider/>
+
+      <v-img
+        v-if="food.image"
+        class="mt-3"
+        max-height="300"
+        :src="image_src"
+        contain />
+
       <v-card-text>
         <v-row>
           <v-col>
@@ -42,8 +50,6 @@
               label="Calories per serving"
               v-model="food.calories_per_serving" />
           </v-col>
-        </v-row>
-        <v-row>
           <v-col>
             <v-text-field
               label="Protein [g]"
@@ -67,11 +73,9 @@
               :items="vendors"
               v-model="food.vendor"/>
           </v-col>
-        </v-row>
-        <v-row>
           <v-col>
             <v-text-field
-              label="Price per serving"
+              label="Price"
               v-model="food.price_per_serving"/>
           </v-col>
         </v-row>
@@ -80,6 +84,17 @@
             <v-checkbox
               label="Keto friendly"
               v-model="food.keto_friendly"/>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <v-file-input v-model="image" label="image"/>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn @click="upload_image()">Upload</v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn @click="delete_food_image()">Delete</v-btn>
           </v-col>
         </v-row>
       </v-card-text>
@@ -103,7 +118,8 @@ export default {
       'スギ薬局',
       'Lawson 100',
       'Family Mart',
-    ]
+    ],
+    image: null,
   }),
   mounted(){
     this.get_food()
@@ -140,9 +156,7 @@ export default {
     update_food(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
       this.axios.patch(url, this.food)
-      .then(() => {
-        this.get_food()
-      })
+      .then(() => { this.get_food() })
       .catch(error => {
         console.error(error)
       })
@@ -154,12 +168,28 @@ export default {
       .catch(error => {
         console.error(error)
       })
-    }
+    },
+    upload_image(){
+      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}/image`
+      const formData = new FormData()
+      formData.append('image', this.image)
+      this.axios.post(url,formData)
+      .then(() => { this.get_food() })
+      .catch(error => {
+        console.error(error)
+      })
+    },
+    delete_food_image(){
+      this.food.image = null
+    },
 
   },
   computed: {
     food_id(){
       return this.$route.params.food_id
+    },
+    image_src(){
+      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}/image`
     }
   }
 }

@@ -23,14 +23,25 @@
 
           <v-spacer/>
 
-
-          <v-btn :to="{name: 'create_food'}">New food</v-btn>
+          <v-btn
+            :to="{name: 'create_food'}">
+            New food
+          </v-btn>
 
         </v-toolbar>
       </template>
 
       <template v-slot:item.keto_friendly="{ item }">
         <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
+      </template>
+
+      <template v-slot:item.image="{ item }">
+        <v-img
+          width="5em"
+          height="5em"
+          contain
+          v-if="item.image"
+          :src="image_src(item)" />
       </template>
 
 
@@ -64,6 +75,9 @@ export default {
         console.error(error)
       })
 
+    },
+    image_src(item){
+      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
     },
     row_clicked(food){
       this.$router.push({name: 'food', params: {food_id: food._id}})

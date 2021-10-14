@@ -1,4 +1,5 @@
 export default [
+  {text: 'Image', value: 'image'},
   {text: 'Name', value: 'name'},
   {text: 'Calories [kcal]', value: 'calories_per_serving'},
   {text: 'Protein [g]', value: 'protein'},
