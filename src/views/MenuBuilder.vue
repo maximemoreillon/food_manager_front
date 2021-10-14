@@ -87,6 +87,15 @@
               </v-toolbar>
             </template>
 
+            <template v-slot:item.image="{ item }">
+              <v-img
+                width="3em"
+                height="3em"
+                contain
+                v-if="item.image"
+                :src="image_src(item)" />
+            </template>
+
             <template v-slot:item.add="{ item }">
               <v-btn
                 icon
@@ -103,6 +112,15 @@
             :headers="meal_plan_foods_headers"
             :items="mapped_selected_foods"
             :items-per-page="-1">
+
+            <template v-slot:item.image="{ item }">
+              <v-img
+                width="3em"
+                height="3em"
+                contain
+                v-if="item.image"
+                :src="image_src(item)" />
+            </template>
 
             <template v-slot:item.remove="{ item, index }">
               <v-btn
@@ -159,6 +177,7 @@ export default {
       color: 'green',
     },
     base_headers: [
+      {text: 'Image', value: 'image'},
       {text: 'Name', value: 'name'},
       {text: 'Calories [kcal]', value: 'calories_per_serving'},
       //{text: 'Keto friendly', value: 'keto_friendly'},
@@ -258,6 +277,9 @@ export default {
     },
     unselect_food(index){
       this.meal_plan.foods.splice(index,1)
+    },
+    image_src(item){
+      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
     },
 
   },
