@@ -8,7 +8,8 @@
       :headers="headers"
       :items="foods"
       :items-per-page="-1"
-      @click:row="row_clicked($event)">
+      @click:row="row_clicked($event)"
+      sort-by="name">
 
       <template v-slot:top>
         <v-toolbar
@@ -37,8 +38,8 @@
 
       <template v-slot:item.image="{ item }">
         <v-img
-          width="5em"
-          height="5em"
+          width="6em"
+          height="6em"
           contain
           v-if="item.image"
           :src="image_src(item)" />
@@ -53,7 +54,6 @@
 </template>
 
 <script>
-import headers from '../table_headers.js'
 
 export default {
   name: 'Foods',
@@ -61,7 +61,16 @@ export default {
   data: () => ({
     search: '',
     foods: [],
-    headers,
+    headers: [
+      {text: 'Image', value: 'image'},
+      {text: 'Name', value: 'name'},
+      {text: 'Calories [kcal]', value: 'calories_per_serving'},
+      {text: 'Protein [g]', value: 'protein'},
+      {text: 'Fat [g]', value: 'fat'},
+      {text: 'Carbs [g]', value: 'carbohydrates'},
+      {text: 'Price [JPY]', value: 'price_per_serving'},
+      {text: 'Vendor', value: 'vendor'},
+    ]
   }),
   mounted(){
     this.get_foodd()

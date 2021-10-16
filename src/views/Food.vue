@@ -81,13 +81,13 @@
               v-model="food.price_per_serving"/>
           </v-col>
         </v-row>
-        <v-row>
+        <!-- <v-row>
           <v-col>
             <v-checkbox
               label="Keto friendly"
               v-model="food.keto_friendly"/>
           </v-col>
-        </v-row>
+        </v-row> -->
         <v-row>
           <v-col>
             <v-file-input

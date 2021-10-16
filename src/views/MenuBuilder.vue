@@ -89,8 +89,8 @@
 
             <template v-slot:item.image="{ item }">
               <v-img
-                width="3em"
-                height="3em"
+                :width="thumbnail_size"
+                :height="thumbnail_size"
                 contain
                 v-if="item.image"
                 :src="image_src(item)" />
@@ -115,17 +115,17 @@
 
             <template v-slot:item.image="{ item }">
               <v-img
-                width="3em"
-                height="3em"
+                :width="thumbnail_size"
+                :height="thumbnail_size"
                 contain
                 v-if="item.image"
                 :src="image_src(item)" />
             </template>
 
-            <template v-slot:item.remove="{ item, index }">
+            <template v-slot:item.remove="{ item }">
               <v-btn
                 icon
-                @click="unselect_food(index)">
+                @click="unselect_food(item)">
                 <v-icon>mdi-playlist-minus</v-icon>
               </v-btn>
             </template>
@@ -171,6 +171,7 @@ export default {
       name: '',
       foods: []
     },
+    thumbnail_size: '6em',
     snackbar: {
       show: false,
       text: null,
@@ -275,8 +276,11 @@ export default {
     select_food(food){
       this.meal_plan.foods.push(food._id)
     },
-    unselect_food(index){
-      this.meal_plan.foods.splice(index,1)
+    unselect_food(item){
+      const {_id} = item
+      const found_index = this.meal_plan.foods.findIndex( f => f===_id)
+      if(found_index < 0) return
+      this.meal_plan.foods.splice(found_index,1)
     },
     image_src(item){
       return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
@@ -301,7 +305,8 @@ export default {
     },
 
     mapped_selected_foods(){
-      return this.meal_plan.foods.map(f => this.foods.find(({_id}) => _id === f))
+      return this.meal_plan.foods
+        .map(f => this.foods.find(({_id}) => _id === f))
     },
     total_calories(){
       if(!this.mapped_selected_foods.length) return 0
@@ -311,15 +316,27 @@ export default {
       }, 0)
     },
     total_protein(){
-      const total = this.mapped_selected_foods.reduce((acc, {protein}) => acc + protein, 0)
+      const total = this.mapped_selected_foods
+        .reduce((acc, food) => {
+          if(!food) return acc
+          return acc + food.protein
+        }, 0)
       return Math.round(total)
     },
     total_fat(){
-      const total = this.mapped_selected_foods.reduce((acc, {fat}) => acc + fat, 0)
+      const total = this.mapped_selected_foods
+        .reduce((acc, food) => {
+          if(!food) return acc
+          return acc + food.fat
+        }, 0)
       return Math.round(total)
     },
     total_carbohydrates(){
-      const total = this.mapped_selected_foods.reduce((acc, {carbohydrates}) => acc + carbohydrates, 0)
+      const total = this.mapped_selected_foods
+        .reduce((acc, food) => {
+          if(!food) return acc
+          return acc + food.carbohydrates
+        }, 0)
       return Math.round(total)
     },
   }
