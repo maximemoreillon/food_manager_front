@@ -1,5 +1,7 @@
 <template>
-  <v-card>
+  <v-card
+    max-width="600px"
+    class="mx-auto">
 
     <v-card-text class="text-center" v-if="loading">
       <v-progress-circular indeterminate></v-progress-circular>
@@ -32,7 +34,7 @@
       <v-img
         v-if="food.image"
         class="mt-3"
-        max-height="300"
+        height="300"
         :src="image_src"
         contain />
 
@@ -88,13 +90,25 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-file-input v-model="image" label="image"/>
+            <v-file-input
+              v-model="image"
+              label="image"/>
           </v-col>
           <v-col cols="auto">
-            <v-btn @click="upload_image()">Upload</v-btn>
+            <v-btn
+              :disabled="!image"
+              @click="upload_image()">
+              <v-icon>mdi-upload</v-icon>
+            </v-btn>
           </v-col>
           <v-col cols="auto">
-            <v-btn @click="delete_food_image()">Delete</v-btn>
+            <v-btn
+              color="#c00000"
+              dark
+              :disabled="!food.image"
+              @click="delete_food_image()">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
       </v-card-text>
