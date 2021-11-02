@@ -110,7 +110,7 @@
           <v-data-table
             class="elevation-1"
             :headers="meal_plan_foods_headers"
-            :items="mapped_selected_foods"
+            :items="meal_plan.foods"
             :items-per-page="-1">
 
             <template v-slot:item.image="{ item }">
@@ -175,7 +175,7 @@ export default {
     foods: [],
     meal_plan: {
       name: '',
-      foods: []
+      foods: [],
     },
     thumbnail_size: '6em',
     snackbar: {
@@ -191,15 +191,15 @@ export default {
       {text: 'Protein [g]', value: 'protein'},
       {text: 'Fat [g]', value: 'fat'},
       {text: 'Carbs [g]', value: 'carbohydrates'},
-      {text: 'Quantity', value: 'quantity'},
+
       //{text: 'Price [JPY]', value: 'price_per_serving'},
 
     ]
   }),
-  mounted(){
-    this.get_foods()
-    if(this.meal_plan_id) this.get_meal_plan()
+  async mounted(){
     document.addEventListener("keydown", this.handle_keydown)
+    this.get_foods()
+
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.handle_keydown)
@@ -223,7 +223,17 @@ export default {
     get_meal_plan(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
       this.axios.get(url)
-      .then(({data}) => { this.meal_plan = data })
+      .then(({data}) => {
+
+        this.meal_plan = {
+          ...data,
+          foods: data.foods.map((mpf) => ({
+            ...mpf, // Original properties (_id, quantity)
+            ...this.foods.find( ({_id}) => mpf._id === _id) // Sdding properties of foods from list
+          }))
+        }
+
+      })
       .catch(error => {
         console.error(error)
       })
@@ -231,14 +241,22 @@ export default {
     get_foods(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
       this.axios.get(url)
-      .then(({data}) => { this.foods = data })
+      .then(({data}) => {
+        this.foods = data
+        this.get_meal_plan()
+       })
       .catch(error => {
         console.error(error)
       })
     },
     update_meal_plan(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
-      const body = this.meal_plan
+
+      const body = {
+        ...this.meal_plan,
+        foods: this.meal_plan.foods.map( ({_id, quantity}) => ({_id, quantity}) )
+      }
+
       this.axios.patch(url,body)
       .then(() => {
         this.snackbar.text = 'Meal plan saved'
@@ -266,7 +284,9 @@ export default {
 
       const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
       if(found_food) found_food.quantity ++
-      else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+      else {
+        this.meal_plan.foods.push({_id: food._id, quantity: 1})
+      }
 
     },
     remove_food_from_plan({_id}){
@@ -279,8 +299,8 @@ export default {
       return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
     },
     total_of_property(property){
-      if(!this.mapped_selected_foods.length) return 0
-      return this.mapped_selected_foods.reduce((acc,item) => {
+      if(!this.meal_plan.foods.length) return 0
+      return this.meal_plan.foods.reduce((acc,item) => {
         if(!item) return acc
         return acc + item[property] * item.quantity
       }, 0)
@@ -300,17 +320,9 @@ export default {
     meal_plan_foods_headers(){
       return [
         ...this.base_headers,
+        {text: 'Quantity', value: 'quantity'},
         {text: 'Remove', value: 'remove'},
       ]
-    },
-
-    mapped_selected_foods(){
-      return this.meal_plan.foods
-        .map( f => ({
-            ...this.foods.find( ({_id}) => _id === f._id),
-            quantity: f.quantity
-          })
-        )
     },
 
   }
