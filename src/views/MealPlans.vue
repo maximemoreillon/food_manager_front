@@ -29,8 +29,8 @@
         </v-toolbar>
       </template>
 
-      <template v-slot:item.keto_friendly="{ item }">
-        <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
+      <template v-slot:item.date="{ item }">
+        <span>{{formatted_date(item.date)}}</span>
       </template>
 
 
@@ -68,6 +68,10 @@ export default {
         console.error(error)
       })
 
+    },
+    formatted_date(date_string){
+      const date = new Date(date_string)
+      return date.toLocaleString()
     },
     row_clicked(item){
       this.$router.push({name: 'meal_plan', params: {meal_plan_id: item._id}})
