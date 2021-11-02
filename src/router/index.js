@@ -32,12 +32,12 @@ const routes = [
   {
     path: '/meal_plans/new',
     name: 'new_meal_plan',
-    component: () => import('../views/MenuBuilder.vue')
+    component: () => import('../views/CreateMealPlan.vue')
   },
   {
     path: '/meal_plans/:meal_plan_id',
     name: 'meal_plan',
-    component: () => import('../views/MenuBuilder.vue')
+    component: () => import('../views/MealPlan.vue')
   },
   {
     path: '/about',

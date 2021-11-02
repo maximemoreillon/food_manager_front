@@ -16,7 +16,7 @@
         <v-row>
           <v-col>
             <v-text-field
-              ref="name_input"
+              autofocus
               label="name"
               v-model="new_food.name" />
           </v-col>
@@ -40,11 +40,6 @@ export default {
     }
 
   }),
-  mounted(){
-    setTimeout(() => {
-      this.$refs.name_input.focus()
-    },10)
-  },
   methods: {
     create_food(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`

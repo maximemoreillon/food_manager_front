@@ -35,9 +35,9 @@
 
     <v-card-text>
       <v-progress-linear
-        :value="100 * total_calories / calories_target"
+        :value="100 * total_of_property('calories_per_serving') / calories_target"
         height="50">
-        {{total_calories}} / {{calories_target}}
+        {{total_of_property('calories_per_serving')}} / {{calories_target}}
       </v-progress-linear>
 
     </v-card-text>
@@ -47,19 +47,19 @@
         <v-col>
           <v-card outlined>
             <v-card-title>Protein</v-card-title>
-            <v-card-text>{{total_protein}}g</v-card-text>
+            <v-card-text>{{total_of_property('protein')}}g</v-card-text>
           </v-card>
         </v-col>
         <v-col>
           <v-card outlined>
             <v-card-title>Fat</v-card-title>
-            <v-card-text>{{total_fat}}g</v-card-text>
+            <v-card-text>{{total_of_property('fat')}}g</v-card-text>
           </v-card>
         </v-col>
         <v-col>
           <v-card outlined>
             <v-card-title>Carbs</v-card-title>
-            <v-card-text>{{total_carbohydrates}}g</v-card-text>
+            <v-card-text>{{total_of_property('carbohydrates')}}g</v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -99,7 +99,7 @@
             <template v-slot:item.add="{ item }">
               <v-btn
                 icon
-                @click="select_food(item)">
+                @click="add_food_to_plan(item)">
                 <v-icon>mdi-playlist-plus</v-icon>
               </v-btn>
             </template>
@@ -122,10 +122,16 @@
                 :src="image_src(item)" />
             </template>
 
+            <template v-slot:item.quantity="{ item }">
+              <v-text-field
+                type="number"
+                v-model="item.quantity"/>
+            </template>
+
             <template v-slot:item.remove="{ item }">
               <v-btn
                 icon
-                @click="unselect_food(item)">
+                @click="remove_food_from_plan(item)">
                 <v-icon>mdi-playlist-minus</v-icon>
               </v-btn>
             </template>
@@ -185,6 +191,7 @@ export default {
       {text: 'Protein [g]', value: 'protein'},
       {text: 'Fat [g]', value: 'fat'},
       {text: 'Carbs [g]', value: 'carbohydrates'},
+      {text: 'Quantity', value: 'quantity'},
       //{text: 'Price [JPY]', value: 'price_per_serving'},
 
     ]
@@ -216,9 +223,7 @@ export default {
     get_meal_plan(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
       this.axios.get(url)
-      .then(({data}) => {
-        this.meal_plan = data
-      })
+      .then(({data}) => { this.meal_plan = data })
       .catch(error => {
         console.error(error)
       })
@@ -226,25 +231,9 @@ export default {
     get_foods(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
       this.axios.get(url)
-      .then(({data}) => {
-        this.foods = data
-      })
+      .then(({data}) => { this.foods = data })
       .catch(error => {
         console.error(error)
-      })
-    },
-    create_meal_plan(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
-      const body = this.meal_plan
-      this.axios.post(url,body)
-      .then(({data}) => {
-        this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}})
-        this.snackbar.text = 'Meal plan saved'
-        this.snackbar.show = true
-      })
-      .catch(error => {
-        console.error(error)
-        alert('Failed')
       })
     },
     update_meal_plan(){
@@ -273,17 +262,28 @@ export default {
       if(this.meal_plan_id) this.update_meal_plan()
       else this.create_meal_plan()
     },
-    select_food(food){
-      this.meal_plan.foods.push(food._id)
+    add_food_to_plan(food){
+
+      const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
+      if(found_food) found_food.quantity ++
+      else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+
     },
-    unselect_food(item){
-      const {_id} = item
-      const found_index = this.meal_plan.foods.findIndex( f => f===_id)
+    remove_food_from_plan({_id}){
+
+      const found_index = this.meal_plan.foods.findIndex( f => f._id ===_id)
       if(found_index < 0) return
       this.meal_plan.foods.splice(found_index,1)
     },
     image_src(item){
       return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
+    },
+    total_of_property(property){
+      if(!this.mapped_selected_foods.length) return 0
+      return this.mapped_selected_foods.reduce((acc,item) => {
+        if(!item) return acc
+        return acc + item[property] * item.quantity
+      }, 0)
     },
 
   },
@@ -306,39 +306,13 @@ export default {
 
     mapped_selected_foods(){
       return this.meal_plan.foods
-        .map(f => this.foods.find(({_id}) => _id === f))
+        .map( f => ({
+            ...this.foods.find( ({_id}) => _id === f._id),
+            quantity: f.quantity
+          })
+        )
     },
-    total_calories(){
-      if(!this.mapped_selected_foods.length) return 0
-      return this.mapped_selected_foods.reduce((acc,item) => {
-        if(!item) return acc
-        return acc + item.calories_per_serving
-      }, 0)
-    },
-    total_protein(){
-      const total = this.mapped_selected_foods
-        .reduce((acc, food) => {
-          if(!food) return acc
-          return acc + food.protein
-        }, 0)
-      return Math.round(total)
-    },
-    total_fat(){
-      const total = this.mapped_selected_foods
-        .reduce((acc, food) => {
-          if(!food) return acc
-          return acc + food.fat
-        }, 0)
-      return Math.round(total)
-    },
-    total_carbohydrates(){
-      const total = this.mapped_selected_foods
-        .reduce((acc, food) => {
-          if(!food) return acc
-          return acc + food.carbohydrates
-        }, 0)
-      return Math.round(total)
-    },
+
   }
 }
 </script>
