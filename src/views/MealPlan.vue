@@ -282,10 +282,12 @@ export default {
     },
     add_food_to_plan(food){
 
+      console.log(food)
+
       const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
       if(found_food) found_food.quantity ++
       else {
-        this.meal_plan.foods.push({_id: food._id, quantity: 1})
+        this.meal_plan.foods.push({...food, quantity: 1})
       }
 
     },
