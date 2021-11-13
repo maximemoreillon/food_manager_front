@@ -176,6 +176,7 @@ export default {
       })
     },
     delete_food(){
+      if(!confirm(`Delete ${this.food.name}?`)) return
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
       this.axios.delete(url)
       .then(() => { this.$router.push({name:'foods'}) })
