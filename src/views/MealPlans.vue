@@ -8,7 +8,9 @@
       :headers="headers"
       :items="meal_plans"
       :items-per-page="-1"
-      @click:row="row_clicked($event)">
+      @click:row="row_clicked($event)"
+      sort-by="date"
+      sort-desc>
 
       <template v-slot:top>
         <v-toolbar
