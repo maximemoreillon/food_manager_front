@@ -1,6 +1,6 @@
 stages:
-  - containerization
-  - deployment
+  - build
+  - deploy
 
 variables:
   APPLICATION_NAME: food-manager-front
@@ -8,10 +8,15 @@ variables:
   CONTAINER_IMAGE_TAGGED: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}:${CI_COMMIT_SHORT_SHA}
   CERTIFICATE_DOMAIN: food.home.maximemoreillon.com
 
-containerization:
-  stage: containerization
+# Needed for Docker in docker build
+image: moreillon/ci-dind
+services:
+  - name: docker:19.03.12-dind
+
+build:
+  stage: build
   tags:
-    - moreillon
+    - dind
   script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
@@ -26,10 +31,10 @@ containerization:
     - docker image rm ${CONTAINER_IMAGE}
     - docker image rm ${CONTAINER_IMAGE_TAGGED}
 
-deployment:
-  stage: deployment
+deploy:
+  stage: deploy
   tags:
-    - moreillon
+    - dind
   script:
     # Apply manifest
     - envsubst < kubernetes_manifest.yml | kubectl apply -f -
