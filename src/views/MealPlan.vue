@@ -2,20 +2,36 @@
   <v-card>
 
     <v-toolbar flat>
-      <v-toolbar-title>Meal plan</v-toolbar-title>
-      <v-spacer/>
-      <v-btn
-        icon
-        @click="save_meal_plan()">
-        <v-icon>mdi-content-save</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        color="#c00000"
-        v-if="meal_plan_id"
-        @click="delete_meal_plan()">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+      <v-row align="center">
+        <v-col cols="auto">
+          <v-btn
+            icon
+            exact
+            :to="{name: 'meal_plans'}">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col>
+          <v-toolbar-title>Meal plan</v-toolbar-title>
+        </v-col>
+        <v-spacer/>
+        <v-col cols="auto">
+          <v-btn
+            icon
+            @click="save_meal_plan()">
+            <v-icon>mdi-content-save</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col cols="auto">
+          <v-btn
+            icon
+            color="#c00000"
+            v-if="meal_plan_id"
+            @click="delete_meal_plan()">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-toolbar>
     <v-divider/>
 

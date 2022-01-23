@@ -3,53 +3,54 @@
 
     <v-card-title>Foods</v-card-title>
 
-    <v-data-table
-      :search="search"
-      :headers="headers"
-      :items="foods"
-      :items-per-page="-1"
-      @click:row="row_clicked($event)"
-      sort-by="name">
+    <v-card-text>
+      <v-data-table
+        :search="search"
+        :headers="headers"
+        :items="foods"
+        :items-per-page="-1"
+        @click:row="row_clicked($event)"
+        sort-by="name">
 
-      <template v-slot:top>
-        <v-toolbar
-          flat>
-
-
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            hide-details/>
-
-          <v-spacer/>
-
-          <v-btn
-            :to="{name: 'create_food'}">
-            New food
-          </v-btn>
-
-        </v-toolbar>
-      </template>
-
-      <template v-slot:item.keto_friendly="{ item }">
-        <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
-      </template>
-
-      <template v-slot:item.image="{ item }">
-        <v-img
-          width="6em"
-          height="6em"
-          contain
-          v-if="item.image"
-          :src="image_src(item)" />
-      </template>
+        <template v-slot:top>
+          <v-toolbar
+            flat>
 
 
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              hide-details/>
+
+            <v-spacer/>
+
+            <v-btn
+              :to="{name: 'create_food'}">
+              New food
+            </v-btn>
+
+          </v-toolbar>
+        </template>
+
+        <template v-slot:item.keto_friendly="{ item }">
+          <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
+        </template>
+
+        <template v-slot:item.image="{ item }">
+          <v-img
+            width="6em"
+            height="6em"
+            contain
+            v-if="item.image"
+            :src="image_src(item)" />
+        </template>
 
 
+      </v-data-table>
+    </v-card-text>
 
-    </v-data-table>
+
   </v-card>
 </template>
 
