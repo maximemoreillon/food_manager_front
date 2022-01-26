@@ -51,9 +51,9 @@
 
     <v-card-text>
       <v-progress-linear
-        :value="100 * total_of_property('calories_per_serving') / calories_target"
+        :value="100 * total_of_property(meal_plan.foods,'calories_per_serving') / calories_target"
         height="50">
-        {{total_of_property('calories_per_serving')}} / {{calories_target}}
+        {{total_of_property(meal_plan.foods,'calories_per_serving')}} / {{calories_target}}
       </v-progress-linear>
 
     </v-card-text>
@@ -63,19 +63,19 @@
         <v-col>
           <v-card outlined>
             <v-card-title>Protein</v-card-title>
-            <v-card-text>{{total_of_property('protein')}}g</v-card-text>
+            <v-card-text>{{total_of_property(meal_plan.foods, 'protein')}}g</v-card-text>
           </v-card>
         </v-col>
         <v-col>
           <v-card outlined>
             <v-card-title>Fat</v-card-title>
-            <v-card-text>{{total_of_property('fat')}}g</v-card-text>
+            <v-card-text>{{total_of_property(meal_plan.foods, 'fat')}}g</v-card-text>
           </v-card>
         </v-col>
         <v-col>
           <v-card outlined>
             <v-card-title>Carbs</v-card-title>
-            <v-card-text>{{total_of_property('carbohydrates')}}g</v-card-text>
+            <v-card-text>{{total_of_property(meal_plan.foods, 'carbohydrates')}}g</v-card-text>
           </v-card>
         </v-col>
       </v-row>
@@ -270,7 +270,11 @@ export default {
 
       const body = {
         ...this.meal_plan,
-        foods: this.meal_plan.foods.map( ({_id, quantity}) => ({_id, quantity}) )
+        foods: this.meal_plan.foods.map( ({_id, quantity}) => ({_id, quantity}) ),
+        calories: this.total_of_property(this.meal_plan.foods,'calories_per_serving'),
+        protein: this.total_of_property(this.meal_plan.foods,'protein'),
+        fat: this.total_of_property(this.meal_plan.foods,'fat'),
+        carbohydrates: this.total_of_property(this.meal_plan.foods,'carbohydrates'),
       }
 
       this.axios.patch(url,body)
@@ -314,12 +318,13 @@ export default {
     image_src(item){
       return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
     },
-    total_of_property(property){
-      if(!this.meal_plan.foods.length) return 0
-      return this.meal_plan.foods.reduce((acc,item) => {
+    total_of_property(foods, property){
+      if(!foods.length) return 0
+      const total =  foods.reduce((acc,item) => {
         if(!item) return acc
         return acc + item[property] * item.quantity
       }, 0)
+      return Math.round(total * 100) / 100
     },
 
   },

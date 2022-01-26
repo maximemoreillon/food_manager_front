@@ -8,7 +8,6 @@
         :search="search"
         :headers="headers"
         :items="meal_plans"
-        :items-per-page="-1"
         @click:row="row_clicked($event)"
         sort-by="date"
         sort-desc>
@@ -57,6 +56,10 @@ export default {
     headers: [
       {text: 'Name', value: 'name'},
       {text: 'Date', value: 'date'},
+      {text: 'Calories', value: 'calories'},
+      {text: 'Protein', value: 'protein'},
+      {text: 'Fat', value: 'fat'},
+      {text: 'Carbohydrates', value: 'carbohydrates'},
 
     ]
   }),
