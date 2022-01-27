@@ -35,58 +35,88 @@
     </v-toolbar>
     <v-divider/>
 
-    <v-card-text>
-      <v-row align="center">
-        <v-col>
-          Date: {{meal_plan.date}}
-        </v-col>
-        <v-col>
-          <v-text-field
-            label="Name"
-            v-model="meal_plan.name"/>
-        </v-col>
-      </v-row>
-    </v-card-text>
-
-
-    <v-card-text>
-      <v-progress-linear
-        :value="100 * total_of_property(meal_plan.foods,'calories_per_serving') / calories_target"
-        height="50">
-        {{total_of_property(meal_plan.foods,'calories_per_serving')}} / {{calories_target}}
-      </v-progress-linear>
-
-    </v-card-text>
 
     <v-card-text>
       <v-row>
         <v-col>
-          <v-card outlined>
-            <v-card-title>Protein</v-card-title>
-            <v-card-text>{{total_of_property(meal_plan.foods, 'protein')}}g</v-card-text>
-          </v-card>
+          <v-row>
+            <v-col>
+              <v-card outlined>
+                <v-card-title>Info</v-card-title>
+                <v-card-text>
+                  <v-row align="center">
+                    <v-col>
+                      <v-text-field
+                        label="Name"
+                        v-model="meal_plan.name"/>
+                    </v-col>
+                    <v-col cols="auto">
+                      {{new Date(meal_plan.date).toLocaleString()}}
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-card outlined>
+                <v-card-title>Calories</v-card-title>
+                <v-card-text>
+                  <v-progress-linear
+                    :value="100 * total_of_property(meal_plan.foods,'calories_per_serving') / calories_target"
+                    height="50">
+                    {{total_of_property(meal_plan.foods,'calories_per_serving')}} / {{calories_target}}
+                  </v-progress-linear>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col
+              v-for="(macronutrient, index) in macronutrients"
+              :key="`macronutrient_${index}`">
+              <v-card outlined>
+                <v-card-subtitle>{{macronutrient.text}}</v-card-subtitle>
+                <v-card-title
+                  class="justify-center">
+                  {{total_of_property(meal_plan.foods, macronutrient.value)}}g
+                </v-card-title>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-col>
         <v-col>
-          <v-card outlined>
-            <v-card-title>Fat</v-card-title>
-            <v-card-text>{{total_of_property(meal_plan.foods, 'fat')}}g</v-card-text>
-          </v-card>
-        </v-col>
-        <v-col>
-          <v-card outlined>
-            <v-card-title>Carbs</v-card-title>
-            <v-card-text>{{total_of_property(meal_plan.foods, 'carbohydrates')}}g</v-card-text>
+          <v-card
+            height="100%"
+            outlined>
+            <v-container fill-height>
+              <v-row justify="center" align="center">
+                <v-col>
+                  <apexchart
+                    type="donut"
+                    :options="options"
+                    :series="series"/>
+                </v-col>
+              </v-row>
+            </v-container>
+
           </v-card>
         </v-col>
       </v-row>
+
+
+
+
+
     </v-card-text>
+
 
     <v-card-text>
       <v-row>
         <v-col>
           <v-data-table
             height="500"
-            class="elevation-1"
             :search="search"
             :headers="food_list_headers"
             :items="foods"
@@ -124,7 +154,6 @@
         </v-col>
         <v-col>
           <v-data-table
-            class="elevation-1"
             :headers="meal_plan_foods_headers"
             :items="meal_plan.foods"
             :items-per-page="-1">
@@ -210,7 +239,18 @@ export default {
 
       //{text: 'Price [JPY]', value: 'price_per_serving'},
 
-    ]
+    ],
+
+    macronutrients: [
+      {text: 'Protein', value: 'protein'},
+      {text: 'Fat', value: 'fat'},
+      {text: 'Carbs', value: 'carbohydrates'},
+    ],
+
+    options: {
+      labels: ['Protein', 'Fat', 'Carbohydrates'],
+    },
+    //series: [44, 55, 41, 17, 15]
   }),
   async mounted(){
     document.addEventListener("keydown", this.handle_keydown)
@@ -345,6 +385,13 @@ export default {
         {text: 'Remove', value: 'remove'},
       ]
     },
+    series(){
+      return [
+        this.total_of_property(this.meal_plan.foods,'protein'),
+        this.total_of_property(this.meal_plan.foods,'fat'),
+        this.total_of_property(this.meal_plan.foods,'carbohydrates'),
+      ]
+    }
 
   }
 }
