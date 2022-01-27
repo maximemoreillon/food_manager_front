@@ -33,20 +33,18 @@
               </v-col>
             </v-row>
 
-
-
-
-
-
-
-
-
           </v-toolbar>
         </template>
 
         <template v-slot:item.date="{ item }">
           <span>{{formatted_date(item.date)}}</span>
         </template>
+
+        <template v-slot:item.calories="{ item }">
+            <CaloriesProgress
+              :calories="item.calories" />
+        </template>
+
 
         <template v-slot:item.macronutrients="{ item }">
           <div class="chart_wrapper">
@@ -71,11 +69,13 @@
 
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
+import CaloriesProgress from '@/components/CaloriesProgress.vue'
 
 export default {
   name: 'Foods',
   components: {
-    MacronutrientChart
+    MacronutrientChart,
+    CaloriesProgress
   },
   data: () => ({
     search: '',

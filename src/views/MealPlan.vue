@@ -64,11 +64,8 @@
               <v-card outlined>
                 <v-card-title>Calories</v-card-title>
                 <v-card-text>
-                  <v-progress-linear
-                    :value="100 * total_of_property(meal_plan.foods,'calories_per_serving') / calories_target"
-                    height="50">
-                    {{total_of_property(meal_plan.foods,'calories_per_serving')}} / {{calories_target}}
-                  </v-progress-linear>
+                  <CaloriesProgress
+                    :calories="total_of_property(meal_plan.foods, 'calories_per_serving')" />
                 </v-card-text>
               </v-card>
             </v-col>
@@ -223,14 +220,15 @@
 
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
+import CaloriesProgress from '@/components/CaloriesProgress.vue'
 
 export default {
   name: 'Foods',
   components: {
-    MacronutrientChart
+    MacronutrientChart,
+    CaloriesProgress,
   },
   data: () => ({
-    calories_target: 2600,
     search: '',
     foods: [],
     meal_plan: {

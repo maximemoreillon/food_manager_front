@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueApexCharts from 'vue-apexcharts'
+import './registerServiceWorker'
 
 Vue.use(VueAxios, axios)
 Vue.use(VueApexCharts)
