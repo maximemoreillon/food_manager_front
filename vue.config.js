@@ -3,7 +3,7 @@ module.exports = {
     'vuetify'
   ],
   pwa: {
-    name: 'Camera viewer',
+    name: 'Food manager',
     themeColor: '#444444',
   }
 }
