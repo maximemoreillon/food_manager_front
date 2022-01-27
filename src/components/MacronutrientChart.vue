@@ -27,7 +27,7 @@
         return {
           ...this.options,
           labels: ['Protein', 'Fat', 'Carbohydrates'],
-          //colors: ['#eb4034', '#ebd034', '#3bb84b']
+          colors: ['#eb4034', '#ebd034', '#3bb84b']
         }
       }
     }
