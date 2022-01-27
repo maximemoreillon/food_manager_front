@@ -39,25 +39,26 @@
     <v-card-text>
       <v-row>
         <v-col>
-          <v-row>
-            <v-col>
-              <v-card outlined>
-                <v-card-title>Info</v-card-title>
-                <v-card-text>
-                  <v-row align="center">
-                    <v-col>
-                      <v-text-field
-                        label="Name"
-                        v-model="meal_plan.name"/>
-                    </v-col>
-                    <v-col cols="auto">
-                      {{new Date(meal_plan.date).toLocaleString()}}
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
+
+          <v-card outlined>
+            <v-card-title>Info</v-card-title>
+            <v-card-text>
+              <v-row align="center">
+                <v-col>
+                  <v-text-field
+                    label="Name"
+                    v-model="meal_plan.name"/>
+                </v-col>
+                <v-col cols="auto">
+                  {{new Date(meal_plan.date).toLocaleString()}}
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
           <v-row>
             <v-col>
               <v-card outlined>
@@ -86,17 +87,17 @@
             </v-col>
           </v-row>
         </v-col>
-        <v-col>
+        <v-col cols="auto">
           <v-card
             height="100%"
             outlined>
             <v-container fill-height>
               <v-row justify="center" align="center">
                 <v-col>
-                  <apexchart
-                    type="donut"
-                    :options="options"
-                    :series="series"/>
+                  <MacronutrientChart
+                    :protein="total_of_property(meal_plan.foods,'protein')"
+                    :fat="total_of_property(meal_plan.foods,'fat')"
+                    :carbohydrates="total_of_property(meal_plan.foods,'carbohydrates')" />
                 </v-col>
               </v-row>
             </v-container>
@@ -140,6 +141,16 @@
                 contain
                 v-if="item.image"
                 :src="image_src(item)" />
+            </template>
+
+            <template v-slot:item.macronutrients="{ item }">
+              <div class="chart_wrapper">
+                <MacronutrientChart
+                  :options="chart_options"
+                  :protein="item.protein"
+                  :fat="item.fat"
+                  :carbohydrates="item.carbohydrates" />
+              </div>
             </template>
 
             <template v-slot:item.add="{ item }">
@@ -211,9 +222,13 @@
 </template>
 
 <script>
+import MacronutrientChart from '@/components/MacronutrientChart.vue'
+
 export default {
   name: 'Foods',
-
+  components: {
+    MacronutrientChart
+  },
   data: () => ({
     calories_target: 2600,
     search: '',
@@ -233,12 +248,7 @@ export default {
       {text: 'Name', value: 'name'},
       {text: 'Calories [kcal]', value: 'calories_per_serving'},
       //{text: 'Keto friendly', value: 'keto_friendly'},
-      {text: 'Protein [g]', value: 'protein'},
-      {text: 'Fat [g]', value: 'fat'},
-      {text: 'Carbs [g]', value: 'carbohydrates'},
-
       //{text: 'Price [JPY]', value: 'price_per_serving'},
-
     ],
 
     macronutrients: [
@@ -247,10 +257,11 @@ export default {
       {text: 'Carbs', value: 'carbohydrates'},
     ],
 
-    options: {
-      labels: ['Protein', 'Fat', 'Carbohydrates'],
+
+    chart_options: {
+      legend: {show: false},
+      dataLabels: {enabled: false},
     },
-    //series: [44, 55, 41, 17, 15]
   }),
   async mounted(){
     document.addEventListener("keydown", this.handle_keydown)
@@ -375,12 +386,15 @@ export default {
     food_list_headers(){
       return [
         ...this.base_headers,
+        ...this.macronutrients,
+        //{text: 'Macronutrients', value: 'macronutrients'},
         {text: 'Add', value: 'add'},
       ]
     },
     meal_plan_foods_headers(){
       return [
         ...this.base_headers,
+        ...this.macronutrients,
         {text: 'Quantity', value: 'quantity'},
         {text: 'Remove', value: 'remove'},
       ]
@@ -396,3 +410,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.chart_wrapper {
+  display: flex;
+  align-items: center;
+  height: 6em;
+  width: 6em;
+}
+</style>
