@@ -1,6 +1,7 @@
 <template>
   <AppTemplate
-    :options="options">
+    :options="options"
+    @user="user_changed($event)">
 
     <template v-slot:nav>
       <v-list
@@ -38,6 +39,7 @@ export default {
     options: {
       title: "Food manager",
       authenticate: true,
+      skip_greetings: process.env.NODE_ENV === 'development',
       login_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`,
       identification_url: `${process.env.VUE_APP_AUTHENTICATION_API_URL}/v2/whoami`,
       main_class: 'grey lighten-3',
@@ -46,14 +48,31 @@ export default {
     nav: [
       {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
       {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'mdi-format-list-bulleted'},
+      {title: 'Settings', to: {name: 'settings'}, icon: 'mdi-cogs'},
+
       {title: 'About', to: {name: 'about'}, icon: 'mdi-information-outline'},
     ]
   }),
 
+  mounted(){
+  },
+
   methods: {
-    get_user(user){
-      console.log(user)
-    }
+    user_changed(user){
+      if(!user) return
+      this.get_settings()
+    },
+    get_settings(){
+      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/settings`
+      this.axios.get(url)
+      .then(({data}) => {
+        this.$store.commit('set_user_configuration',data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+
+    },
   }
 };
 </script>
