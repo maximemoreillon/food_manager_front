@@ -7,34 +7,53 @@
       <v-data-table
         :search="search"
         :headers="headers"
-        :items="foods"
+        :items="filtered_foods"
         :items-per-page="-1"
         @click:row="row_clicked($event)"
         sort-by="name">
 
         <template v-slot:top>
-          <v-toolbar
-            flat>
+          <v-toolbar flat>
+
+            <v-row>
+              <v-col>
+                <v-text-field
+                  v-model="search"
+                  append-icon="mdi-magnify"
+                  label="Search"
+                  hide-details/>
+              </v-col>
+              <v-col>
+                <v-checkbox
+                  label="Show hidden"
+                  v-model="show_hidden"/>
+              </v-col>
+              <v-spacer/>
+              <v-col>
+                <v-btn
+                  :to="{name: 'create_food'}">
+                  <v-icon>mdi-plus</v-icon>
+                  <span class="ml-2">New food</span>
+                </v-btn>
+              </v-col>
+            </v-row>
 
 
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              hide-details/>
 
-            <v-spacer/>
 
-            <v-btn
-              :to="{name: 'create_food'}">
-              New food
-            </v-btn>
+
+
+
 
           </v-toolbar>
         </template>
 
         <template v-slot:item.keto_friendly="{ item }">
           <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
+        </template>
+
+        <template v-slot:item.hidden="{ item }">
+          <v-icon v-if="item.hidden">mdi-check</v-icon>
         </template>
 
         <template v-slot:item.image="{ item }">
@@ -62,7 +81,8 @@ export default {
   data: () => ({
     search: '',
     foods: [],
-    headers: [
+    show_hidden: false,
+    base_headers: [
       {text: 'Image', value: 'image'},
       {text: 'Name', value: 'name'},
       {text: 'Calories [kcal]', value: 'calories_per_serving'},
@@ -94,5 +114,17 @@ export default {
     },
 
   },
+  computed: {
+    filtered_foods(){
+      if(this.show_hidden) return this.foods
+      else return this.foods.filter(f => !f.hidden)
+    },
+    headers(){
+      if(this.show_hidden) return [ ...this.base_headers, {text: 'Hidden', value: 'hidden'} ]
+      else return this.base_headers
+
+
+    }
+  }
 }
 </script>

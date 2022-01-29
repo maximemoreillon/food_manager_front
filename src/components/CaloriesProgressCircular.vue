@@ -1,18 +1,19 @@
 <!-- UNUSED -->
 <template>
-  <v-progress-linear
+  <v-progress-circular
     rounded
     :value="100 * calories / calories_target"
-    height="50"
+    :size="size || 80"
     :color="color">
-    {{calories}} / {{calories_target}}
-  </v-progress-linear>
+    <span class="black--text">{{calories}}</span>
+  </v-progress-circular>
 </template>
 
 <script>
   export default {
-    name: 'CaloriesProgress',
+    name: 'CaloriesProgressCircular',
     props: {
+      size: Number,
       calories: Number,
       height: Number,
     },

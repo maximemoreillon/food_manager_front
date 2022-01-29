@@ -1,9 +1,9 @@
 <template>
   <apexchart
-    height="100%"
     type="donut"
     :options="chart_options"
     :series="series"/>
+
 </template>
 
 <script>
@@ -26,11 +26,23 @@
       chart_options(){
         return {
           ...this.options,
-          labels: ['Protein', 'Fat', 'Carbohydrates'],
-          colors: ['#eb4034', '#ebd034', '#3bb84b']
+          labels: [
+            `Protein: ${this.protein}g`,
+            `Fat: ${this.fat}g`,
+            `Carbohydrates: ${this.carbohydrates}g`
+          ],
+          colors: [
+            '#eb4034',
+            '#ebd034',
+            '#3bb84b'
+          ]
         }
       }
     }
 
   }
 </script>
+
+<style media="screen">
+
+</style>

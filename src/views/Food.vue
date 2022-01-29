@@ -1,11 +1,8 @@
 <template>
   <v-card
+    :loading="loading"
     max-width="600px"
     class="mx-auto">
-
-    <v-card-text class="text-center" v-if="loading">
-      <v-progress-circular indeterminate></v-progress-circular>
-    </v-card-text>
 
     <template v-if="food && !loading">
       <v-toolbar flat>
@@ -44,6 +41,11 @@
             <v-text-field
               label="name"
               v-model="food.name" />
+          </v-col>
+          <v-col cols="auto">
+            <v-checkbox
+              label="Hidden"
+              v-model="food.hidden" />
           </v-col>
         </v-row>
         <v-row>
@@ -88,7 +90,7 @@
               v-model="food.keto_friendly"/>
           </v-col>
         </v-row> -->
-        <v-row>
+        <v-row align="center">
           <v-col>
             <v-file-input
               v-model="image"

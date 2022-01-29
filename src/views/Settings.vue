@@ -1,15 +1,31 @@
 <template>
-  <v-card>
+  <v-card
+    max-width="600px"
+    class="mx-auto">
 
     <v-card-title>Settings</v-card-title>
 
     <v-card-text>
-      <v-text-field
-        label="Calories target"
-        v-model="$store.state.user_configuration.calories_target" />
+      <v-row>
+        <v-col>
+          <v-text-field
+            label="Calories target"
+            v-model="$store.state.user_configuration.calories_target" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-spacer/>
+        <v-col cols="auto">
+          <v-btn @click="update_settings()">
+            <v-icon>mdi-content-save</v-icon>
+            <span class="ml-2">Save</span>
+          </v-btn>
+        </v-col>
+      </v-row>
 
-        <v-btn @click="update_settings()">
-        Save</v-btn>
+
+
+
 
     </v-card-text>
 

@@ -52,6 +52,11 @@
                 <v-col cols="auto">
                   {{new Date(meal_plan.date).toLocaleString()}}
                 </v-col>
+                <v-col cols="auto">
+                  <v-checkbox
+                    label="Incomplete"
+                    v-model="meal_plan.incomplete"/>
+                </v-col>
               </v-row>
             </v-card-text>
           </v-card>
@@ -60,46 +65,48 @@
       <v-row>
         <v-col>
           <v-row>
-            <v-col>
-              <v-card outlined>
+            <v-col cols="12" md="6">
+              <v-card outlined height="100%">
                 <v-card-title>Calories</v-card-title>
                 <v-card-text>
-                  <CaloriesProgress
-                    :calories="total_of_property(meal_plan.foods, 'calories_per_serving')" />
+                  <CalorieCountChart
+                    :options="{chart: {height: 200}}"
+                    :calories="total_of_property(meal_plan.foods,'calories_per_serving')" />
                 </v-card-text>
               </v-card>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col
-              v-for="(macronutrient, index) in macronutrients"
-              :key="`macronutrient_${index}`">
-              <v-card outlined>
-                <v-card-subtitle>{{macronutrient.text}}</v-card-subtitle>
-                <v-card-title
-                  class="justify-center">
-                  {{total_of_property(meal_plan.foods, macronutrient.value)}}g
-                </v-card-title>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="auto">
-          <v-card
-            height="100%"
-            outlined>
-            <v-container fill-height>
-              <v-row justify="center" align="center">
-                <v-col>
+            <v-col cols="12" md="6" >
+              <v-card outlined height="100%">
+                <v-card-title>Macronutrients</v-card-title>
+                <v-card-text>
                   <MacronutrientChart
+                    :options="{chart: {height: 200}}"
                     :protein="total_of_property(meal_plan.foods,'protein')"
                     :fat="total_of_property(meal_plan.foods,'fat')"
                     :carbohydrates="total_of_property(meal_plan.foods,'carbohydrates')" />
-                </v-col>
-              </v-row>
-            </v-container>
 
-          </v-card>
+                </v-card-text>
+              </v-card>
+
+            </v-col>
+          </v-row>
+
+          <!-- <v-row align="stretch">
+            <v-col
+              v-for="(macronutrient, index) in macronutrients"
+              :key="`macronutrient_${index}`">
+              <v-card
+                outlined
+                height="100%">
+                <v-card-subtitle>{{macronutrient.text}} [g]</v-card-subtitle>
+                <v-card-title
+                  class="justify-center">
+                  {{total_of_property(meal_plan.foods, macronutrient.value)}}
+                </v-card-title>
+              </v-card>
+            </v-col>
+          </v-row> -->
+
         </v-col>
       </v-row>
 
@@ -138,6 +145,13 @@
                 contain
                 v-if="item.image"
                 :src="image_src(item)" />
+            </template>
+
+            <template v-slot:item.calories_per_serving="{ item }">
+              <v-chip
+                :color=" item_too_calorific(item) ? 'red' : 'green'">
+                {{item.calories_per_serving}}
+              </v-chip>
             </template>
 
             <template v-slot:item.macronutrients="{ item }">
@@ -189,6 +203,7 @@
               </v-btn>
             </template>
 
+
           </v-data-table>
 
         </v-col>
@@ -220,13 +235,15 @@
 
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
-import CaloriesProgress from '@/components/CaloriesProgress.vue'
+import CalorieCountChart from '@/components/CalorieCountChart.vue'
+
 
 export default {
   name: 'Foods',
   components: {
     MacronutrientChart,
-    CaloriesProgress,
+    CalorieCountChart,
+    // CaloriesProgress,
   },
   data: () => ({
     search: '',
@@ -375,6 +392,11 @@ export default {
       }, 0)
       return Math.round(total * 100) / 100
     },
+    item_too_calorific({calories_per_serving}){
+      const target = this.$store.state.user_configuration.calories_target
+      const current = this.total_of_property(this.meal_plan.foods,'calories_per_serving')
+      return calories_per_serving > (target - current)
+    }
 
   },
   computed: {

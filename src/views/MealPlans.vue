@@ -41,8 +41,12 @@
         </template>
 
         <template v-slot:item.calories="{ item }">
-            <CaloriesProgress
-              :calories="item.calories" />
+          <!-- <CaloriesProgress :calories="item.calories" /> -->
+          <div class="chart_wrapper">
+            <CalorieCountChart
+              :options="chart_options"
+              :calories="item.calories"/>
+          </div>
         </template>
 
 
@@ -54,6 +58,14 @@
               :fat="item.fat"
               :carbohydrates="item.carbohydrates" />
           </div>
+        </template>
+
+        <template v-slot:item.incomplete="{ item }">
+          <v-icon
+            color="#c00000"
+            v-if="item.incomplete">
+            mdi-alert
+          </v-icon>
         </template>
 
 
@@ -69,13 +81,15 @@
 
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
-import CaloriesProgress from '@/components/CaloriesProgress.vue'
+// import CaloriesProgress from '@/components/CaloriesProgressCircular.vue'
+import CalorieCountChart from '@/components/CalorieCountChart.vue'
 
 export default {
   name: 'Foods',
   components: {
     MacronutrientChart,
-    CaloriesProgress
+    CalorieCountChart,
+    // CaloriesProgress
   },
   data: () => ({
     search: '',
@@ -89,6 +103,7 @@ export default {
       {text: 'Date', value: 'date'},
       {text: 'Calories', value: 'calories'},
       {text: 'Macronutrients', value: 'macronutrients'},
+      {text: 'Incomplete', value: 'incomplete'},
 
       // {text: 'Protein', value: 'protein'},
       // {text: 'Fat', value: 'fat'},
@@ -125,7 +140,9 @@ export default {
 
 <style scoped>
 .chart_wrapper {
-  height: 100px;
-  width: 100px;
+  display: inline-flex;
+  align-items: center;
+  width: 10em;
+  height: 10em;
 }
 </style>
