@@ -18,12 +18,14 @@
     },
     data(){
       return {
-        calories_target: 2600
       }
     },
     computed: {
       color(){
         return this.calories > this.calories_target ? 'red' : 'blue'
+      },
+      calories_target(){
+        return this.$store.state.user_configuration.calories_target
       }
     }
 
