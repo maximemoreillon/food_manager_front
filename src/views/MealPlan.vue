@@ -120,91 +120,101 @@
     <v-card-text>
       <v-row>
         <v-col>
-          <v-data-table
-            height="500"
-            :search="search"
-            :headers="food_list_headers"
-            :items="filtered_foods"
-            :items-per-page="-1"
-            sort-by="name">
+          <v-card outlined>
+            <v-card-text>
+              <v-data-table
+                height="500"
+                :search="search"
+                :headers="food_list_headers"
+                :items="filtered_foods"
+                :items-per-page="-1"
+                sort-by="name">
 
-            <template v-slot:top>
-              <v-toolbar flat>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  hide-details/>
-              </v-toolbar>
-            </template>
+                <template v-slot:top>
+                  <v-toolbar flat>
+                    <v-text-field
+                      v-model="search"
+                      append-icon="mdi-magnify"
+                      label="Search"
+                      hide-details/>
+                  </v-toolbar>
+                </template>
 
-            <template v-slot:item.image="{ item }">
-              <v-img
-                :width="thumbnail_size"
-                :height="thumbnail_size"
-                contain
-                v-if="item.image"
-                :src="image_src(item)" />
-            </template>
+                <template v-slot:item.image="{ item }">
+                  <v-img
+                    :width="thumbnail_size"
+                    :height="thumbnail_size"
+                    contain
+                    v-if="item.image"
+                    :src="image_src(item)" />
+                </template>
 
-            <template v-slot:item.calories_per_serving="{ item }">
-              <v-chip
-                :color=" item_too_calorific(item) ? 'red' : 'green'">
-                {{item.calories_per_serving}}
-              </v-chip>
-            </template>
+                <template v-slot:item.calories_per_serving="{ item }">
+                  <v-chip
+                    :color=" item_too_calorific(item) ? 'red' : 'green'">
+                    {{item.calories_per_serving}}
+                  </v-chip>
+                </template>
 
-            <template v-slot:item.macronutrients="{ item }">
-              <div class="chart_wrapper">
-                <MacronutrientChart
-                  :options="chart_options"
-                  :protein="item.protein"
-                  :fat="item.fat"
-                  :carbohydrates="item.carbohydrates" />
-              </div>
-            </template>
+                <template v-slot:item.macronutrients="{ item }">
+                  <div class="chart_wrapper">
+                    <MacronutrientChart
+                      :options="chart_options"
+                      :protein="item.protein"
+                      :fat="item.fat"
+                      :carbohydrates="item.carbohydrates" />
+                  </div>
+                </template>
 
-            <template v-slot:item.add="{ item }">
-              <v-btn
-                icon
-                @click="add_food_to_plan(item)">
-                <v-icon>mdi-playlist-plus</v-icon>
-              </v-btn>
-            </template>
+                <template v-slot:item.add="{ item }">
+                  <v-btn
+                    icon
+                    @click="add_food_to_plan(item)">
+                    <v-icon>mdi-playlist-plus</v-icon>
+                  </v-btn>
+                </template>
 
-          </v-data-table>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+
         </v-col>
         <v-col>
-          <v-data-table
-            :headers="meal_plan_foods_headers"
-            :items="meal_plan.foods"
-            :items-per-page="-1">
+          <v-card outlined>
+            <v-card-text>
+              <v-data-table
+                :headers="meal_plan_foods_headers"
+                :items="meal_plan.foods"
+                :items-per-page="-1">
 
-            <template v-slot:item.image="{ item }">
-              <v-img
-                :width="thumbnail_size"
-                :height="thumbnail_size"
-                contain
-                v-if="item.image"
-                :src="image_src(item)" />
-            </template>
+                <template v-slot:item.image="{ item }">
+                  <v-img
+                    :width="thumbnail_size"
+                    :height="thumbnail_size"
+                    contain
+                    v-if="item.image"
+                    :src="image_src(item)" />
+                </template>
 
-            <template v-slot:item.quantity="{ item }">
-              <v-text-field
-                type="number"
-                v-model="item.quantity"/>
-            </template>
+                <template v-slot:item.quantity="{ item }">
+                  <v-text-field
+                    type="number"
+                    v-model="item.quantity"/>
+                </template>
 
-            <template v-slot:item.remove="{ item }">
-              <v-btn
-                icon
-                @click="remove_food_from_plan(item)">
-                <v-icon>mdi-playlist-minus</v-icon>
-              </v-btn>
-            </template>
+                <template v-slot:item.remove="{ item }">
+                  <v-btn
+                    icon
+                    @click="remove_food_from_plan(item)">
+                    <v-icon>mdi-playlist-minus</v-icon>
+                  </v-btn>
+                </template>
 
 
-          </v-data-table>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+
 
         </v-col>
       </v-row>
