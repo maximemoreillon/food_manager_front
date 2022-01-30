@@ -41,23 +41,29 @@
         </template>
 
         <template v-slot:item.calories="{ item }">
-          <!-- <CaloriesProgress :calories="item.calories" /> -->
-          <div class="chart_wrapper">
+          <div
+            v-if="item.calories"
+            class="chart_wrapper">
             <CalorieCountChart
               :options="chart_options"
               :calories="item.calories"/>
           </div>
+          <span v-else>N/A</span>
         </template>
 
 
         <template v-slot:item.macronutrients="{ item }">
-          <div class="chart_wrapper">
+          <div
+            v-if="item.protein && item.fat && item.carbohydrates"
+            class="chart_wrapper">
             <MacronutrientChart
+
               :options="chart_options"
               :protein="item.protein"
               :fat="item.fat"
               :carbohydrates="item.carbohydrates" />
           </div>
+          <span v-else>N/A</span>
         </template>
 
         <template v-slot:item.incomplete="{ item }">
