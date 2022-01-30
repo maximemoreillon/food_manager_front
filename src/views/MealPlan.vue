@@ -124,7 +124,7 @@
             height="500"
             :search="search"
             :headers="food_list_headers"
-            :items="foods"
+            :items="filtered_foods"
             :items-per-page="-1"
             sort-by="name">
 
@@ -402,6 +402,9 @@ export default {
   computed: {
     meal_plan_id(){
       return this.$route.params.meal_plan_id
+    },
+    filtered_foods(){
+      return this.foods.filter(f => !f.hidden)
     },
     food_list_headers(){
       return [
