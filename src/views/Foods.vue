@@ -15,7 +15,7 @@
         <template v-slot:top>
           <v-toolbar flat>
 
-            <v-row>
+            <v-row align="baseline">
               <v-col>
                 <v-text-field
                   v-model="search"
@@ -29,11 +29,11 @@
                   v-model="show_hidden"/>
               </v-col>
               <v-spacer/>
-              <v-col>
+              <v-col cols="auto">
                 <v-btn
                   :to="{name: 'create_food'}">
                   <v-icon>mdi-plus</v-icon>
-                  <span class="ml-2">New food</span>
+                  <span class="ml-2">Add</span>
                 </v-btn>
               </v-col>
             </v-row>
