@@ -128,7 +128,8 @@
                 :headers="food_list_headers"
                 :items="filtered_foods"
                 :items-per-page="-1"
-                sort-by="name">
+                sort-by="name"
+                @click:row="add_food_to_plan($event)">
 
                 <template v-slot:top>
                   <v-toolbar flat>
@@ -166,13 +167,13 @@
                   </div>
                 </template>
 
-                <template v-slot:item.add="{ item }">
+                <!-- <template v-slot:item.add="{ item }">
                   <v-btn
                     icon
                     @click="add_food_to_plan(item)">
                     <v-icon>mdi-playlist-plus</v-icon>
                   </v-btn>
-                </template>
+                </template> -->
 
               </v-data-table>
             </v-card-text>
@@ -421,7 +422,7 @@ export default {
         ...this.base_headers,
         ...this.macronutrients,
         //{text: 'Macronutrients', value: 'macronutrients'},
-        {text: 'Add', value: 'add'},
+        //{text: 'Add', value: 'add'},
       ]
     },
     meal_plan_foods_headers(){
