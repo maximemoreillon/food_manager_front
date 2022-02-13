@@ -1,8 +1,11 @@
 <template>
-  <v-card>
+  <v-card
+    max-width="500px"
+    class="mx-auto">
     <v-toolbar flat>
       <v-btn
         icon
+        exact
         :to="{name: 'foods'}">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
@@ -13,7 +16,7 @@
 
     <v-card-text>
       <v-form @submit.prevent="create_food()">
-        <v-row>
+        <v-row align="baseline">
           <v-col>
             <v-text-field
               autofocus
