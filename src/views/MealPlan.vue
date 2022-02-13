@@ -44,14 +44,16 @@
             <v-card-title>Info</v-card-title>
             <v-card-text>
               <v-row align="center">
-                <v-col>
+                <v-col cols="12" md="6">
                   <v-text-field
                     label="Name"
                     v-model="meal_plan.name"/>
                 </v-col>
+                <v-spacer/>
                 <v-col cols="auto">
-                  {{new Date(meal_plan.date).toLocaleString()}}
+                  Date: {{new Date(meal_plan.date).toLocaleString()}}
                 </v-col>
+                <v-spacer/>
                 <v-col cols="auto">
                   <v-checkbox
                     label="Incomplete"
