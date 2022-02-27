@@ -29,7 +29,6 @@
       <v-divider/>
 
       <v-img
-        v-if="food.image"
         class="mt-3"
         height="300"
         :src="image_src"
@@ -206,8 +205,10 @@ export default {
       return this.$route.params.food_id
     },
     image_src(){
-      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}/image`
-    }
+      if (!this.food.image) return require('@/assets/image-off.png')
+      else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/thumbnail`
+    },
+
   }
 }
 </script>

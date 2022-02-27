@@ -150,8 +150,8 @@
                       :width="thumbnail_size"
                       :height="thumbnail_size"
                       contain
-                      v-if="item.image"
                       :src="image_src(item)" />
+
                   </template>
 
                   <template v-slot:item.calories_per_serving="{ item }">
@@ -352,7 +352,7 @@ export default {
         this.get_meal_plan()
        })
       .catch(error => {
-        alert('Failes to get foods')
+        alert('Failed to get foods')
         console.error(error)
       })
     },
@@ -362,11 +362,10 @@ export default {
 
       const body = {
         ...this.meal_plan,
-        //foods: this.meal_plan.foods.map( ({_id, quantity}) => ({_id, quantity}) ),
-        calories: this.total_of_property(this.meal_plan.foods,'calories_per_serving'),
-        protein: this.total_of_property(this.meal_plan.foods,'protein'),
-        fat: this.total_of_property(this.meal_plan.foods,'fat'),
-        carbohydrates: this.total_of_property(this.meal_plan.foods,'carbohydrates'),
+        calories: this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving'),
+        protein: this.total_of_property(this.formatted_meal_plan_foods,'protein'),
+        fat: this.total_of_property(this.formatted_meal_plan_foods,'fat'),
+        carbohydrates: this.total_of_property(this.formatted_meal_plan_foods,'carbohydrates'),
       }
 
       this.axios.patch(url,body)
@@ -406,8 +405,9 @@ export default {
       if(found_index < 0) return
       this.meal_plan.foods.splice(found_index,1)
     },
-    image_src(item){
-      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
+    image_src({_id, image}){
+      if (!image) return require('@/assets/image-off.png')
+      else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
     total_of_property(foods, property){
       if(!foods.length) return 0

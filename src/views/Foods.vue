@@ -38,18 +38,7 @@
               </v-col>
             </v-row>
 
-
-
-
-
-
-
-
           </v-toolbar>
-        </template>
-
-        <template v-slot:item.keto_friendly="{ item }">
-          <v-icon v-if="item.keto_friendly">mdi-check</v-icon>
         </template>
 
         <template v-slot:item.hidden="{ item }">
@@ -61,7 +50,6 @@
             width="6em"
             height="6em"
             contain
-            v-if="item.image"
             :src="image_src(item)" />
         </template>
 
@@ -106,8 +94,9 @@ export default {
       })
 
     },
-    image_src(item){
-      return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${item._id}/thumbnail`
+    image_src({_id, image}){
+      if (!image) return require('@/assets/image-off.png')
+      else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
     row_clicked(food){
       this.$router.push({name: 'food', params: {food_id: food._id}})
