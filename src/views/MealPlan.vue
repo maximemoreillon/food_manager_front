@@ -202,7 +202,6 @@
                       :width="thumbnail_size"
                       :height="thumbnail_size"
                       contain
-                      v-if="item.image"
                       :src="image_src(item)" />
                   </template>
 
