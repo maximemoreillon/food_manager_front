@@ -418,7 +418,7 @@ export default {
     },
     item_too_calorific({calories_per_serving}){
       const target = this.$store.state.user_configuration.calories_target
-      const current = this.total_of_property(this.meal_plan.foods,'calories_per_serving')
+      const current = this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving')
       return calories_per_serving > (target - current)
     },
     update_food_quantity({index}, new_quantity){
