@@ -23,6 +23,7 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
+        
         <v-card-text v-if="food">
           <v-row>
             <v-col>
