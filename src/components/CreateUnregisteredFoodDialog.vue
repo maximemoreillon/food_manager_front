@@ -27,7 +27,7 @@
           <v-row>
             <v-col>
               <v-text-field
-                label="name"
+                label="Food name"
                 v-model="food.name" />
             </v-col>
           </v-row>
@@ -35,12 +35,14 @@
 
             <v-col>
               <v-text-field
+                type="number"
                 label="Calories [kcal]"
                 v-model="food.calories_per_serving" />
             </v-col>
             <v-col>
               <v-text-field
                 label="Quantity"
+                type="number"
                 v-model="food.quantity" />
             </v-col>
           </v-row>
@@ -49,16 +51,19 @@
             <v-col>
               <v-text-field
                 label="Protein [g]"
+                type="number"
                 v-model="food.protein" />
             </v-col>
             <v-col>
               <v-text-field
                 label="Fat [g]"
+                type="number"
                 v-model="food.fat" />
             </v-col>
             <v-col>
               <v-text-field
                 label="Carbs [g]"
+                type="number"
                 v-model="food.carbohydrates" />
             </v-col>
           </v-row>
@@ -95,20 +100,25 @@
     data(){
       return {
         dialog: false,
-        food: {
+        defaults: {
           name: null,
           calories_per_serving: 0,
           fat: 0,
           carbohydrates: 0,
           protein: 0,
           quantity: 1,
-        }
+        },
+        food: null,
       }
+    },
+    mounted(){
+      this.food = {...this.defaults}
     },
     methods: {
       submit(){
-        this.$emit('foodSubmitted', this.food)
+        this.$emit('foodSubmitted', {...this.food})
         this.dialog = false
+        this.food = {...this.defaults}
       }
     }
 
