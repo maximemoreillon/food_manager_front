@@ -398,11 +398,8 @@ export default {
       else this.meal_plan.foods.push({_id: food._id, quantity: 1})
 
     },
-    remove_food_from_plan({_id}){
-
-      const found_index = this.meal_plan.foods.findIndex( f => f._id ===_id)
-      if(found_index < 0) return
-      this.meal_plan.foods.splice(found_index,1)
+    remove_food_from_plan({index}){
+      this.meal_plan.foods.splice(index,1)
     },
     image_src({_id, image}){
       if (!image) return require('@/assets/image-off.png')
