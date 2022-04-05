@@ -160,6 +160,5 @@ export default {
 
 .value{
   position: absolute;
-  font-weight: bold;
 }
 </style>
