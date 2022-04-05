@@ -71,12 +71,30 @@
             <v-row>
               <v-col cols="12" md="6">
                 <v-card outlined height="100%">
-                  <v-card-title>Calories</v-card-title>
+                  <v-toolbar flat>
+
+                    <v-row align="baseline">
+                      <v-col>
+                        <v-card-title>Calories <v-spacer/></v-card-title>
+                      </v-col>
+                      <v-spacer></v-spacer>
+                      <v-col cols="auto">
+                        <v-text-field
+                          type="number"
+                          v-model="meal_plan.calories_target"
+                          label="Target"/>
+                      </v-col>
+                    </v-row>
+
+                  </v-toolbar>
+
                   <v-card-text>
                     <CalorieCountChart
                       :options="{chart: {height: 200}}"
-                      :calories="total_of_property(formatted_meal_plan_foods,'calories_per_serving')" />
+                      :calories="total_of_property(formatted_meal_plan_foods,'calories_per_serving')"
+                      :target="meal_plan.calories_target"/>
                   </v-card-text>
+
                 </v-card>
               </v-col>
               <v-col cols="12" md="6" >
@@ -88,7 +106,6 @@
                       :protein="total_of_property(formatted_meal_plan_foods,'protein')"
                       :fat="total_of_property(formatted_meal_plan_foods,'fat')"
                       :carbohydrates="total_of_property(formatted_meal_plan_foods,'carbohydrates')" />
-
                   </v-card-text>
                 </v-card>
 
@@ -123,7 +140,8 @@
 
       <v-card-text>
         <v-row>
-          <v-col>
+          <!-- Left col: registered foods -->
+          <v-col cols="12" md="6">
             <v-card outlined>
               <v-card-text>
                 <v-data-table
@@ -176,7 +194,9 @@
             </v-card>
 
           </v-col>
-          <v-col>
+
+          <!-- Right col: Foods in meal plan -->
+          <v-col cols="12" md="6">
             <v-card outlined>
               <v-card-text>
                 <v-data-table
@@ -451,7 +471,6 @@ export default {
     },
     formatted_meal_plan_foods(){
 
-      // TODO: ADD if for food_id
       return this.meal_plan.foods.map((mpf, index) => {
 
         let output = {
@@ -460,6 +479,7 @@ export default {
         }
 
         // If food comes from registered foods, import properties
+        // TODO: Only do that if properties nor available
         if(mpf._id) {
           output = {
             ...output,

@@ -46,7 +46,11 @@
             class="chart_wrapper">
             <CalorieCountChart
               :options="chart_options"
-              :calories="item.calories"/>
+              :calories="item.calories"
+              :target="item.calories_target"/>
+            <span class="value">
+              {{item.calories}}/{{item.calories_target || $store.state.user_configuration.calories_target}}
+            </span>
           </div>
           <span v-else>N/A</span>
         </template>
@@ -147,8 +151,15 @@ export default {
 <style scoped>
 .chart_wrapper {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
   width: 10em;
   height: 10em;
+  position: relative;
+}
+
+.value{
+  position: absolute;
+  font-weight: bold;
 }
 </style>
