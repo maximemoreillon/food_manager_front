@@ -9,7 +9,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            label="Calories target"
+            label="Current calories target"
             v-model="$store.state.user_configuration.calories_target" />
         </v-col>
       </v-row>

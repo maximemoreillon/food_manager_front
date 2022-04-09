@@ -112,21 +112,6 @@
               </v-col>
             </v-row>
 
-            <!-- <v-row align="stretch">
-              <v-col
-                v-for="(macronutrient, index) in macronutrients"
-                :key="`macronutrient_${index}`">
-                <v-card
-                  outlined
-                  height="100%">
-                  <v-card-subtitle>{{macronutrient.text}} [g]</v-card-subtitle>
-                  <v-card-title
-                    class="justify-center">
-                    {{total_of_property(meal_plan.foods, macronutrient.value)}}
-                  </v-card-title>
-                </v-card>
-              </v-col>
-            </v-row> -->
 
           </v-col>
         </v-row>
@@ -209,7 +194,9 @@
                     <v-toolbar
                       flat>
                       <v-spacer />
-                      <CreateUnregisteredFoodDialog @foodSubmitted="add_unregistered_food($event)"/>
+                      <UnregisteredFoodDialog
+                        :foods="foods"
+                        @foodSubmitted="add_unregistered_food($event)"/>
 
                     </v-toolbar>
 
@@ -238,6 +225,20 @@
                       @click="remove_food_from_plan(item)">
                       <v-icon>mdi-playlist-minus</v-icon>
                     </v-btn>
+                  </template>
+
+                  <template v-slot:item.edit="{ item }">
+                    <v-btn
+                      v-if="item._id"
+                      icon
+                      target="_blank"
+                      :to="{name: 'food', params: {food_id: item._id}}">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <UnregisteredFoodDialog
+                      v-else
+                      :food_index="item.index"
+                      :foods="meal_plan.foods"/>
                   </template>
 
 
@@ -281,14 +282,14 @@
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
 import CalorieCountChart from '@/components/CalorieCountChart.vue'
-import CreateUnregisteredFoodDialog from '@/components/CreateUnregisteredFoodDialog.vue'
+import UnregisteredFoodDialog from '@/components/UnregisteredFoodDialog.vue'
 
 export default {
   name: 'Foods',
   components: {
     MacronutrientChart,
     CalorieCountChart,
-    CreateUnregisteredFoodDialog,
+    UnregisteredFoodDialog,
     // CaloriesProgress,
   },
   data: () => ({
@@ -353,6 +354,12 @@ export default {
       this.axios.get(url)
       .then(({data}) => {
         this.meal_plan = data
+
+        if(!this.meal_plan.calories_target) {
+          const current_calories_target = this.$store.state.user_configuration.calories_target
+          this.$set(this.meal_plan,'calories_target',current_calories_target)
+        }
+
       })
       .catch(error => {
         alert('Failed to load meal plan')
@@ -366,7 +373,7 @@ export default {
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
       this.axios.get(url)
       .then(({data}) => {
-        this.foods = data
+        this.foods = data.items
         // Might not be needed here anymore
         this.get_meal_plan()
        })
@@ -434,9 +441,8 @@ export default {
       return Math.round(total * 100) / 100
     },
     item_too_calorific({calories_per_serving}){
-      const target = this.$store.state.user_configuration.calories_target
       const current = this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving')
-      return calories_per_serving > (target - current)
+      return calories_per_serving > (this.meal_plan.calories_target - current)
     },
     update_food_quantity({index}, new_quantity){
       this.meal_plan.foods[index].quantity = new_quantity
@@ -467,6 +473,7 @@ export default {
         ...this.macronutrients,
         {text: 'Quantity', value: 'quantity'},
         {text: 'Remove', value: 'remove'},
+        {text: 'Edit', value: 'edit'},
       ]
     },
     formatted_meal_plan_foods(){

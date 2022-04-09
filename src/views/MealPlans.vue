@@ -10,19 +10,14 @@
         :items="meal_plans"
         @click:row="row_clicked($event)"
         sort-by="date"
-        sort-desc>
+        sort-desc
+        :server-items-length="total"
+        :options.sync="options">
 
         <template v-slot:top>
           <v-toolbar
             flat>
             <v-row align="center">
-              <v-col>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  hide-details/>
-              </v-col>
               <v-spacer/>
               <v-col cols="auto">
                 <v-btn
@@ -91,7 +86,6 @@
 
 <script>
 import MacronutrientChart from '@/components/MacronutrientChart.vue'
-// import CaloriesProgress from '@/components/CaloriesProgressCircular.vue'
 import CalorieCountChart from '@/components/CalorieCountChart.vue'
 
 export default {
@@ -99,7 +93,6 @@ export default {
   components: {
     MacronutrientChart,
     CalorieCountChart,
-    // CaloriesProgress
   },
   data: () => ({
     search: '',
@@ -108,6 +101,8 @@ export default {
       legend: {show: false},
       dataLabels: {enabled: false},
     },
+    options: {},
+    total: 0,
     headers: [
       {text: 'Name', value: 'name'},
       {text: 'Date', value: 'date'},
@@ -115,25 +110,34 @@ export default {
       {text: 'Macronutrients', value: 'macronutrients'},
       {text: 'Incomplete', value: 'incomplete'},
 
-      // {text: 'Protein', value: 'protein'},
-      // {text: 'Fat', value: 'fat'},
-      // {text: 'Carbohydrates', value: 'carbohydrates'},
-
     ]
   }),
   mounted(){
-    this.get_foodd()
+    this.get_meal_plans()
+  },
+  watch: {
+    options: {
+        handler () {
+          this.get_meal_plans()
+        },
+        deep: true,
+      },
   },
   methods:{
-    get_foodd(){
+    get_meal_plans(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
-      this.axios.get(url)
-      .then(({data}) => {
-        this.meal_plans = data
-      })
-      .catch(error => {
-        console.error(error)
-      })
+      const { itemsPerPage, page } = this.options
+      const params = { limit: itemsPerPage, skip: ( page - 1 ) * itemsPerPage }
+
+      this.axios
+        .get(url, { params })
+        .then(({data}) => {
+          this.meal_plans = data.items
+          this.total = data.total
+        })
+        .catch(error => {
+          console.error(error)
+        })
 
     },
     formatted_date(date_string){

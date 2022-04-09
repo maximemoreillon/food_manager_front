@@ -3,16 +3,28 @@
     max-width="600px"
     v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
+
       <v-btn
+        v-if="food_index > -1"
+        icon
+        v-bind="attrs"
+        v-on="on">
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+
+      <v-btn
+        v-else
         v-bind="attrs"
         v-on="on"  >
         Add unregistered food
       </v-btn>
+
     </template>
     <v-form @submit.prevent="submit()">
       <v-card>
         <v-toolbar flat>
-          <v-toolbar-title>Add unregistered food</v-toolbar-title>
+          <v-toolbar-title v-if="food_index > -1">Edit food</v-toolbar-title>
+          <v-toolbar-title v-else>Add unregistered food</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn
@@ -23,7 +35,7 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        
+
         <v-card-text v-if="food">
           <v-row>
             <v-col>
@@ -68,7 +80,8 @@
                 v-model="food.carbohydrates" />
             </v-col>
           </v-row>
-          <v-row>
+
+          <v-row v-if="food_index === -1">
             <v-spacer/>
             <v-col cols="auto">
               <v-btn
@@ -82,8 +95,18 @@
                 Submit
               </v-btn>
             </v-col>
-
           </v-row>
+
+          <v-row v-else>
+            <v-spacer/>
+            <v-col cols="auto">
+              <v-btn
+                @click="dialog = false">
+                Close
+              </v-btn>
+            </v-col>
+          </v-row>
+
         </v-card-text>
 
       </v-card>
@@ -94,9 +117,10 @@
 
 <script>
   export default {
-    name: 'CreateUnregisteredFoodDialog',
+    name: 'UnregisteredFoodDialog',
     props: {
-
+      food_index: {type: Number, default(){return -1}},
+      foods: Array,
     },
     data(){
       return {
@@ -110,6 +134,13 @@
           quantity: 1,
         },
         food: null,
+      }
+    },
+    watch: {
+      dialog(){
+        if(!this.dialog) this.food = {...this.defaults}
+        else if(this.food_index > -1) this.food = this.foods[this.food_index]
+        else this.food = {...this.defaults}
       }
     },
     mounted(){
