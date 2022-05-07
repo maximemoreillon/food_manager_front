@@ -5,6 +5,7 @@
 
     <v-card-text>
       <v-data-table
+        :loading="loading"
         :search="search"
         :headers="headers"
         :items="meal_plans"
@@ -96,6 +97,7 @@ export default {
   },
   data: () => ({
     search: '',
+    loading: false,
     meal_plans: [],
     chart_options: {
       legend: {show: false},
@@ -125,6 +127,7 @@ export default {
   },
   methods:{
     get_meal_plans(){
+      this.loading = true
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
       const { itemsPerPage, page } = this.options
       const params = { limit: itemsPerPage, skip: ( page - 1 ) * itemsPerPage }
@@ -137,6 +140,9 @@ export default {
         })
         .catch(error => {
           console.error(error)
+        })
+        .finally( () => {
+          this.loading = false
         })
 
     },

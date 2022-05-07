@@ -66,27 +66,32 @@
             </v-card>
           </v-col>
         </v-row>
+
         <v-row>
           <v-col>
             <v-row>
               <v-col cols="12" md="6">
-                <v-card outlined height="100%">
-                  <v-toolbar flat>
 
+                <v-card 
+                  outlined 
+                  height="100%">
+
+                  <v-container fluid>
                     <v-row align="baseline">
-                      <v-col>
-                        <v-card-title>Calories <v-spacer/></v-card-title>
+                      <v-col 
+                        class="text-h6">
+                        Calories
                       </v-col>
-                      <v-spacer></v-spacer>
-                      <v-col cols="auto">
+                      <v-spacer />
+                      <v-col>
                         <v-text-field
+                          width="100%"
                           type="number"
                           v-model="meal_plan.calories_target"
                           label="Target"/>
                       </v-col>
                     </v-row>
-
-                  </v-toolbar>
+                  </v-container>
 
                   <v-card-text>
                     <CalorieCountChart
@@ -98,8 +103,18 @@
                 </v-card>
               </v-col>
               <v-col cols="12" md="6" >
-                <v-card outlined height="100%">
-                  <v-card-title>Macronutrients</v-card-title>
+                <v-card 
+                  outlined 
+                  height="100%">
+                  <v-container fluid>
+                    <v-row align="baseline">
+                      <v-col 
+                        class="text-h6">
+                        Macronutrients
+                      </v-col>
+                      <v-spacer/>
+                    </v-row>
+                  </v-container>
                   <v-card-text>
                     <MacronutrientChart
                       :options="{chart: {height: 200}}"
@@ -138,15 +153,29 @@
                   sort-by="name"
                   @click:row="add_food_to_plan($event)">
 
-                  <template v-slot:top>
-                    <v-toolbar flat>
-                      <v-text-field
-                        v-model="search"
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        hide-details/>
-                    </v-toolbar>
+                  <template
+                    v-slot:top>
+                    <v-container
+                      fluid>
+                      <v-row>
+                        <v-col cols="12" md="6" class="text-h6">
+                          Registered foods
+                        </v-col>
+                        <v-spacer></v-spacer>
+                        <v-col md="12">
+                          <v-text-field
+                            v-model="search"
+                            append-icon="mdi-magnify"
+                            label="Search"
+                            hide-details/>
+                        </v-col>
+                      </v-row>
+                      
+
+                    </v-container>
+
                   </template>
+
 
                   <template v-slot:item.image="{ item }">
                     <v-img
@@ -183,6 +212,8 @@
           <!-- Right col: Foods in meal plan -->
           <v-col cols="12" md="6">
             <v-card outlined>
+              
+
               <v-card-text>
                 <v-data-table
                   :headers="meal_plan_foods_headers"
@@ -191,14 +222,22 @@
 
                   <template
                     v-slot:top>
-                    <v-toolbar
-                      flat>
+                    <v-container
+                      fluid>
+                      <v-row>
+                        <v-col cols="12" md="6" class="text-h6">
+                          Foods in meal plan
+                        </v-col>
+                        <v-spacer></v-spacer>
+                        <v-col md="12">
+                          <UnregisteredFoodDialog
+                            :foods="foods"
+                            @foodSubmitted="add_unregistered_food($event)"/>
+                        </v-col>
+                      </v-row>
                       <v-spacer />
-                      <UnregisteredFoodDialog
-                        :foods="foods"
-                        @foodSubmitted="add_unregistered_food($event)"/>
-
-                    </v-toolbar>
+                    </v-container>
+                      
 
                   </template>
 
