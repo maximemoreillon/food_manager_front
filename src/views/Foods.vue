@@ -4,8 +4,14 @@
     <v-card-title>Foods</v-card-title>
 
     <v-card-text>
-      <v-data-table :search="search" :headers="headers" :items="filtered_foods" :items-per-page="-1"
-        @click:row="row_clicked($event)" sort-by="name">
+      <v-data-table
+        :loading="loading"
+        :search="search"
+        :headers="headers"
+        :items="filtered_foods"
+        :items-per-page="-1"
+        @click:row="row_clicked($event)"
+        sort-by="name">
 
         <template v-slot:top>
           <v-toolbar flat>
@@ -56,6 +62,7 @@ export default {
 
   data: () => ({
     search: '',
+    loading: false,
     foods: [],
     show_hidden: false,
     base_headers: [
@@ -73,12 +80,17 @@ export default {
   },
   methods:{
     get_foodd(){
+      this.loading = true
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
-      this.axios.get(url)
-      .then(({data}) => { this.foods = data.items })
-      .catch(error => {
-        console.error(error)
-      })
+      const params = { limit: -1 }
+      this.axios.get(url, {params} )
+        .then( ({data}) => { this.foods = data.items })
+        .catch(error => {
+          console.error(error)
+        })
+        .finally( () => {
+          this.loading = false
+        })
 
     },
     image_src({_id, image}){
