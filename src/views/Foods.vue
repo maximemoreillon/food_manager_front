@@ -18,21 +18,14 @@
 
             <v-row align="baseline">
               <v-col>
-                <v-text-field
-                  v-model="search"
-                  append-icon="mdi-magnify"
-                  label="Search"
-                  hide-details/>
+                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
               </v-col>
               <v-col>
-                <v-checkbox
-                  label="Show hidden"
-                  v-model="show_hidden"/>
+                <v-checkbox label="Show hidden" v-model="show_hidden" />
               </v-col>
-              <v-spacer/>
+              <v-spacer />
               <v-col cols="auto">
-                <v-btn
-                  :to="{name: 'create_food'}">
+                <v-btn :to="{name: 'create_food'}">
                   <v-icon>mdi-plus</v-icon>
                   <span class="ml-2">Add</span>
                 </v-btn>
@@ -42,16 +35,16 @@
           </v-toolbar>
         </template>
 
+        <template v-slot:item.serving="{ item }">
+          {{item.serving.size}} {{item.serving.unit}}
+        </template>
+
         <template v-slot:item.hidden="{ item }">
           <v-icon v-if="item.hidden">mdi-check</v-icon>
         </template>
 
         <template v-slot:item.image="{ item }">
-          <v-img
-            width="6em"
-            height="6em"
-            contain
-            :src="image_src(item)" />
+          <v-img width="6em" height="6em" contain :src="image_src(item)" />
         </template>
 
 
@@ -73,14 +66,13 @@ export default {
     foods: [],
     show_hidden: false,
     base_headers: [
-      {text: 'Image', value: 'image'},
-      {text: 'Name', value: 'name'},
-      {text: 'Calories [kcal]', value: 'calories_per_serving'},
-      {text: 'Protein [g]', value: 'protein'},
-      {text: 'Fat [g]', value: 'fat'},
-      {text: 'Carbs [g]', value: 'carbohydrates'},
-      {text: 'Price [JPY]', value: 'price_per_serving'},
-      {text: 'Vendor', value: 'vendor'},
+      { text: 'Image', value: 'image' },
+      { text: 'Name', value: 'name' },
+      { text: 'Serving', value: 'serving' },
+      { text: 'Calories [kcal]', value: 'serving.calories'},
+      { text: 'Protein [g]', value: 'serving.macronutrients.protein'},
+      { text: 'Fat [g]', value: 'serving.macronutrients.fat'},
+      { text: 'Carbs [g]', value: 'serving.macronutrients.carbohydrates'},
     ]
   }),
   mounted(){
