@@ -82,13 +82,7 @@
               v-model="food.price_per_serving"/>
           </v-col>
         </v-row>
-        <!-- <v-row>
-          <v-col>
-            <v-checkbox
-              label="Keto friendly"
-              v-model="food.keto_friendly"/>
-          </v-col>
-        </v-row> -->
+
         <v-row align="center">
           <v-col>
             <v-file-input
@@ -129,6 +123,7 @@ export default {
   data: () => ({
     food: null,
     loading: false,
+    // TODO: Don't hardcode those
     vendors: [
       'スギ薬局',
       'Lawson 100',
