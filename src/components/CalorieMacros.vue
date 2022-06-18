@@ -70,7 +70,7 @@ export default {
         calorie_bar_style(){
             return {
                 width: `${100 * this.calories / this.calorie_bar_max}%`,
-                'background-color': this.calories > this.target ? this.colors.calorie_excess : this.colors.calories
+                // 'background-color': this.calories > this.target ? this.colors.calorie_excess : this.colors.calories
             }
         },
         target_bar_style(){
@@ -110,7 +110,7 @@ export default {
 
 .calories_bar {
     border-radius: 0.5em;
-    padding: 0.5em;
+    padding: 0.25em;
     display: flex;
     transition: width 0.25s;
     gap: 0.1em;

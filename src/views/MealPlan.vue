@@ -106,7 +106,7 @@
                   </template>
 
                   <template v-slot:item.serving.calories="{ item }">
-                    <v-chip :color="item_too_calorific(item) ? colors.calorie_excess : colors.calories">
+                    <v-chip :color="item_too_calorific(item) ? colors.calorie_excess : ''" outlined>
                       {{item.calories_per_serving}}
                     </v-chip>
                   </template>
@@ -174,10 +174,6 @@
                   </template>
 
                   <template v-slot:item.edit="{ item }">
-                    <!-- <v-btn v-if="item.food._id" icon target="_blank"
-                      :to="{name: 'food', params: {food_id: item.food._id}}">
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn> -->
                     <UnregisteredFoodDialog :item="item" />
                   </template>
 
