@@ -33,7 +33,7 @@
           <v-row>
 
             <v-col>
-              <v-text-field type="number" label="Servign size" v-model.number="food.serving.size" />
+              <v-text-field type="number" label="Serving size" v-model.number="food.serving.size" />
             </v-col>
             <v-col>
               <v-text-field  label="Unit" v-model="food.serving.unit" />
