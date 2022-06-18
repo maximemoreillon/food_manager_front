@@ -1,7 +1,7 @@
 export default {
-    protein: '#f79797',
+    protein: '#f29191',
     fat: '#ede577',
-    carbohydrates: '#9de0b7',
+    carbohydrates: '#90de97',
     calories: '#dfecf7',
     calorie_excess: '#ed8a8a'
 }
