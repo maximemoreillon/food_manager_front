@@ -236,11 +236,6 @@ export default {
       color: 'green',
     },
 
-
-    chart_options: {
-      legend: {show: false},
-      dataLabels: {enabled: false},
-    },
   }),
   mounted(){
     document.addEventListener("keydown", this.handle_keydown_events)

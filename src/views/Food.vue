@@ -30,7 +30,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="Serving size" v-model="food.serving.size" />
+            <v-text-field label="Serving size" type="number" v-model.number="food.serving.size" />
           </v-col>
           <v-col cols="2">
             <v-text-field label="unit" v-model="food.serving.unit" />
@@ -79,6 +79,16 @@
 
     </template>
 
+    <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+      {{ snackbar.text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn text dark v-bind="attrs" @click="snackbar.show = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
 
 
 
@@ -92,13 +102,13 @@ export default {
   data: () => ({
     food: null,
     loading: false,
-    // TODO: Don't hardcode those
-    vendors: [
-      'スギ薬局',
-      'Lawson 100',
-      'Family Mart',
-    ],
+
     image: null,
+    snackbar: {
+      show: false,
+      text: null,
+      color: 'green',
+    },
   }),
   mounted(){
     this.get_food()
@@ -135,7 +145,10 @@ export default {
     update_food(){
       const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
       this.axios.patch(url, this.food)
-      .then(() => { this.get_food() })
+      .then(() => { 
+        this.snackbar.text = 'Food saved'
+        this.snackbar.show = true
+       })
       .catch(error => {
         console.error(error)
       })
