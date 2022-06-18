@@ -1,40 +1,30 @@
 <template>
-  <v-card
-    :loading="loading">
+  <v-card :loading="loading">
 
     <v-toolbar flat>
       <v-row align="center">
         <v-col cols="auto">
-          <v-btn
-            icon
-            exact
-            :to="{name: 'meal_plans'}">
+          <v-btn icon exact :to="{name: 'meal_plans'}">
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
         </v-col>
         <v-col>
           <v-toolbar-title>Meal plan</v-toolbar-title>
         </v-col>
-        <v-spacer/>
+        <v-spacer />
         <v-col cols="auto">
-          <v-btn
-            icon
-            @click="save_meal_plan()">
+          <v-btn icon @click="save_meal_plan()">
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="auto">
-          <v-btn
-            icon
-            color="#c00000"
-            v-if="meal_plan_id"
-            @click="delete_meal_plan()">
+          <v-btn icon color="#c00000" v-if="meal_plan_id" @click="delete_meal_plan()">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-divider/>
+    <v-divider />
 
     <template v-if="this.meal_plan">
 
@@ -47,19 +37,15 @@
               <v-card-text>
                 <v-row align="center">
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      label="Meal plan name"
-                      v-model="meal_plan.name"/>
+                    <v-text-field label="Meal plan name" v-model="meal_plan.name" />
                   </v-col>
-                  <v-spacer/>
+                  <v-spacer />
                   <v-col cols="auto">
                     Date: {{new Date(meal_plan.date).toLocaleString()}}
                   </v-col>
-                  <v-spacer/>
+                  <v-spacer />
                   <v-col cols="auto">
-                    <v-checkbox
-                      label="Incomplete"
-                      v-model="meal_plan.incomplete"/>
+                    <v-checkbox label="Incomplete" v-model="meal_plan.incomplete" />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -74,53 +60,41 @@
               <!-- Calories -->
               <v-col cols="12" md="6">
 
-                <v-card 
-                  outlined 
-                  height="100%">
+                <v-card outlined height="100%">
 
                   <v-container fluid>
                     <v-row align="baseline">
-                      <v-col 
-                        class="text-h6">
+                      <v-col class="text-h6">
                         Calories
                       </v-col>
                       <v-spacer />
                       <v-col>
-                        <v-text-field
-                          width="100%"
-                          type="number"
-                          v-model="meal_plan.calories_target"
-                          label="Target"/>
+                        <v-text-field width="100%" type="number" v-model="meal_plan.calories_target" label="Target" />
                       </v-col>
                     </v-row>
                   </v-container>
 
                   <v-card-text>
-                    <CalorieCountChart
-                      :options="{chart: {height: 200}}"
+                    <CalorieCountChart :options="{chart: {height: 200}}"
                       :calories="total_of_property(formatted_meal_plan_foods,'calories_per_serving')"
-                      :target="meal_plan.calories_target"/>
+                      :target="meal_plan.calories_target" />
                   </v-card-text>
 
                 </v-card>
               </v-col>
               <!-- Macros -->
-              <v-col cols="12" md="6" >
-                <v-card 
-                  outlined 
-                  height="100%">
+              <v-col cols="12" md="6">
+                <v-card outlined height="100%">
                   <v-container fluid>
                     <v-row align="baseline">
-                      <v-col 
-                        class="text-h6">
+                      <v-col class="text-h6">
                         Macronutrients
                       </v-col>
-                      <v-spacer/>
+                      <v-spacer />
                     </v-row>
                   </v-container>
                   <v-card-text>
-                    <MacronutrientChart
-                      :options="{chart: {height: 200}}"
+                    <MacronutrientChart :options="{chart: {height: 200}}"
                       :protein="total_of_property(formatted_meal_plan_foods,'protein')"
                       :fat="total_of_property(formatted_meal_plan_foods,'fat')"
                       :carbohydrates="total_of_property(formatted_meal_plan_foods,'carbohydrates')" />
@@ -143,33 +117,21 @@
           <v-col cols="12" md="6">
             <v-card outlined>
               <v-card-text>
-                <v-data-table
-                  height="500"
-                  :search="search"
-                  :headers="food_list_headers"
-                  :items="filtered_foods"
-                  :items-per-page="-1"
-                  sort-by="name"
-                  @click:row="add_food_to_plan($event)">
+                <v-data-table height="500" :search="search" :headers="food_list_headers" :items="filtered_foods"
+                  :items-per-page="-1" sort-by="name" @click:row="add_food_to_plan($event)">
 
-                  <template
-                    v-slot:top>
-                    <v-container
-                      fluid>
+                  <template v-slot:top>
+                    <v-container fluid>
                       <v-row>
                         <v-col cols="12" md="6" class="text-h6">
                           Registered foods
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col md="12">
-                          <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            hide-details/>
+                          <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
                         </v-col>
                       </v-row>
-                      
+
 
                     </v-container>
 
@@ -177,27 +139,24 @@
 
 
                   <template v-slot:item.image="{ item }">
-                    <v-img
-                      :width="thumbnail_size"
-                      :height="thumbnail_size"
-                      contain
-                      :src="image_src(item)" />
+                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item)" />
 
                   </template>
 
-                  <template v-slot:item.calories_per_serving="{ item }">
-                    <v-chip
-                      :color=" item_too_calorific(item) ? 'red' : 'green'">
+                  <template v-slot:item.serving.calories="{ item }">
+                    <!-- <v-chip :color=" item_too_calorific(item) ? 'red' : 'green'">
                       {{item.calories_per_serving}}
-                    </v-chip>
+                    </v-chip> -->
+                    <v-chip>{{item.serving.calories}}</v-chip>
+                  </template>
+
+                  <template v-slot:item.food.serving="{ item }">
+                    {{item.food.serving.size}} {{ item.food.serving.unit}}
                   </template>
 
                   <template v-slot:item.macronutrients="{ item }">
                     <div class="chart_wrapper">
-                      <MacronutrientChart
-                        :options="chart_options"
-                        :protein="item.protein"
-                        :fat="item.fat"
+                      <MacronutrientChart :options="chart_options" :protein="item.protein" :fat="item.fat"
                         :carbohydrates="item.carbohydrates" />
                     </div>
                   </template>
@@ -210,73 +169,55 @@
 
           <!-- Right col: Foods in meal plan -->
           <v-col cols="12" md="6">
-            <v-card outlined v-if="false">
-              
+            <v-card outlined>
+
 
               <v-card-text>
-                <v-data-table
-                  :headers="meal_plan_foods_headers"
-                  :items="meal_plan.foods"
-                  :items-per-page="-1">
+                <v-data-table :headers="meal_plan_foods_headers" :items="meal_plan.foods" :items-per-page="-1">
 
-                  <template
-                    v-slot:top>
-                    <v-container
-                      fluid>
+                  <template v-slot:top>
+                    <v-container fluid>
                       <v-row>
                         <v-col cols="12" md="6" class="text-h6">
                           Foods in meal plan
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col md="12">
-                          <UnregisteredFoodDialog
-                            :foods="foods"
-                            @foodSubmitted="add_unregistered_food($event)"/>
+                          <UnregisteredFoodDialog :foods="foods" @foodSubmitted="add_unregistered_food($event)" />
                         </v-col>
                       </v-row>
                       <v-spacer />
                     </v-container>
-                      
+
 
                   </template>
 
 
 
                   <template v-slot:item.image="{ item }">
-                    <v-img
-                      :width="thumbnail_size"
-                      :height="thumbnail_size"
-                      contain
-                      :src="image_src(item)" />
+                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item.food)" />
                   </template>
 
                   <template v-slot:item.quantity="{ item }">
-                    <v-text-field
-                      type="number"
-                      :value="item.quantity"
-                      @input="update_food_quantity(item, $event)"/>
+                    <v-text-field type="number" v-model="item.quantity"  />
+                  </template>
+
+                  <template v-slot:item.food.serving="{ item }">
+                    {{item.food.serving.size}} {{ item.food.serving.unit}}
                   </template>
 
                   <template v-slot:item.remove="{ item }">
-                    <v-btn
-                      icon
-                      @click="remove_food_from_plan(item)">
+                    <v-btn icon @click="remove_food_from_plan(item)">
                       <v-icon>mdi-playlist-minus</v-icon>
                     </v-btn>
                   </template>
 
                   <template v-slot:item.edit="{ item }">
-                    <v-btn
-                      v-if="item._id"
-                      icon
-                      target="_blank"
-                      :to="{name: 'food', params: {food_id: item._id}}">
+                    <v-btn v-if="item.food._id" icon target="_blank"
+                      :to="{name: 'food', params: {food_id: item.food._id}}">
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                    <UnregisteredFoodDialog
-                      v-else
-                      :food_index="item.index"
-                      :foods="meal_plan.foods"/>
+                    <UnregisteredFoodDialog v-else :food_index="item.index" :foods="meal_plan.foods" />
                   </template>
 
 
@@ -294,18 +235,11 @@
 
 
 
-    <v-snackbar
-      :color="snackbar.color"
-      v-model="snackbar.show">
+    <v-snackbar :color="snackbar.color" v-model="snackbar.show">
       {{ snackbar.text }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-
-          text
-          dark
-          v-bind="attrs"
-          @click="snackbar.show = false">
+        <v-btn text dark v-bind="attrs" @click="snackbar.show = false">
           Close
         </v-btn>
       </template>
@@ -345,7 +279,7 @@ export default {
       color: 'green',
     },
     base_headers: [
-      {text: '', value: 'image'},
+      // {text: '', value: 'image'},
       {text: 'Name', value: 'name'},
       {text: 'Calories', value: 'serving.calories'},
       //{text: 'Keto friendly', value: 'keto_friendly'},
@@ -459,9 +393,11 @@ export default {
     add_food_to_plan(food){
 
       // Check if food is already listed. If so, simply increase quantity
-      const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
-      if(found_food) found_food.quantity ++
-      else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+      // const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
+      // if(found_food) found_food.quantity ++
+      // else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+
+      this.meal_plan.foods.push({food, quantity: 1})
 
     },
     remove_food_from_plan({index}){
@@ -507,10 +443,13 @@ export default {
     },
     meal_plan_foods_headers(){
       return [
-        ...this.base_headers,
-        ...this.macronutrients,
-        {text: 'Quantity', value: 'quantity'},
+        // { text: '', value: 'image' },
+        { text: 'Name', value: 'food.name' },
+        { text: 'Serving', value: 'food.serving' },
+        { text: 'Calories', value: 'food.serving.calories' },
+        {text: 'Qty', value: 'quantity', width: '5rem'},
         {text: 'Remove', value: 'remove'},
+        
         {text: 'Edit', value: 'edit'},
       ]
     },
