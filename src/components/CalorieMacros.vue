@@ -2,15 +2,16 @@
     <div>
         <v-row>
             <v-col>
-                {{calories}} / {{target}} kcal
+                <v-chip :color="calories > target ? '#ed8a8a' : colors.calories">{{calories}} /
+                    {{target}} kcal</v-chip>
             </v-col>
             <v-spacer />
             <v-col cols="auto" v-for="(value, key) in macronutrients" :key="key">
-                <span :style="{ color: colors[key] }">{{value}}g {{ key }}</span>
+                <v-chip :color="colors[key]">{{value}}g {{ key }}</v-chip>
             </v-col>
         </v-row>
 
-        <div class=" wrapper" :style="wrapper_style">
+        <div class=" wrapper">
             <div class="target_bar" :style="target_bar_style" v-if="calories > target"></div>
 
             <div class="calories_bar" :style="calorie_bar_style">
@@ -54,7 +55,7 @@ export default {
         macro_bar_style(macro){
             return {
                 width: `${100 * this.macronutrients[macro] / this.macros_total_mass}%`,
-                'background-color': colors[macro]
+                'background-color': this.colors[macro]
             }
         }
     },
@@ -64,7 +65,8 @@ export default {
         },
         calorie_bar_style(){
             return {
-                width: `${100 * this.calories / this.calorie_bar_max}%`
+                width: `${100 * this.calories / this.calorie_bar_max}%`,
+                'background-color': this.calories > this.target ? 'lightpink' : this.colors.calories
             }
         },
         target_bar_style(){
@@ -72,11 +74,7 @@ export default {
                 width: `${100 * (1 - this.target / this.calorie_bar_max)}%`
             }
         },
-        wrapper_style(){
-            return {
-                'background-color': this.calories > this.target ? 'lightpink' : 'aliceblue'
-            }
-        },
+
         macros_total_mass(){
             const {protein, fat, carbohydrates} = this.macronutrients
             return protein + fat + carbohydrates
@@ -90,6 +88,7 @@ export default {
 
 <style scoped>
 .wrapper {
+    border: 1px solid #dddddd;
     margin-top: 0.5em;
     border-radius: 0.5em;
     position: relative;
@@ -101,6 +100,7 @@ export default {
 }
 
 .calories_bar {
+    border-radius: 0.5em;
     padding: 0.5em;
     display: flex;
     transition: width 0.25s;

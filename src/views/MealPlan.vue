@@ -398,7 +398,7 @@ export default {
     },
     meal_plan_foods_headers(){
       return [
-        // { text: '', value: 'image' },
+        { text: '', value: 'image' },
         { text: 'Name', value: 'food.name' },
         { text: 'Serving', value: 'food.serving' },
         { text: 'Calories', value: 'food.serving.calories' },
