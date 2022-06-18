@@ -6,8 +6,8 @@
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
 
-      <v-btn v-else v-bind="attrs" v-on="on">
-        Add unregistered food
+      <v-btn v-else v-bind="attrs" v-on="on" icon>
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
 
     </template>

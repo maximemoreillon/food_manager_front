@@ -143,7 +143,7 @@
                           Foods in meal plan
                         </v-col>
                         <v-spacer></v-spacer>
-                        <v-col md="12">
+                        <v-col cols="auto">
                           <UnregisteredFoodDialog :foods="foods" @foodSubmitted="add_unregistered_food($event)" />
                         </v-col>
                       </v-row>
