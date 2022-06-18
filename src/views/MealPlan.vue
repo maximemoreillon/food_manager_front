@@ -106,7 +106,7 @@
                   </template>
 
                   <template v-slot:item.serving.calories="{ item }">
-                    <v-chip :color=" item_too_calorific(item) ? 'red' : 'green'">
+                    <v-chip :color="item_too_calorific(item) ? colors.calorie_excess : colors.calories">
                       {{item.calories_per_serving}}
                     </v-chip>
                   </template>
@@ -178,7 +178,7 @@
                       :to="{name: 'food', params: {food_id: item.food._id}}">
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn> -->
-                    <UnregisteredFoodDialog  :item="item" />
+                    <UnregisteredFoodDialog :item="item" />
                   </template>
 
 
@@ -215,6 +215,8 @@
 <script>
 import UnregisteredFoodDialog from '@/components/UnregisteredFoodDialog.vue'
 import CalorieMacros from '../components/CalorieMacros.vue'
+import colors from '@/colors'
+
 export default {
   name: 'Foods',
   components: {
@@ -223,6 +225,7 @@ export default {
     CalorieMacros,
   },
   data: () => ({
+    colors,
     search: '',
     foods: [],
 
