@@ -4,25 +4,15 @@
     <v-card-title>Meal plans</v-card-title>
 
     <v-card-text>
-      <v-data-table
-        :loading="loading"
-        :search="search"
-        :headers="headers"
-        :items="meal_plans"
-        @click:row="row_clicked($event)"
-        sort-by="date"
-        sort-desc
-        :server-items-length="total"
-        :options.sync="options">
+      <v-data-table :loading="loading" :search="search" :headers="headers" :items="meal_plans"
+        @click:row="row_clicked($event)" sort-by="date" sort-desc :server-items-length="total" :options.sync="options">
 
         <template v-slot:top>
-          <v-toolbar
-            flat>
+          <v-toolbar flat>
             <v-row align="center">
-              <v-spacer/>
+              <v-spacer />
               <v-col cols="auto">
-                <v-btn
-                  :to="{name: 'new_meal_plan'}">
+                <v-btn :to="{name: 'new_meal_plan'}">
                   <v-icon>mdi-plus</v-icon>
                   <span class="ml-2">New</span>
                 </v-btn>
@@ -37,13 +27,8 @@
         </template>
 
         <template v-slot:item.calories="{ item }">
-          <div
-            v-if="item.calories"
-            class="chart_wrapper">
-            <CalorieCountChart
-              :options="chart_options"
-              :calories="item.calories"
-              :target="item.calories_target"/>
+          <div v-if="item.calories" class="chart_wrapper">
+            <CalorieCountChart :options="chart_options" :calories="item.calories" :target="item.calories_target" />
             <span class="value">
               {{item.calories}}/{{item.calories_target || $store.state.user_configuration.calories_target}}
             </span>
@@ -53,23 +38,15 @@
 
 
         <template v-slot:item.macronutrients="{ item }">
-          <div
-            v-if="item.protein && item.fat && item.carbohydrates"
-            class="chart_wrapper">
-            <MacronutrientChart
-
-              :options="chart_options"
-              :protein="item.protein"
-              :fat="item.fat"
-              :carbohydrates="item.carbohydrates" />
+          <div v-if="item.macronutrients" class="chart_wrapper">
+            <MacronutrientChart :options="chart_options" :protein="item.macronutrients.protein"
+              :fat="item.macronutrients.fat" :carbohydrates="item.macronutrients.carbohydrates" />
           </div>
           <span v-else>N/A</span>
         </template>
 
         <template v-slot:item.incomplete="{ item }">
-          <v-icon
-            color="#c00000"
-            v-if="item.incomplete">
+          <v-icon color="#c00000" v-if="item.incomplete">
             mdi-alert
           </v-icon>
         </template>

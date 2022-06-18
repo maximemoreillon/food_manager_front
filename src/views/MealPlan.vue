@@ -328,13 +328,10 @@ export default {
       else this.create_meal_plan()
     },
     add_food_to_plan(new_food){
-
       // Check if food is already listed. If so, simply increase quantity
       const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
       else this.meal_plan.foods.push({ food: new_food, quantity: 1})
-
-
     },
     remove_food_from_plan({food: food_to_delete}){
       const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
