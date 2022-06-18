@@ -1,21 +1,12 @@
 <template>
-  <v-dialog
-    max-width="600px"
-    v-model="dialog">
+  <v-dialog max-width="600px" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
 
-      <v-btn
-        v-if="food_index > -1"
-        icon
-        v-bind="attrs"
-        v-on="on">
+      <v-btn v-if="food_index > -1" icon v-bind="attrs" v-on="on">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
 
-      <v-btn
-        v-else
-        v-bind="attrs"
-        v-on="on"  >
+      <v-btn v-else v-bind="attrs" v-on="on">
         Add unregistered food
       </v-btn>
 
@@ -27,10 +18,7 @@
           <v-toolbar-title v-else>Add unregistered food</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn
-              icon
-              dark
-              @click="dialog = false">
+            <v-btn icon dark @click="dialog = false">
               <v-icon>mdi-close</v-icon>
             </v-btn>
           </v-toolbar-items>
@@ -39,69 +27,52 @@
         <v-card-text v-if="food">
           <v-row>
             <v-col>
-              <v-text-field
-                label="Food name"
-                v-model="food.name" />
+              <v-text-field label="Food name" v-model="food.name" />
             </v-col>
           </v-row>
           <v-row>
 
             <v-col>
-              <v-text-field
-                type="number"
-                label="Calories [kcal]"
-                v-model="food.calories_per_serving" />
+              <v-text-field type="number" label="Servign size" v-model.number="food.serving.size" />
             </v-col>
             <v-col>
-              <v-text-field
-                label="Quantity"
-                type="number"
-                v-model="food.quantity" />
+              <v-text-field  label="Unit" v-model="food.serving.unit" />
+            </v-col>
+            <v-col>
+              <v-text-field type="number" label="Calories [kcal]" v-model.number="food.serving.calories" />
             </v-col>
           </v-row>
           <v-row>
 
             <v-col>
-              <v-text-field
-                label="Protein [g]"
-                type="number"
-                v-model="food.protein" />
+              <v-text-field label="Protein [g]" type="number" v-model="food.serving.macronutrients.protein" />
             </v-col>
             <v-col>
-              <v-text-field
-                label="Fat [g]"
-                type="number"
-                v-model="food.fat" />
+              <v-text-field label="Fat [g]" type="number" v-model="food.serving.macronutrients.fat" />
             </v-col>
             <v-col>
-              <v-text-field
-                label="Carbs [g]"
-                type="number"
-                v-model="food.carbohydrates" />
+              <v-text-field label="Carbs [g]" type="number" v-model="food.serving.macronutrients.carbohydrates" />
             </v-col>
           </v-row>
 
           <v-row v-if="food_index === -1">
-            <v-spacer/>
+            <v-spacer />
             <v-col cols="auto">
-              <v-btn
-                @click="dialog = false">
+              <v-btn @click="dialog = false">
                 Cancel
               </v-btn>
             </v-col>
             <v-col cols="auto">
-              <v-btn
-                type="submit">
+              <v-btn type="submit">
                 Submit
               </v-btn>
             </v-col>
           </v-row>
 
           <v-row v-else>
-            <v-spacer/>
+            <v-spacer />
             <v-col cols="auto">
-              <v-btn
-                @click="dialog = false">
+              <v-btn @click="dialog = false">
                 Close
               </v-btn>
             </v-col>
@@ -127,11 +98,17 @@
         dialog: false,
         defaults: {
           name: null,
-          calories_per_serving: 0,
-          fat: 0,
-          carbohydrates: 0,
-          protein: 0,
-          quantity: 1,
+          serving: {
+            calories: 0,
+            size: 0,
+            unit: 'g',
+            macronutrients: {
+              fat: 0,
+              carbohydrates: 0,
+              protein: 0,
+            }
+          },
+          
         },
         food: null,
       }

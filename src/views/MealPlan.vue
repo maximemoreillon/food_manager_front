@@ -335,8 +335,6 @@ export default {
     },
     add_food_to_plan(new_food){
 
-      // console.log(new_food)
-
       // Check if food is already listed. If so, simply increase quantity
       const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
@@ -350,6 +348,7 @@ export default {
       this.meal_plan.foods.splice(found_index, 1)
     },
     image_src({_id, image}){
+      if(!_id) return require('@/assets/image-off.png')
       if (!image) return require('@/assets/image-off.png')
       else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
@@ -363,7 +362,8 @@ export default {
     },
 
     add_unregistered_food(food){
-      this.meal_plan.foods.push(food)
+      console.log(food)
+      this.meal_plan.foods.push({food, quantity: 1})
     }
 
   },
@@ -386,8 +386,8 @@ export default {
       }
     },
     food_list_headers(){
-      // TODO: use base headers
       return [
+        { text: '', value: 'image' },
         { text: 'Name', value: 'name' },
         { text: 'Serving', value: 'serving' },
         { text: 'Calories', value: 'serving.calories' },
