@@ -58,8 +58,8 @@
             <v-card outlined>
               <v-card-title>Calories and Macros</v-card-title>
               <v-card-text>
-                <CalorieMacros :target="meal_plan.calories_target" :calories="calorie_total"
-                  :macronutrients="macros_total" />
+                <CalorieMacros :target="meal_plan.calories_target" @update:target="meal_plan.calories_target = $event"
+                  :calories="calorie_total" :macronutrients="macros_total" />
               </v-card-text>
 
 
@@ -144,7 +144,7 @@
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col cols="auto">
-                          <UnregisteredFoodDialog :foods="foods" @foodSubmitted="add_unregistered_food($event)" />
+                          <UnregisteredFoodDialog @foodSubmitted="add_unregistered_food($event)" />
                         </v-col>
                       </v-row>
                       <v-spacer />

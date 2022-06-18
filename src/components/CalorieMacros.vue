@@ -1,9 +1,13 @@
 <template>
     <div>
-        <v-row>
-            <v-col>
-                <v-chip :color="calories > target ? colors.calorie_excess : colors.calories">{{calories}} /
-                    {{target}} kcal</v-chip>
+        <v-row align="center">
+            <v-col cols="auto">
+                <v-text-field dense label="Calories" outlined filled rounded :value="calories" readonly />
+            </v-col>
+            <v-col cols="auto">/</v-col>
+            <v-col cols="auto">
+                <v-text-field label="Target" outlined dense rounded v-model.number="targetModel" />
+
             </v-col>
             <v-spacer />
             <v-col cols="auto" v-for="(value, key) in macronutrients" :key="key">
@@ -81,7 +85,12 @@ export default {
         },
         calorie_bar_max(){
             return Math.max(this.target, this.calories)
+        },
+        targetModel: {
+            get() { return this.target },
+            set(value) { this.$emit('update:target', value) },
         }
+
     }
 }
 </script>
