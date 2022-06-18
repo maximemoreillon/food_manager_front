@@ -4,20 +4,14 @@
     <v-card-title>Foods</v-card-title>
 
     <v-card-text>
-      <v-data-table
-        :loading="loading"
-        :search="search"
-        :headers="headers"
-        :items="filtered_foods"
-        :items-per-page="-1"
-        @click:row="row_clicked($event)"
-        sort-by="name">
+      <v-data-table :loading="loading" :search="search" :headers="headers" :items="filtered_foods" :items-per-page="-1"
+        @click:row="row_clicked($event)" sort-by="name">
 
         <template v-slot:top>
-          <v-toolbar flat>
+          <v-container fluid>
 
             <v-row align="baseline">
-              <v-col>
+              <v-col cols="12" md="6">
                 <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
               </v-col>
               <v-col>
@@ -32,7 +26,7 @@
               </v-col>
             </v-row>
 
-          </v-toolbar>
+          </v-container>
         </template>
 
         <template v-slot:item.serving="{ item }">
