@@ -106,10 +106,9 @@
                   </template>
 
                   <template v-slot:item.serving.calories="{ item }">
-                    <!-- <v-chip :color=" item_too_calorific(item) ? 'red' : 'green'">
+                    <v-chip :color=" item_too_calorific(item) ? 'red' : 'green'">
                       {{item.calories_per_serving}}
-                    </v-chip> -->
-                    <v-chip>{{item.serving.calories}}</v-chip>
+                    </v-chip>
                   </template>
 
                   <template v-slot:item.food.serving="{ item }">
@@ -306,10 +305,8 @@ export default {
 
       const body = {
         ...this.meal_plan,
-        // calories: this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving'),
-        // protein: this.total_of_property(this.formatted_meal_plan_foods,'protein'),
-        // fat: this.total_of_property(this.formatted_meal_plan_foods,'fat'),
-        // carbohydrates: this.total_of_property(this.formatted_meal_plan_foods,'carbohydrates'),
+        calories: this.calorie_total,
+        macronutrients: this.macros_total,
       }
 
       this.axios.patch(url,body)
@@ -336,20 +333,21 @@ export default {
       if(this.meal_plan_id) this.update_meal_plan()
       else this.create_meal_plan()
     },
-    add_food_to_plan(food){
+    add_food_to_plan(new_food){
+
+      // console.log(new_food)
 
       // Check if food is already listed. If so, simply increase quantity
-      // const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
-      // if(found_food) found_food.quantity ++
-      // else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+      const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
+      if(found_food) found_food.quantity ++
+      else this.meal_plan.foods.push({ food: new_food, quantity: 1})
 
-      this.meal_plan.foods.push({food, quantity: 1})
 
     },
-    remove_food_from_plan(item){
-      console.log(item)
-      alert('not implemented')
-      //this.meal_plan.foods.splice(index,1)
+    remove_food_from_plan({food: food_to_delete}){
+      const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
+      if(found_index < 0) return alert(`Error whiel deletign food`)
+      this.meal_plan.foods.splice(found_index, 1)
     },
     image_src({_id, image}){
       if (!image) return require('@/assets/image-off.png')
@@ -360,13 +358,10 @@ export default {
       const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.macronutrients[macro], 0)
       return Math.round(total * 100) / 100
     },
-    item_too_calorific({calories_per_serving}){
-      const current = this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving')
-      return calories_per_serving > (this.meal_plan.calories_target - current)
+    item_too_calorific({serving: {calories}}){
+      return calories > (this.meal_plan.calories_target - this.calorie_total)
     },
-    update_food_quantity({index}, new_quantity){
-      this.meal_plan.foods[index].quantity = new_quantity
-    },
+
     add_unregistered_food(food){
       this.meal_plan.foods.push(food)
     }
