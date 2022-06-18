@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import MealPlans from '@/views/MealPlans.vue'
 
 Vue.use(VueRouter)
 
@@ -7,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Foods.vue')
+    component: MealPlans
   },
   {
     path: '/foods',
@@ -27,7 +28,7 @@ const routes = [
   {
     path: '/meal_plans',
     name: 'meal_plans',
-    component: () => import('../views/MealPlans.vue')
+    component: MealPlans
   },
   {
     path: '/meal_plans/new',

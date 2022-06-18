@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import colors from '@/colors'
+
   export default {
     name: 'MacronutrientChart',
     props: {
@@ -32,9 +34,9 @@
             `Carbohydrates: ${this.carbohydrates}g`
           ],
           colors: [
-            '#eb4034',
-            '#ebd034',
-            '#3bb84b'
+            colors.protein,
+            colors.fat,
+            colors.carbohydrates
           ]
         }
       }

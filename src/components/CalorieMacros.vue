@@ -57,9 +57,14 @@ export default {
     },
     methods: {
         macro_bar_style(macro){
+            
             return {
                 width: `${100 * this.macronutrients[macro] / this.macros_total_mass}%`,
-                'background-color': this.colors[macro]
+                'background-color': this.colors[macro],
+                'border-top-right-radius': macro === 'carbohydrates' ? '0.5em' : '0',
+                'border-bottom-right-radius': macro === 'carbohydrates' ? '0.5em' : '0',
+                'border-top-left-radius': macro === 'protein' ? '0.5em' : '0',
+                'border-bottom-left-radius': macro === 'protein' ? '0.5em' : '0',
             }
         }
     },
@@ -113,7 +118,6 @@ export default {
     padding: 0.25em;
     display: flex;
     transition: width 0.25s;
-    gap: 0.1em;
 }
 
 .target_bar {
@@ -126,7 +130,6 @@ export default {
 }
 
 .macro_bar {
-    border-radius: 0.5em;
     height: 1.5em;
     display: flex;
     justify-content: center;
