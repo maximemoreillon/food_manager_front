@@ -174,11 +174,11 @@
                   </template>
 
                   <template v-slot:item.edit="{ item }">
-                    <v-btn v-if="item.food._id" icon target="_blank"
+                    <!-- <v-btn v-if="item.food._id" icon target="_blank"
                       :to="{name: 'food', params: {food_id: item.food._id}}">
                       <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <UnregisteredFoodDialog v-else :food_index="item.index" :foods="meal_plan.foods" />
+                    </v-btn> -->
+                    <UnregisteredFoodDialog  :item="item" />
                   </template>
 
 
@@ -361,9 +361,8 @@ export default {
       return calories > (this.meal_plan.calories_target - this.calorie_total)
     },
 
-    add_unregistered_food(food){
-      console.log(food)
-      this.meal_plan.foods.push({food, quantity: 1})
+    add_unregistered_food({quantity, food}){
+      this.meal_plan.foods.push({food, quantity})
     }
 
   },
@@ -402,6 +401,9 @@ export default {
         { text: 'Name', value: 'food.name' },
         { text: 'Serving', value: 'food.serving' },
         { text: 'Calories', value: 'food.serving.calories' },
+        { text: 'Protein', value: 'food.serving.macronutrients.protein' },
+        { text: 'Fat', value: 'food.serving.macronutrients.fat' },
+        { text: 'Carbs', value: 'food.serving.macronutrients.carbohydrates' },
         { text: 'Qty', value: 'quantity', width: '5rem'},
         { text: '', value: 'remove'},
         

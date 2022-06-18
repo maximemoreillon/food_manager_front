@@ -2,7 +2,7 @@
   <v-dialog max-width="600px" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
 
-      <v-btn v-if="food_index > -1" icon v-bind="attrs" v-on="on">
+      <v-btn v-if="item" icon v-bind="attrs" v-on="on">
         <v-icon>mdi-pencil</v-icon>
       </v-btn>
 
@@ -14,7 +14,7 @@
     <v-form @submit.prevent="submit()">
       <v-card>
         <v-toolbar flat>
-          <v-toolbar-title v-if="food_index > -1">Edit food</v-toolbar-title>
+          <v-toolbar-title v-if="item">Edit food</v-toolbar-title>
           <v-toolbar-title v-else>Add unregistered food</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
@@ -29,6 +29,9 @@
             <v-col>
               <v-text-field label="Food name" v-model="food.name" />
             </v-col>
+            <v-col>
+              <v-text-field label="Quantity" v-model.number="quantity" />
+            </v-col>
           </v-row>
           <v-row>
 
@@ -36,7 +39,7 @@
               <v-text-field type="number" label="Serving size" v-model.number="food.serving.size" />
             </v-col>
             <v-col>
-              <v-text-field  label="Unit" v-model="food.serving.unit" />
+              <v-text-field label="Unit" v-model="food.serving.unit" />
             </v-col>
             <v-col>
               <v-text-field type="number" label="Calories [kcal]" v-model.number="food.serving.calories" />
@@ -55,7 +58,7 @@
             </v-col>
           </v-row>
 
-          <v-row v-if="food_index === -1">
+          <v-row v-if="!item">
             <v-spacer />
             <v-col cols="auto">
               <v-btn @click="dialog = false">
@@ -90,12 +93,12 @@
   export default {
     name: 'UnregisteredFoodDialog',
     props: {
-      food_index: {type: Number, default(){return -1}},
-      foods: Array,
+      item: Object,
     },
     data(){
       return {
         dialog: false,
+        quantity: 1,
         defaults: {
           name: null,
           serving: {
@@ -115,9 +118,14 @@
     },
     watch: {
       dialog(){
-        if(!this.dialog) this.food = {...this.defaults}
-        else if(this.food_index > -1) this.food = this.foods[this.food_index]
-        else this.food = {...this.defaults}
+        if (!this.dialog || !this.item) {
+          this.food = { ...this.defaults },
+            this.quantity = 1
+        }
+        else if(this.item) {
+            this.food = {...this.item.food},
+            this.quantity = this.item.quantity
+          }
       }
     },
     mounted(){
@@ -125,7 +133,7 @@
     },
     methods: {
       submit(){
-        this.$emit('foodSubmitted', {...this.food})
+        this.$emit('foodSubmitted', {quantity: this.quantity, food: {...this.food}})
         this.dialog = false
         this.food = {...this.defaults}
       }
