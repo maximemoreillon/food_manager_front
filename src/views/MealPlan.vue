@@ -1,40 +1,30 @@
 <template>
-  <v-card
-    :loading="loading">
+  <v-card :loading="loading">
 
     <v-toolbar flat>
       <v-row align="center">
         <v-col cols="auto">
-          <v-btn
-            icon
-            exact
-            :to="{name: 'meal_plans'}">
+          <v-btn icon exact :to="{name: 'meal_plans'}">
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
         </v-col>
         <v-col>
           <v-toolbar-title>Meal plan</v-toolbar-title>
         </v-col>
-        <v-spacer/>
+        <v-spacer />
         <v-col cols="auto">
-          <v-btn
-            icon
-            @click="save_meal_plan()">
+          <v-btn icon @click="save_meal_plan()">
             <v-icon>mdi-content-save</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="auto">
-          <v-btn
-            icon
-            color="#c00000"
-            v-if="meal_plan_id"
-            @click="delete_meal_plan()">
+          <v-btn icon color="#c00000" v-if="meal_plan_id" @click="delete_meal_plan()">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
         </v-col>
       </v-row>
     </v-toolbar>
-    <v-divider/>
+    <v-divider />
 
     <template v-if="this.meal_plan">
 
@@ -43,23 +33,19 @@
           <v-col>
 
             <v-card outlined>
-              <v-card-title>Info</v-card-title>
+              <v-card-title>Meal plan info</v-card-title>
               <v-card-text>
                 <v-row align="center">
                   <v-col cols="12" md="6">
-                    <v-text-field
-                      label="Name"
-                      v-model="meal_plan.name"/>
+                    <v-text-field label="Meal plan name" v-model="meal_plan.name" />
                   </v-col>
-                  <v-spacer/>
+                  <v-spacer />
                   <v-col cols="auto">
                     Date: {{new Date(meal_plan.date).toLocaleString()}}
                   </v-col>
-                  <v-spacer/>
+                  <v-spacer />
                   <v-col cols="auto">
-                    <v-checkbox
-                      label="Incomplete"
-                      v-model="meal_plan.incomplete"/>
+                    <v-checkbox label="Incomplete" v-model="meal_plan.incomplete" />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -69,71 +55,17 @@
 
         <v-row>
           <v-col>
-            <v-row>
-              <v-col cols="12" md="6">
-
-                <v-card 
-                  outlined 
-                  height="100%">
-
-                  <v-container fluid>
-                    <v-row align="baseline">
-                      <v-col 
-                        class="text-h6">
-                        Calories
-                      </v-col>
-                      <v-spacer />
-                      <v-col>
-                        <v-text-field
-                          width="100%"
-                          type="number"
-                          v-model="meal_plan.calories_target"
-                          label="Target"/>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-
-                  <v-card-text>
-                    <CalorieCountChart
-                      :options="{chart: {height: 200}}"
-                      :calories="total_of_property(formatted_meal_plan_foods,'calories_per_serving')"
-                      :target="meal_plan.calories_target"/>
-                  </v-card-text>
-
-                </v-card>
-              </v-col>
-              <v-col cols="12" md="6" >
-                <v-card 
-                  outlined 
-                  height="100%">
-                  <v-container fluid>
-                    <v-row align="baseline">
-                      <v-col 
-                        class="text-h6">
-                        Macronutrients
-                      </v-col>
-                      <v-spacer/>
-                    </v-row>
-                  </v-container>
-                  <v-card-text>
-                    <MacronutrientChart
-                      :options="{chart: {height: 200}}"
-                      :protein="total_of_property(formatted_meal_plan_foods,'protein')"
-                      :fat="total_of_property(formatted_meal_plan_foods,'fat')"
-                      :carbohydrates="total_of_property(formatted_meal_plan_foods,'carbohydrates')" />
-                  </v-card-text>
-                </v-card>
-
-              </v-col>
-            </v-row>
+            <v-card outlined>
+              <v-card-title>Calories and Macros</v-card-title>
+              <v-card-text>
+                <CalorieMacros :target="meal_plan.calories_target" :calories="calorie_total"
+                  :macronutrients="macros_total" />
+              </v-card-text>
 
 
+            </v-card>
           </v-col>
         </v-row>
-
-
-
-
 
       </v-card-text>
 
@@ -144,33 +76,21 @@
           <v-col cols="12" md="6">
             <v-card outlined>
               <v-card-text>
-                <v-data-table
-                  height="500"
-                  :search="search"
-                  :headers="food_list_headers"
-                  :items="filtered_foods"
-                  :items-per-page="-1"
-                  sort-by="name"
-                  @click:row="add_food_to_plan($event)">
+                <v-data-table height="500" :search="search" :headers="food_list_headers" :items="filtered_foods"
+                  :items-per-page="-1" sort-by="name" @click:row="add_food_to_plan($event)">
 
-                  <template
-                    v-slot:top>
-                    <v-container
-                      fluid>
+                  <template v-slot:top>
+                    <v-container fluid>
                       <v-row>
                         <v-col cols="12" md="6" class="text-h6">
                           Registered foods
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col md="12">
-                          <v-text-field
-                            v-model="search"
-                            append-icon="mdi-magnify"
-                            label="Search"
-                            hide-details/>
+                          <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
                         </v-col>
                       </v-row>
-                      
+
 
                     </v-container>
 
@@ -178,27 +98,26 @@
 
 
                   <template v-slot:item.image="{ item }">
-                    <v-img
-                      :width="thumbnail_size"
-                      :height="thumbnail_size"
-                      contain
-                      :src="image_src(item)" />
-
+                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item)" />
                   </template>
 
-                  <template v-slot:item.calories_per_serving="{ item }">
-                    <v-chip
-                      :color=" item_too_calorific(item) ? 'red' : 'green'">
+                  <template v-slot:item.serving="{ item }">
+                    {{item.serving.size}} {{ item.serving.unit}}
+                  </template>
+
+                  <template v-slot:item.serving.calories="{ item }">
+                    <v-chip :color=" item_too_calorific(item) ? 'red' : 'green'">
                       {{item.calories_per_serving}}
                     </v-chip>
                   </template>
 
+                  <template v-slot:item.food.serving="{ item }">
+                    {{item.food.serving.size}} {{ item.food.serving.unit}}
+                  </template>
+
                   <template v-slot:item.macronutrients="{ item }">
                     <div class="chart_wrapper">
-                      <MacronutrientChart
-                        :options="chart_options"
-                        :protein="item.protein"
-                        :fat="item.fat"
+                      <MacronutrientChart :options="chart_options" :protein="item.protein" :fat="item.fat"
                         :carbohydrates="item.carbohydrates" />
                     </div>
                   </template>
@@ -212,72 +131,54 @@
           <!-- Right col: Foods in meal plan -->
           <v-col cols="12" md="6">
             <v-card outlined>
-              
+
 
               <v-card-text>
-                <v-data-table
-                  :headers="meal_plan_foods_headers"
-                  :items="formatted_meal_plan_foods"
-                  :items-per-page="-1">
+                <v-data-table :headers="meal_plan_foods_headers" :items="meal_plan.foods" :items-per-page="-1">
 
-                  <template
-                    v-slot:top>
-                    <v-container
-                      fluid>
+                  <template v-slot:top>
+                    <v-container fluid>
                       <v-row>
                         <v-col cols="12" md="6" class="text-h6">
                           Foods in meal plan
                         </v-col>
                         <v-spacer></v-spacer>
                         <v-col md="12">
-                          <UnregisteredFoodDialog
-                            :foods="foods"
-                            @foodSubmitted="add_unregistered_food($event)"/>
+                          <UnregisteredFoodDialog :foods="foods" @foodSubmitted="add_unregistered_food($event)" />
                         </v-col>
                       </v-row>
                       <v-spacer />
                     </v-container>
-                      
+
 
                   </template>
 
 
 
                   <template v-slot:item.image="{ item }">
-                    <v-img
-                      :width="thumbnail_size"
-                      :height="thumbnail_size"
-                      contain
-                      :src="image_src(item)" />
+                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item.food)" />
                   </template>
 
                   <template v-slot:item.quantity="{ item }">
-                    <v-text-field
-                      type="number"
-                      :value="item.quantity"
-                      @input="update_food_quantity(item, $event)"/>
+                    <v-text-field type="number" v-model="item.quantity" />
+                  </template>
+
+                  <template v-slot:item.food.serving="{ item }">
+                    {{item.food.serving.size}} {{ item.food.serving.unit}}
                   </template>
 
                   <template v-slot:item.remove="{ item }">
-                    <v-btn
-                      icon
-                      @click="remove_food_from_plan(item)">
+                    <v-btn icon @click="remove_food_from_plan(item)">
                       <v-icon>mdi-playlist-minus</v-icon>
                     </v-btn>
                   </template>
 
                   <template v-slot:item.edit="{ item }">
-                    <v-btn
-                      v-if="item._id"
-                      icon
-                      target="_blank"
-                      :to="{name: 'food', params: {food_id: item._id}}">
+                    <v-btn v-if="item.food._id" icon target="_blank"
+                      :to="{name: 'food', params: {food_id: item.food._id}}">
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-                    <UnregisteredFoodDialog
-                      v-else
-                      :food_index="item.index"
-                      :foods="meal_plan.foods"/>
+                    <UnregisteredFoodDialog v-else :food_index="item.index" :foods="meal_plan.foods" />
                   </template>
 
 
@@ -295,18 +196,11 @@
 
 
 
-    <v-snackbar
-      :color="snackbar.color"
-      v-model="snackbar.show">
+    <v-snackbar :color="snackbar.color" v-model="snackbar.show">
       {{ snackbar.text }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn
-
-          text
-          dark
-          v-bind="attrs"
-          @click="snackbar.show = false">
+        <v-btn text dark v-bind="attrs" @click="snackbar.show = false">
           Close
         </v-btn>
       </template>
@@ -319,17 +213,14 @@
 </template>
 
 <script>
-import MacronutrientChart from '@/components/MacronutrientChart.vue'
-import CalorieCountChart from '@/components/CalorieCountChart.vue'
 import UnregisteredFoodDialog from '@/components/UnregisteredFoodDialog.vue'
-
+import CalorieMacros from '../components/CalorieMacros.vue'
 export default {
   name: 'Foods',
   components: {
-    MacronutrientChart,
-    CalorieCountChart,
     UnregisteredFoodDialog,
     // CaloriesProgress,
+    CalorieMacros,
   },
   data: () => ({
     search: '',
@@ -345,19 +236,6 @@ export default {
       text: null,
       color: 'green',
     },
-    base_headers: [
-      {text: '', value: 'image'},
-      {text: 'Name', value: 'name'},
-      {text: 'Calories', value: 'calories_per_serving'},
-      //{text: 'Keto friendly', value: 'keto_friendly'},
-      //{text: 'Price [JPY]', value: 'price_per_serving'},
-    ],
-
-    macronutrients: [
-      {text: 'Protein', value: 'protein'},
-      {text: 'Fat', value: 'fat'},
-      {text: 'Carbs', value: 'carbohydrates'},
-    ],
 
 
     chart_options: {
@@ -367,6 +245,7 @@ export default {
   }),
   mounted(){
     document.addEventListener("keydown", this.handle_keydown_events)
+    this.get_meal_plan()
     this.get_foods()
 
   },
@@ -394,6 +273,7 @@ export default {
       .then(({data}) => {
         this.meal_plan = data
 
+        // Calorie target
         if(!this.meal_plan.calories_target) {
           const current_calories_target = this.$store.state.user_configuration.calories_target
           this.$set(this.meal_plan,'calories_target',current_calories_target)
@@ -413,8 +293,6 @@ export default {
       this.axios.get(url)
       .then(({data}) => {
         this.foods = data.items
-        // Might not be needed here anymore
-        this.get_meal_plan()
        })
       .catch(error => {
         alert('Failed to get foods')
@@ -427,10 +305,8 @@ export default {
 
       const body = {
         ...this.meal_plan,
-        calories: this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving'),
-        protein: this.total_of_property(this.formatted_meal_plan_foods,'protein'),
-        fat: this.total_of_property(this.formatted_meal_plan_foods,'fat'),
-        carbohydrates: this.total_of_property(this.formatted_meal_plan_foods,'carbohydrates'),
+        calories: this.calorie_total,
+        macronutrients: this.macros_total,
       }
 
       this.axios.patch(url,body)
@@ -457,35 +333,35 @@ export default {
       if(this.meal_plan_id) this.update_meal_plan()
       else this.create_meal_plan()
     },
-    add_food_to_plan(food){
+    add_food_to_plan(new_food){
 
-      const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
+      // console.log(new_food)
+
+      // Check if food is already listed. If so, simply increase quantity
+      const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
-      else this.meal_plan.foods.push({_id: food._id, quantity: 1})
+      else this.meal_plan.foods.push({ food: new_food, quantity: 1})
+
 
     },
-    remove_food_from_plan({index}){
-      this.meal_plan.foods.splice(index,1)
+    remove_food_from_plan({food: food_to_delete}){
+      const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
+      if(found_index < 0) return alert(`Error whiel deletign food`)
+      this.meal_plan.foods.splice(found_index, 1)
     },
     image_src({_id, image}){
       if (!image) return require('@/assets/image-off.png')
       else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
-    total_of_property(foods, property){
-      if(!foods.length) return 0
-      const total =  foods.reduce((acc,item) => {
-        if(!item) return acc
-        return acc + item[property] * item.quantity
-      }, 0)
+    
+    total_for_macro( macro ){
+      const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.macronutrients[macro], 0)
       return Math.round(total * 100) / 100
     },
-    item_too_calorific({calories_per_serving}){
-      const current = this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving')
-      return calories_per_serving > (this.meal_plan.calories_target - current)
+    item_too_calorific({serving: {calories}}){
+      return calories > (this.meal_plan.calories_target - this.calorie_total)
     },
-    update_food_quantity({index}, new_quantity){
-      this.meal_plan.foods[index].quantity = new_quantity
-    },
+
     add_unregistered_food(food){
       this.meal_plan.foods.push(food)
     }
@@ -498,45 +374,41 @@ export default {
     filtered_foods(){
       return this.foods.filter(f => !f.hidden)
     },
+    calorie_total() {
+      const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.calories, 0)
+      return Math.round(total * 100) / 100
+    },
+    macros_total(){
+      return {
+        protein: this.total_for_macro('protein'),
+        fat: this.total_for_macro('fat'),
+        carbohydrates: this.total_for_macro('carbohydrates')
+      }
+    },
     food_list_headers(){
+      // TODO: use base headers
       return [
-        ...this.base_headers,
-        ...this.macronutrients,
-        //{text: 'Macronutrients', value: 'macronutrients'},
-        //{text: 'Add', value: 'add'},
+        { text: 'Name', value: 'name' },
+        { text: 'Serving', value: 'serving' },
+        { text: 'Calories', value: 'serving.calories' },
+        { text: 'Protein', value: 'serving.macronutrients.protein' },
+        { text: 'Fat', value: 'serving.macronutrients.fat' },
+        { text: 'Carbs', value: 'serving.macronutrients.carbohydrates' },
       ]
     },
     meal_plan_foods_headers(){
       return [
-        ...this.base_headers,
-        ...this.macronutrients,
-        {text: 'Quantity', value: 'quantity'},
-        {text: 'Remove', value: 'remove'},
-        {text: 'Edit', value: 'edit'},
+        // { text: '', value: 'image' },
+        { text: 'Name', value: 'food.name' },
+        { text: 'Serving', value: 'food.serving' },
+        { text: 'Calories', value: 'food.serving.calories' },
+        { text: 'Qty', value: 'quantity', width: '5rem'},
+        { text: '', value: 'remove'},
+        
+        { text: '', value: 'edit'},
       ]
     },
-    formatted_meal_plan_foods(){
 
-      return this.meal_plan.foods.map((mpf, index) => {
-
-        let output = {
-          ...mpf, // Original properties (_id, quantity)
-          index,
-        }
-
-        // If food comes from registered foods, import properties
-        // TODO: Only do that if properties nor available
-        if(mpf._id) {
-          output = {
-            ...output,
-            ...this.foods.find( ({_id}) => mpf._id === _id) // Adding properties of foods from list
-          }
-        }
-
-        return output
-      })
-
-    },
 
 
   }

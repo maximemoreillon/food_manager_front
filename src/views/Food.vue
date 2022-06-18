@@ -1,107 +1,76 @@
 <template>
-  <v-card
-    :loading="loading"
-    max-width="600px"
-    class="mx-auto">
+  <v-card :loading="loading" max-width="600px" class="mx-auto">
 
     <template v-if="food && !loading">
       <v-toolbar flat>
-        <v-btn
-          icon
-          :to="{name: 'foods'}"
-          exact>
+        <v-btn icon :to="{name: 'foods'}" exact>
           <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
         <v-toolbar-title>{{food.name || 'unnnamed food'}}</v-toolbar-title>
-        <v-spacer/>
-        <v-btn
-          icon
-          @click="update_food()">
+        <v-spacer />
+        <v-btn icon @click="update_food()">
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
-        <v-btn
-          icon
-          color="#c00000"
-          @click="delete_food()">
+        <v-btn icon color="#c00000" @click="delete_food()">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-divider/>
+      <v-divider />
 
-      <v-img
-        class="mt-3"
-        height="300"
-        :src="image_src"
-        contain />
+      <v-img class="mt-3" height="300" :src="image_src" contain />
 
       <v-card-text>
         <v-row>
           <v-col>
-            <v-text-field
-              label="name"
-              v-model="food.name" />
+            <v-text-field label="name" v-model="food.name" />
           </v-col>
           <v-col cols="auto">
-            <v-checkbox
-              label="Hidden"
-              v-model="food.hidden" />
+            <v-checkbox label="Hidden" v-model="food.hidden" />
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field
-              label="Calories per serving"
-              v-model="food.calories_per_serving" />
+            <v-text-field label="Serving size" v-model="food.serving.size" />
           </v-col>
-          <v-col>
-            <v-text-field
-              label="Protein [g]"
-              v-model="food.protein" />
+          <v-col cols="2">
+            <v-text-field label="unit" v-model="food.serving.unit" />
           </v-col>
-          <v-col>
-            <v-text-field
-              label="Fat [g]"
-              v-model="food.fat" />
-          </v-col>
-          <v-col>
-            <v-text-field
-              label="Carbs [g]"
-              v-model="food.carbohydrates" />
+          <v-col cols="5">
+            <v-text-field label="Calories per serving" v-model="food.serving.calories" />
           </v-col>
         </v-row>
         <v-row>
+
           <v-col>
-            <v-combobox
-              label="Vendor"
-              :items="vendors"
-              v-model="food.vendor"/>
+            <v-text-field label="Protein [g]" v-model="food.serving.macronutrients.protein" />
           </v-col>
           <v-col>
-            <v-text-field
-              label="Price"
-              v-model="food.price_per_serving"/>
+            <v-text-field label="Fat [g]" v-model="food.serving.macronutrients.fat" />
+          </v-col>
+          <v-col>
+            <v-text-field label="Carbs [g]" v-model="food.serving.macronutrients.carbohydrates" />
           </v-col>
         </v-row>
+        <!-- <v-row>
+          <v-col>
+            <v-combobox label="Vendor" :items="vendors" v-model="food.vendor" />
+          </v-col>
+          <v-col>
+            <v-text-field label="Price" v-model="food.price_per_serving" />
+          </v-col>
+        </v-row> -->
 
         <v-row align="center">
           <v-col>
-            <v-file-input
-              v-model="image"
-              label="image"/>
+            <v-file-input v-model="image" label="image" />
           </v-col>
           <v-col cols="auto">
-            <v-btn
-              :disabled="!image"
-              @click="upload_image()">
+            <v-btn :disabled="!image" @click="upload_image()">
               <v-icon>mdi-upload</v-icon>
             </v-btn>
           </v-col>
           <v-col cols="auto">
-            <v-btn
-              color="#c00000"
-              dark
-              :disabled="!food.image"
-              @click="delete_food_image()">
+            <v-btn color="#c00000" dark :disabled="!food.image" @click="delete_food_image()">
               <v-icon>mdi-delete</v-icon>
             </v-btn>
           </v-col>
