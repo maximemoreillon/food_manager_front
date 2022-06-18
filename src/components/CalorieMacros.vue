@@ -1,17 +1,17 @@
 <template>
     <div>
-        <v-row align="center">
-            <v-col cols="auto">
-                <v-text-field dense label="Calories" outlined filled rounded :value="calories" readonly />
-            </v-col>
-            <v-col cols="auto">/</v-col>
-            <v-col cols="auto">
-                <v-text-field label="Target" outlined dense rounded v-model.number="targetModel" />
+        <v-row align="baseline">
+
+            <v-col md="2">
+                <v-text-field :error="calories > target" :prefix="`${calories}/`" label="Calories" color="red" type="number" outlined dense
+                    rounded v-model.number="targetModel" />
 
             </v-col>
             <v-spacer />
-            <v-col cols="auto" v-for="(value, key) in macronutrients" :key="key">
-                <v-chip :color="colors[key]">{{value}}g {{ key }}</v-chip>
+            <v-col cols="auto">
+                <v-chip v-for="(value, key) in macronutrients" :key="key" class="mx-1" :color="colors[key]">
+                    {{value}}g {{ key }}
+                </v-chip>
             </v-col>
         </v-row>
 
