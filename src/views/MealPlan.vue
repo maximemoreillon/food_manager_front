@@ -53,58 +53,17 @@
           </v-col>
         </v-row>
 
-        <!-- Calories and macros -->
-        <v-row v-if="false">
+        <v-row>
           <v-col>
-            <v-row>
-              <!-- Calories -->
-              <v-col cols="12" md="6">
-
-                <v-card outlined height="100%">
-
-                  <v-container fluid>
-                    <v-row align="baseline">
-                      <v-col class="text-h6">
-                        Calories
-                      </v-col>
-                      <v-spacer />
-                      <v-col>
-                        <v-text-field width="100%" type="number" v-model="meal_plan.calories_target" label="Target" />
-                      </v-col>
-                    </v-row>
-                  </v-container>
-
-                  <v-card-text>
-                    <CalorieCountChart :options="{chart: {height: 200}}"
-                      :calories="total_of_property(formatted_meal_plan_foods,'calories_per_serving')"
-                      :target="meal_plan.calories_target" />
-                  </v-card-text>
-
-                </v-card>
-              </v-col>
-              <!-- Macros -->
-              <v-col cols="12" md="6">
-                <v-card outlined height="100%">
-                  <v-container fluid>
-                    <v-row align="baseline">
-                      <v-col class="text-h6">
-                        Macronutrients
-                      </v-col>
-                      <v-spacer />
-                    </v-row>
-                  </v-container>
-                  <v-card-text>
-                    <MacronutrientChart :options="{chart: {height: 200}}"
-                      :protein="total_of_property(formatted_meal_plan_foods,'protein')"
-                      :fat="total_of_property(formatted_meal_plan_foods,'fat')"
-                      :carbohydrates="total_of_property(formatted_meal_plan_foods,'carbohydrates')" />
-                  </v-card-text>
-                </v-card>
-
-              </v-col>
-            </v-row>
+            <v-card outlined>
+              <v-card-title>Calories and Macros</v-card-title>
+              <v-card-text>
+                <CalorieMacros :target="meal_plan.calories_target" :calories="calorie_total"
+                  :macronutrients="macros_total" />
+              </v-card-text>
 
 
+            </v-card>
           </v-col>
         </v-row>
 
@@ -140,7 +99,10 @@
 
                   <template v-slot:item.image="{ item }">
                     <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item)" />
+                  </template>
 
+                  <template v-slot:item.serving="{ item }">
+                    {{item.serving.size}} {{ item.serving.unit}}
                   </template>
 
                   <template v-slot:item.serving.calories="{ item }">
@@ -199,7 +161,7 @@
                   </template>
 
                   <template v-slot:item.quantity="{ item }">
-                    <v-text-field type="number" v-model="item.quantity"  />
+                    <v-text-field type="number" v-model="item.quantity" />
                   </template>
 
                   <template v-slot:item.food.serving="{ item }">
@@ -252,17 +214,14 @@
 </template>
 
 <script>
-import MacronutrientChart from '@/components/MacronutrientChart.vue'
-import CalorieCountChart from '@/components/CalorieCountChart.vue'
 import UnregisteredFoodDialog from '@/components/UnregisteredFoodDialog.vue'
-
+import CalorieMacros from '../components/CalorieMacros.vue'
 export default {
   name: 'Foods',
   components: {
-    MacronutrientChart,
-    CalorieCountChart,
     UnregisteredFoodDialog,
     // CaloriesProgress,
+    CalorieMacros,
   },
   data: () => ({
     search: '',
@@ -278,19 +237,6 @@ export default {
       text: null,
       color: 'green',
     },
-    base_headers: [
-      // {text: '', value: 'image'},
-      {text: 'Name', value: 'name'},
-      {text: 'Calories', value: 'serving.calories'},
-      //{text: 'Keto friendly', value: 'keto_friendly'},
-      //{text: 'Price [JPY]', value: 'price_per_serving'},
-    ],
-
-    macronutrients: [
-      { text: 'Protein', value: 'serving.macronutrients.protein' },
-      { text: 'Fat', value: 'serving.macronutrients.fat'},
-      { text: 'Carbs', value: 'serving.macronutrients.carbohydrates'},
-    ],
 
 
     chart_options: {
@@ -400,19 +346,18 @@ export default {
       this.meal_plan.foods.push({food, quantity: 1})
 
     },
-    remove_food_from_plan({index}){
-      this.meal_plan.foods.splice(index,1)
+    remove_food_from_plan(item){
+      console.log(item)
+      alert('not implemented')
+      //this.meal_plan.foods.splice(index,1)
     },
     image_src({_id, image}){
       if (!image) return require('@/assets/image-off.png')
       else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
-    total_of_property(foods, property){
-      if(!foods.length) return 0
-      const total =  foods.reduce((acc,item) => {
-        if(!item) return acc
-        return acc + item[property] * item.quantity
-      }, 0)
+    
+    total_for_macro( macro ){
+      const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.macronutrients[macro], 0)
       return Math.round(total * 100) / 100
     },
     item_too_calorific({calories_per_serving}){
@@ -434,11 +379,26 @@ export default {
     filtered_foods(){
       return this.foods.filter(f => !f.hidden)
     },
+    calorie_total() {
+      const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.calories, 0)
+      return Math.round(total * 100) / 100
+    },
+    macros_total(){
+      return {
+        protein: this.total_for_macro('protein'),
+        fat: this.total_for_macro('fat'),
+        carbohydrates: this.total_for_macro('carbohydrates')
+      }
+    },
     food_list_headers(){
       // TODO: use base headers
       return [
-        ...this.base_headers,
-        ...this.macronutrients,
+        { text: 'Name', value: 'name' },
+        { text: 'Serving', value: 'serving' },
+        { text: 'Calories', value: 'serving.calories' },
+        { text: 'Protein', value: 'serving.macronutrients.protein' },
+        { text: 'Fat', value: 'serving.macronutrients.fat' },
+        { text: 'Carbs', value: 'serving.macronutrients.carbohydrates' },
       ]
     },
     meal_plan_foods_headers(){
@@ -447,10 +407,10 @@ export default {
         { text: 'Name', value: 'food.name' },
         { text: 'Serving', value: 'food.serving' },
         { text: 'Calories', value: 'food.serving.calories' },
-        {text: 'Qty', value: 'quantity', width: '5rem'},
-        {text: 'Remove', value: 'remove'},
+        { text: 'Qty', value: 'quantity', width: '5rem'},
+        { text: '', value: 'remove'},
         
-        {text: 'Edit', value: 'edit'},
+        { text: '', value: 'edit'},
       ]
     },
 
