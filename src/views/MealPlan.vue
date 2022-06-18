@@ -43,12 +43,12 @@
           <v-col>
 
             <v-card outlined>
-              <v-card-title>Info</v-card-title>
+              <v-card-title>Meal plan info</v-card-title>
               <v-card-text>
                 <v-row align="center">
                   <v-col cols="12" md="6">
                     <v-text-field
-                      label="Name"
+                      label="Meal plan name"
                       v-model="meal_plan.name"/>
                   </v-col>
                   <v-spacer/>
@@ -67,9 +67,11 @@
           </v-col>
         </v-row>
 
-        <v-row>
+        <!-- Calories and macros -->
+        <v-row v-if="false">
           <v-col>
             <v-row>
+              <!-- Calories -->
               <v-col cols="12" md="6">
 
                 <v-card 
@@ -102,6 +104,7 @@
 
                 </v-card>
               </v-col>
+              <!-- Macros -->
               <v-col cols="12" md="6" >
                 <v-card 
                   outlined 
@@ -130,10 +133,6 @@
 
           </v-col>
         </v-row>
-
-
-
-
 
       </v-card-text>
 
@@ -211,13 +210,13 @@
 
           <!-- Right col: Foods in meal plan -->
           <v-col cols="12" md="6">
-            <v-card outlined>
+            <v-card outlined v-if="false">
               
 
               <v-card-text>
                 <v-data-table
                   :headers="meal_plan_foods_headers"
-                  :items="formatted_meal_plan_foods"
+                  :items="meal_plan.foods"
                   :items-per-page="-1">
 
                   <template
@@ -348,15 +347,15 @@ export default {
     base_headers: [
       {text: '', value: 'image'},
       {text: 'Name', value: 'name'},
-      {text: 'Calories', value: 'calories_per_serving'},
+      {text: 'Calories', value: 'serving.calories'},
       //{text: 'Keto friendly', value: 'keto_friendly'},
       //{text: 'Price [JPY]', value: 'price_per_serving'},
     ],
 
     macronutrients: [
-      {text: 'Protein', value: 'protein'},
-      {text: 'Fat', value: 'fat'},
-      {text: 'Carbs', value: 'carbohydrates'},
+      { text: 'Protein', value: 'serving.macronutrients.protein' },
+      { text: 'Fat', value: 'serving.macronutrients.fat'},
+      { text: 'Carbs', value: 'serving.macronutrients.carbohydrates'},
     ],
 
 
@@ -367,6 +366,7 @@ export default {
   }),
   mounted(){
     document.addEventListener("keydown", this.handle_keydown_events)
+    this.get_meal_plan()
     this.get_foods()
 
   },
@@ -394,6 +394,7 @@ export default {
       .then(({data}) => {
         this.meal_plan = data
 
+        // Calorie target
         if(!this.meal_plan.calories_target) {
           const current_calories_target = this.$store.state.user_configuration.calories_target
           this.$set(this.meal_plan,'calories_target',current_calories_target)
@@ -413,8 +414,6 @@ export default {
       this.axios.get(url)
       .then(({data}) => {
         this.foods = data.items
-        // Might not be needed here anymore
-        this.get_meal_plan()
        })
       .catch(error => {
         alert('Failed to get foods')
@@ -427,10 +426,10 @@ export default {
 
       const body = {
         ...this.meal_plan,
-        calories: this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving'),
-        protein: this.total_of_property(this.formatted_meal_plan_foods,'protein'),
-        fat: this.total_of_property(this.formatted_meal_plan_foods,'fat'),
-        carbohydrates: this.total_of_property(this.formatted_meal_plan_foods,'carbohydrates'),
+        // calories: this.total_of_property(this.formatted_meal_plan_foods,'calories_per_serving'),
+        // protein: this.total_of_property(this.formatted_meal_plan_foods,'protein'),
+        // fat: this.total_of_property(this.formatted_meal_plan_foods,'fat'),
+        // carbohydrates: this.total_of_property(this.formatted_meal_plan_foods,'carbohydrates'),
       }
 
       this.axios.patch(url,body)
@@ -459,6 +458,7 @@ export default {
     },
     add_food_to_plan(food){
 
+      // Check if food is already listed. If so, simply increase quantity
       const found_food = this.meal_plan.foods.find( ({_id}) => _id === food._id)
       if(found_food) found_food.quantity ++
       else this.meal_plan.foods.push({_id: food._id, quantity: 1})
@@ -499,11 +499,10 @@ export default {
       return this.foods.filter(f => !f.hidden)
     },
     food_list_headers(){
+      // TODO: use base headers
       return [
         ...this.base_headers,
         ...this.macronutrients,
-        //{text: 'Macronutrients', value: 'macronutrients'},
-        //{text: 'Add', value: 'add'},
       ]
     },
     meal_plan_foods_headers(){
@@ -515,28 +514,7 @@ export default {
         {text: 'Edit', value: 'edit'},
       ]
     },
-    formatted_meal_plan_foods(){
 
-      return this.meal_plan.foods.map((mpf, index) => {
-
-        let output = {
-          ...mpf, // Original properties (_id, quantity)
-          index,
-        }
-
-        // If food comes from registered foods, import properties
-        // TODO: Only do that if properties nor available
-        if(mpf._id) {
-          output = {
-            ...output,
-            ...this.foods.find( ({_id}) => mpf._id === _id) // Adding properties of foods from list
-          }
-        }
-
-        return output
-      })
-
-    },
 
 
   }
