@@ -91,7 +91,8 @@
 
 
           <v-card-text>
-            <v-data-table :headers="meal_plan_foods_headers" :items="meal_plan.foods" :items-per-page="-1">
+            <v-data-table :search="search" :headers="meal_plan_foods_headers" :items="meal_plan.foods"
+              :items-per-page="-1">
 
               <template v-slot:top>
                 <v-container fluid>
@@ -104,7 +105,12 @@
                       <AddFoodDialog :meal_plan="meal_plan" @submit="add_food_to_plan($event)" />
                     </v-col>
                   </v-row>
-                  <v-spacer />
+                  <v-row dense>
+                    <v-col>
+                      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
+                    </v-col>
+
+                  </v-row>
                 </v-container>
 
 
