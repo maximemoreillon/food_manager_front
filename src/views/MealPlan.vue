@@ -343,12 +343,12 @@ export default {
       return [
         { text: '', value: 'image' },
         { text: 'Name', value: 'food.name' },
+        { text: 'Calories [kcal]', value: 'food.serving.calories' },
+        { text: 'Protein [g]', value: 'food.serving.macronutrients.protein' },
+        { text: 'Fat [g]', value: 'food.serving.macronutrients.fat' },
+        { text: 'Carbs [g]', value: 'food.serving.macronutrients.carbohydrates' },
         { text: 'Serving', value: 'food.serving' },
-        { text: 'Calories', value: 'food.serving.calories' },
-        { text: 'Protein', value: 'food.serving.macronutrients.protein' },
-        { text: 'Fat', value: 'food.serving.macronutrients.fat' },
-        { text: 'Carbs', value: 'food.serving.macronutrients.carbohydrates' },
-        { text: 'Qty', value: 'quantity', width: '5rem'},
+        { text: 'Quantity', value: 'quantity', width: '5rem'},
         { text: '', value: 'remove'},
         
         { text: '', value: 'edit'},

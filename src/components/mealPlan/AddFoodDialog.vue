@@ -10,7 +10,18 @@
 
         <v-card>
             <v-toolbar flat>
-                <v-toolbar-title>Add food</v-toolbar-title>
+                <v-row align="baseline">
+                    <v-col>
+                        <v-card-title>Add food to meal plan</v-card-title>
+                    </v-col>
+                    <v-spacer />
+                    <v-col cols="auto">
+                        <v-btn icon @click="dialog = false">
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </v-col>
+                </v-row>
+
                 <template v-slot:extension>
                     <v-tabs v-model="tab" align-with-title>
                         <v-tabs-slider></v-tabs-slider>

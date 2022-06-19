@@ -5,10 +5,7 @@
         <template v-slot:top>
             <v-container fluid>
                 <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
-
-
             </v-container>
-
         </template>
 
 

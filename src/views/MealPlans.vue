@@ -35,28 +35,17 @@
           <span>{{formatted_date(item.date)}}</span>
         </template>
 
-        <!-- <template v-slot:item.calories="{ item }">
-          <div v-if="item.calories" class="chart_wrapper">
-            <CalorieCountChart :options="chart_options" :calories="item.calories" :target="item.calories_target" />
-            <span class="value">
-              {{item.calories}}/{{item.calories_target || $store.state.user_configuration.calories_target}}
-            </span>
-          </div>
-          <span v-else>N/A</span>
-        </template> -->
+
 
         <template v-slot:item.calories="{ item }">
-          <CalorieMacros :target="item.calories_target" :calories="item.calories" :macronutrients="item.macronutrients" />
+          {{item.calories}}/{{item.calories_target}}
         </template>
-
 
         <template v-slot:item.macronutrients="{ item }">
-          <div v-if="item.macronutrients" class="chart_wrapper">
-            <MacronutrientChart :options="chart_options" :protein="item.macronutrients.protein"
-              :fat="item.macronutrients.fat" :carbohydrates="item.macronutrients.carbohydrates" />
-          </div>
-          <span v-else>N/A</span>
+          <CalorieMacros :target="item.calories_target" :calories="item.calories"
+            :macronutrients="item.macronutrients" />
         </template>
+
 
         <template v-slot:item.incomplete="{ item }">
           <v-icon color="#c00000" v-if="item.incomplete">
@@ -76,15 +65,12 @@
 </template>
 
 <script>
-// import MacronutrientChart from '@/components/MacronutrientChart.vue'
-// import CalorieCountChart from '@/components/CalorieCountChart.vue'
+
 import CalorieMacros from '../components/CalorieMacros.vue'
 
 export default {
   name: 'Foods',
   components: {
-    // MacronutrientChart,
-    // CalorieCountChart,
     CalorieMacros
   },
   data: () => ({
@@ -101,7 +87,7 @@ export default {
       {text: 'Name', value: 'name'},
       {text: 'Date', value: 'date'},
       {text: 'Calories', value: 'calories'},
-      // {text: 'Macronutrients', value: 'macronutrients'},
+      {text: 'Macros', value: 'macronutrients'},
       {text: 'Incomplete', value: 'incomplete'},
 
     ]
