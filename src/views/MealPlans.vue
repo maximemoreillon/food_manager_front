@@ -1,25 +1,30 @@
 <template>
   <v-card>
 
-    <v-card-title>Meal plans</v-card-title>
+    <v-toolbar flat>
+      <v-row align="center">
+        <v-col>
+          <v-toolbar-title>
+            Meal plans
+          </v-toolbar-title>
+        </v-col>
+        <v-spacer />
+        <v-col cols="auto">
+          <v-btn :to="{name: 'new_meal_plan'}">
+            <v-icon>mdi-plus</v-icon>
+            <span class="ml-2">New meal plan</span>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+    </v-toolbar>
 
     <v-card-text>
       <v-data-table :loading="loading" :search="search" :headers="headers" :items="meal_plans"
         @click:row="row_clicked($event)" sort-by="date" sort-desc :server-items-length="total" :options.sync="options">
 
         <template v-slot:top>
-          <v-toolbar flat>
-            <v-row align="center">
-              <v-spacer />
-              <v-col cols="auto">
-                <v-btn :to="{name: 'new_meal_plan'}">
-                  <v-icon>mdi-plus</v-icon>
-                  <span class="ml-2">New</span>
-                </v-btn>
-              </v-col>
-            </v-row>
 
-          </v-toolbar>
         </template>
 
         <template v-slot:item.date="{ item }">

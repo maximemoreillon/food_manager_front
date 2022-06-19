@@ -335,7 +335,7 @@ export default {
     },
     remove_food_from_plan({food: food_to_delete}){
       const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
-      if(found_index < 0) return alert(`Error whiel deletign food`)
+      if(found_index < 0) return alert(`Error while deleting food`)
       this.meal_plan.foods.splice(found_index, 1)
     },
     image_src({_id, image}){
