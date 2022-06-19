@@ -39,13 +39,15 @@
                   <v-col cols="12" md="6">
                     <v-text-field label="Meal plan name" v-model="meal_plan.name" />
                   </v-col>
-                  <v-spacer />
+                </v-row>
+                <v-row dense align="baseline">
                   <v-col cols="auto">
-                    Date: {{new Date(meal_plan.date).toLocaleString()}}
+                    <v-checkbox label="Incomplete" v-model="meal_plan.incomplete" />
                   </v-col>
                   <v-spacer />
                   <v-col cols="auto">
-                    <v-checkbox label="Incomplete" v-model="meal_plan.incomplete" />
+                    <v-text-field prepend-inner-icon="mdi-calendar" solo flat
+                      :value="new Date(meal_plan.date).toString()" />
                   </v-col>
                 </v-row>
               </v-card-text>
