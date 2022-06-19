@@ -4,8 +4,7 @@
     <v-card-title>Foods</v-card-title>
 
     <v-card-text>
-      <v-data-table :loading="loading" :search="search" :headers="headers" :items="filtered_foods" :items-per-page="-1"
-        @click:row="row_clicked($event)" sort-by="name">
+      <v-data-table :loading="loading" :search="search" :headers="headers" :items="filtered_foods" :items-per-page="-1" sort-by="name">
 
         <template v-slot:top>
           <v-container fluid>
@@ -27,6 +26,12 @@
             </v-row>
 
           </v-container>
+        </template>
+
+        <template v-slot:item.name="{ item }">
+          <router-link :to="{ name: 'food', params: { food_id: item._id } }">
+            {{item.name}}
+          </router-link>
         </template>
 
         <template v-slot:item.serving="{ item }">
@@ -91,9 +96,7 @@ export default {
       if (!image) return require('@/assets/image-off.png')
       else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
     },
-    row_clicked(food){
-      this.$router.push({name: 'food', params: {food_id: food._id}})
-    },
+
 
   },
   computed: {

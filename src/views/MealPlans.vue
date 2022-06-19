@@ -21,10 +21,14 @@
 
     <v-card-text>
       <v-data-table :loading="loading" :search="search" :headers="headers" :items="meal_plans"
-        @click:row="row_clicked($event)" sort-by="date" sort-desc :server-items-length="total" :options.sync="options">
+        sort-by="date" sort-desc :server-items-length="total" :options.sync="options">
 
-        <template v-slot:top>
 
+
+        <template v-slot:item.name="{ item }">
+          <router-link :to="{ name: 'meal_plan', params: { meal_plan_id: item._id } }">
+            {{item.name}}
+          </router-link>
         </template>
 
         <template v-slot:item.date="{ item }">
@@ -131,9 +135,6 @@ export default {
     formatted_date(date_string){
       const date = new Date(date_string)
       return date.toLocaleString()
-    },
-    row_clicked(item){
-      this.$router.push({name: 'meal_plan', params: {meal_plan_id: item._id}})
     },
 
   },
