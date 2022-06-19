@@ -1,0 +1,76 @@
+<template>
+    <v-dialog max-width="90vw" v-model="dialog">
+        <template v-slot:activator="{ on, attrs }">
+
+            <v-btn v-bind="attrs" v-on="on" icon>
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+
+        </template>
+
+        <v-card>
+            <v-toolbar flat>
+                <v-toolbar-title>Add food</v-toolbar-title>
+                <template v-slot:extension>
+                    <v-tabs v-model="tab" align-with-title>
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab>
+                            Registered foods
+                        </v-tab>
+                        <v-tab>
+                            New food
+                        </v-tab>
+                    </v-tabs>
+                </template>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-card-text>
+                <v-tabs-items v-model="tab">
+                    <v-tab-item>
+                        <RegisteredFoodsTable :meal_plan="meal_plan" @foodAdded="$emit('submit', $event)" />
+                    </v-tab-item>
+                    <v-tab-item>
+                        <FoodForm @submit="$emit('submit', $event); dialog = false" />
+                    </v-tab-item>
+                </v-tabs-items>
+            </v-card-text>
+
+
+
+
+
+        </v-card>
+
+
+    </v-dialog>
+</template>
+
+<script>
+import RegisteredFoodsTable from './RegisteredFoodsTable.vue'
+import FoodForm from './FoodForm.vue'
+export default {
+    name: 'AddFoodDialog',
+    props: {
+        meal_plan: Object,
+    },
+    components: {
+        RegisteredFoodsTable,
+        FoodForm
+    },
+    data() {
+        return {
+            dialog: false,
+            tab: null,
+
+        }
+    },
+
+    mounted() {
+    },
+    methods: {
+
+    }
+
+
+}
+</script>
