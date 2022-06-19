@@ -60,7 +60,7 @@
               <v-card-text>
                 <v-row align="baseline">
 
-                  <v-col md="2">
+                  <v-col cols="auto">
                     <v-text-field :error="calorie_total > meal_plan.calories_target" :prefix="`${calorie_total}/`"
                       label="Calories" color="red" type="number" outlined dense rounded
                       v-model.number="meal_plan.calories_target" />
@@ -86,114 +86,58 @@
 
 
       <v-card-text>
-        <v-row>
-          <!-- Left col: registered foods -->
-          <v-col cols="12" md="6">
-            <v-card outlined>
-              <v-card-text>
-                <v-data-table height="500" :search="search" :headers="food_list_headers" :items="filtered_foods"
-                  :items-per-page="-1" sort-by="name" @click:row="add_food_to_plan($event)">
 
-                  <template v-slot:top>
-                    <v-container fluid>
-                      <v-row>
-                        <v-col cols="12" md="6" class="text-h6">
-                          Registered foods
-                        </v-col>
-                        <v-spacer></v-spacer>
-                        <v-col md="12">
-                          <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
-                        </v-col>
-                      </v-row>
+        <v-card outlined>
 
 
-                    </v-container>
+          <v-card-text>
+            <v-data-table :headers="meal_plan_foods_headers" :items="meal_plan.foods" :items-per-page="-1">
 
-                  </template>
-
-
-                  <template v-slot:item.image="{ item }">
-                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item)" />
-                  </template>
-
-                  <template v-slot:item.serving="{ item }">
-                    {{item.serving.size}} {{ item.serving.unit}}
-                  </template>
-
-                  <template v-slot:item.serving.calories="{ item }">
-                    <v-chip :color="item_too_calorific(item) ? colors.calorie_excess : ''" outlined>
-                      {{item.serving.calories}}
-                    </v-chip>
-                  </template>
-
-                  <template v-slot:item.food.serving="{ item }">
-                    {{item.food.serving.size}} {{ item.food.serving.unit}}
-                  </template>
+              <template v-slot:top>
+                <v-container fluid>
+                  <v-row>
+                    <v-col class="text-h6">
+                      Foods
+                    </v-col>
+                    <v-spacer></v-spacer>
+                    <v-col cols="auto">
+                      <AddFoodDialog :meal_plan="meal_plan" @submit="add_food_to_plan($event)" />
+                    </v-col>
+                  </v-row>
+                  <v-spacer />
+                </v-container>
 
 
-                </v-data-table>
-              </v-card-text>
-            </v-card>
-
-          </v-col>
-
-          <!-- Right col: Foods in meal plan -->
-          <v-col cols="12" md="6">
-            <v-card outlined>
-
-
-              <v-card-text>
-                <v-data-table :headers="meal_plan_foods_headers" :items="meal_plan.foods" :items-per-page="-1">
-
-                  <template v-slot:top>
-                    <v-container fluid>
-                      <v-row>
-                        <v-col cols="12" md="6" class="text-h6">
-                          Foods in meal plan
-                        </v-col>
-                        <v-spacer></v-spacer>
-                        <v-col cols="auto">
-                          <UnregisteredFoodDialog @foodSubmitted="add_unregistered_food($event)" />
-                        </v-col>
-                      </v-row>
-                      <v-spacer />
-                    </v-container>
-
-
-                  </template>
+              </template>
 
 
 
-                  <template v-slot:item.image="{ item }">
-                    <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item.food)" />
-                  </template>
+              <template v-slot:item.image=" { item }">
+                <v-img :width="thumbnail_size" :height="thumbnail_size" contain :src="image_src(item.food)" />
+              </template>
 
-                  <template v-slot:item.quantity="{ item }">
-                    <v-text-field type="number" v-model="item.quantity" />
-                  </template>
+              <template v-slot:item.quantity="{ item }">
+                <v-text-field type="number" v-model="item.quantity" />
+              </template>
 
-                  <template v-slot:item.food.serving="{ item }">
-                    {{item.food.serving.size}} {{ item.food.serving.unit}}
-                  </template>
+              <template v-slot:item.food.serving="{ item }">
+                {{item.food.serving.size}} {{ item.food.serving.unit}}
+              </template>
 
-                  <template v-slot:item.remove="{ item }">
-                    <v-btn icon @click="remove_food_from_plan(item)">
-                      <v-icon>mdi-playlist-minus</v-icon>
-                    </v-btn>
-                  </template>
+              <template v-slot:item.remove="{ item }">
+                <v-btn icon @click="remove_food_from_plan(item)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+              </template>
 
-                  <template v-slot:item.edit="{ item }">
-                    <UnregisteredFoodDialog :item="item" />
-                  </template>
-
-
-                </v-data-table>
-              </v-card-text>
-            </v-card>
+              <template v-slot:item.edit="{ item }">
+                <FoodEditDialog :item="item" />
+              </template>
 
 
-          </v-col>
-        </v-row>
+            </v-data-table>
+          </v-card-text>
+        </v-card>
       </v-card-text>
 
     </template>
@@ -218,16 +162,20 @@
 </template>
 
 <script>
-import UnregisteredFoodDialog from '@/components/UnregisteredFoodDialog.vue'
+import FoodEditDialog from '@/components/mealPlan/FoodEditDialog.vue'
 import CalorieMacros from '../components/CalorieMacros.vue'
+import AddFoodDialog from '../components/mealPlan/AddFoodDialog.vue'
+
+
 import colors from '@/colors'
 
 export default {
   name: 'MealPlan',
   components: {
-    UnregisteredFoodDialog,
+    FoodEditDialog,
     // CaloriesProgress,
     CalorieMacros,
+    AddFoodDialog,
   },
   data: () => ({
     colors,
@@ -336,11 +284,11 @@ export default {
       if(this.meal_plan_id) this.update_meal_plan()
       else this.create_meal_plan()
     },
-    add_food_to_plan(new_food){
+    add_food_to_plan({food: new_food, quantity}){
       // Check if food is already listed. If so, simply increase quantity
       const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
-      else this.meal_plan.foods.push({ food: new_food, quantity: 1})
+      else this.meal_plan.foods.push({ food: new_food, quantity})
     },
     remove_food_from_plan({food: food_to_delete}){
       const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
@@ -361,18 +309,16 @@ export default {
       return calories > (this.meal_plan.calories_target - this.calorie_total)
     },
 
-    add_unregistered_food({quantity, food}){
-      this.meal_plan.foods.push({food, quantity})
-    }
+    // add_unregistered_food({quantity, food}){
+    //   this.meal_plan.foods.push({food, quantity})
+    // }
 
   },
   computed: {
     meal_plan_id(){
       return this.$route.params.meal_plan_id
     },
-    filtered_foods(){
-      return this.foods.filter(f => !f.hidden)
-    },
+    
     calorie_total() {
       const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.calories, 0)
       return Math.round(total * 100) / 100
@@ -384,17 +330,7 @@ export default {
         carbohydrates: this.total_for_macro('carbohydrates')
       }
     },
-    food_list_headers(){
-      return [
-        { text: '', value: 'image' },
-        { text: 'Name', value: 'name' },
-        { text: 'Serving', value: 'serving' },
-        { text: 'Calories', value: 'serving.calories' },
-        { text: 'Protein', value: 'serving.macronutrients.protein' },
-        { text: 'Fat', value: 'serving.macronutrients.fat' },
-        { text: 'Carbs', value: 'serving.macronutrients.carbohydrates' },
-      ]
-    },
+    
     meal_plan_foods_headers(){
       return [
         { text: '', value: 'image' },
