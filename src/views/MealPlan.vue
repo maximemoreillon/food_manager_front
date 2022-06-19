@@ -58,8 +58,23 @@
             <v-card outlined>
               <v-card-title>Calories and Macros</v-card-title>
               <v-card-text>
-                <CalorieMacros :target="meal_plan.calories_target" @update:target="meal_plan.calories_target = $event"
-                  :calories="calorie_total" :macronutrients="macros_total" />
+                <v-row align="baseline">
+
+                  <v-col md="2">
+                    <v-text-field :error="calorie_total > meal_plan.calories_target" :prefix="`${calorie_total}/`"
+                      label="Calories" color="red" type="number" outlined dense rounded
+                      v-model.number="meal_plan.calories_target" />
+
+                  </v-col>
+                  <v-spacer />
+                  <v-col cols="auto">
+                    <v-chip v-for="(value, key) in macros_total" :key="key" class="mx-1" :color="colors[key]">
+                      {{value}}g {{ key }}
+                    </v-chip>
+                  </v-col>
+                </v-row>
+                <CalorieMacros :target="meal_plan.calories_target" :calories="calorie_total"
+                  :macronutrients="macros_total" />
               </v-card-text>
 
 
@@ -115,12 +130,6 @@
                     {{item.food.serving.size}} {{ item.food.serving.unit}}
                   </template>
 
-                  <template v-slot:item.macronutrients="{ item }">
-                    <div class="chart_wrapper">
-                      <MacronutrientChart :options="chart_options" :protein="item.protein" :fat="item.fat"
-                        :carbohydrates="item.carbohydrates" />
-                    </div>
-                  </template>
 
                 </v-data-table>
               </v-card-text>
@@ -214,7 +223,7 @@ import CalorieMacros from '../components/CalorieMacros.vue'
 import colors from '@/colors'
 
 export default {
-  name: 'Foods',
+  name: 'MealPlan',
   components: {
     UnregisteredFoodDialog,
     // CaloriesProgress,

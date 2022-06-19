@@ -20,8 +20,8 @@
     </v-toolbar>
 
     <v-card-text>
-      <v-data-table :loading="loading" :search="search" :headers="headers" :items="meal_plans"
-        sort-by="date" sort-desc :server-items-length="total" :options.sync="options">
+      <v-data-table :loading="loading" :search="search" :headers="headers" :items="meal_plans" sort-by="date" sort-desc
+        :server-items-length="total" :options.sync="options">
 
 
 
@@ -35,7 +35,7 @@
           <span>{{formatted_date(item.date)}}</span>
         </template>
 
-        <template v-slot:item.calories="{ item }">
+        <!-- <template v-slot:item.calories="{ item }">
           <div v-if="item.calories" class="chart_wrapper">
             <CalorieCountChart :options="chart_options" :calories="item.calories" :target="item.calories_target" />
             <span class="value">
@@ -43,6 +43,10 @@
             </span>
           </div>
           <span v-else>N/A</span>
+        </template> -->
+
+        <template v-slot:item.calories="{ item }">
+          <CalorieMacros :target="item.calories_target" :calories="item.calories" :macronutrients="item.macronutrients" />
         </template>
 
 
@@ -72,14 +76,16 @@
 </template>
 
 <script>
-import MacronutrientChart from '@/components/MacronutrientChart.vue'
-import CalorieCountChart from '@/components/CalorieCountChart.vue'
+// import MacronutrientChart from '@/components/MacronutrientChart.vue'
+// import CalorieCountChart from '@/components/CalorieCountChart.vue'
+import CalorieMacros from '../components/CalorieMacros.vue'
 
 export default {
   name: 'Foods',
   components: {
-    MacronutrientChart,
-    CalorieCountChart,
+    // MacronutrientChart,
+    // CalorieCountChart,
+    CalorieMacros
   },
   data: () => ({
     search: '',
@@ -95,7 +101,7 @@ export default {
       {text: 'Name', value: 'name'},
       {text: 'Date', value: 'date'},
       {text: 'Calories', value: 'calories'},
-      {text: 'Macronutrients', value: 'macronutrients'},
+      // {text: 'Macronutrients', value: 'macronutrients'},
       {text: 'Incomplete', value: 'incomplete'},
 
     ]
