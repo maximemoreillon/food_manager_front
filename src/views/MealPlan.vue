@@ -107,7 +107,7 @@
 
                   <template v-slot:item.serving.calories="{ item }">
                     <v-chip :color="item_too_calorific(item) ? colors.calorie_excess : ''" outlined>
-                      {{item.calories_per_serving}}
+                      {{item.serving.calories}}
                     </v-chip>
                   </template>
 
