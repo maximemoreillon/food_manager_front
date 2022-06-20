@@ -88,6 +88,7 @@ export default {
     margin-top: 0.5em;
     border-radius: 0.5em;
     height: 2em;
+    min-width: 5rem;
 }
 
 
