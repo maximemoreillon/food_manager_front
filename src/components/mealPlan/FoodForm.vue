@@ -78,7 +78,6 @@ export default {
 
     },
     mounted() {
-        console.log('mounted')
         if(this.item) {
             this.food = this.item.food,
             this.quantity = this.item.quantity
@@ -91,7 +90,6 @@ export default {
     methods: {
         submit() {
             this.$emit('submit', { quantity: this.quantity, food: { ...this.food } })
-            
             this.food = { ...this.defaults }
         }
     }
