@@ -293,7 +293,7 @@ export default {
       else this.create_meal_plan()
     },
     add_food_to_plan({food: new_food, quantity}){
-      // Check if food is already listed. If so, simply increase quantity
+      if (!new_food._id) return this.meal_plan.foods.push({ food: new_food, quantity })
       const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
       else this.meal_plan.foods.push({ food: new_food, quantity})

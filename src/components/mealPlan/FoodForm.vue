@@ -58,7 +58,7 @@ export default {
         return {
             quantity: 1,
             defaults: {
-                name: '',
+                name: 'Default',
                 serving: {
                     calories: 0,
                     size: 0,
@@ -78,15 +78,20 @@ export default {
 
     },
     mounted() {
+        console.log('mounted')
         if(this.item) {
             this.food = this.item.food,
             this.quantity = this.item.quantity
         }
-        else this.food = { ...this.defaults }
+        else {
+            this.food = { ...this.defaults }
+            this.quantity = 1
+        }
     },
     methods: {
         submit() {
             this.$emit('submit', { quantity: this.quantity, food: { ...this.food } })
+            
             this.food = { ...this.defaults }
         }
     }

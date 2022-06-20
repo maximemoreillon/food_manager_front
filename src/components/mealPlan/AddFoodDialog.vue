@@ -41,7 +41,7 @@
                         <RegisteredFoodsTable :meal_plan="meal_plan" @foodAdded="$emit('submit', $event)" />
                     </v-tab-item>
                     <v-tab-item>
-                        <FoodForm @submit="$emit('submit', $event); dialog = false" />
+                        <FoodForm v-if="dialog" @submit="$emit('submit', $event); dialog = false" />
                     </v-tab-item>
                 </v-tabs-items>
             </v-card-text>
