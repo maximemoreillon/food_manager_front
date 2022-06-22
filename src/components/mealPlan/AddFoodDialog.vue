@@ -38,10 +38,11 @@
             <v-card-text>
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
-                        <RegisteredFoodsTable :meal_plan="meal_plan" @foodAdded="$emit('submit', $event)" />
+                        <RegisteredFoodsTable :open="dialog" :meal_plan="meal_plan"
+                            @foodAdded="$emit('submit', $event)" />
                     </v-tab-item>
                     <v-tab-item>
-                        <FoodForm v-if="dialog" @submit="$emit('submit', $event); dialog = false" />
+                        <FoodForm :open="dialog" @submit="$emit('submit', $event); dialog = false" />
                     </v-tab-item>
                 </v-tabs-items>
             </v-card-text>

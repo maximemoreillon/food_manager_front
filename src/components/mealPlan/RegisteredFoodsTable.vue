@@ -4,7 +4,7 @@
 
         <template v-slot:top>
             <v-container fluid>
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
+                <v-text-field v-model="search" clearable append-icon="mdi-magnify" label="Search" hide-details />
             </v-container>
         </template>
 
@@ -38,6 +38,7 @@ export default {
     name: 'RegisteredFoodsTable',
     props: {
         meal_plan: Object,
+        open: Boolean,
     },
     data() {
         return {
@@ -51,6 +52,11 @@ export default {
 
     mounted() {
         this.get_foods()
+    },
+    watch: {
+        open() {
+            this.search = ''
+        }
     },
     methods: {
         get_foods() {

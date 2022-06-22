@@ -53,6 +53,7 @@ export default {
     name: 'FoodForm',
     props: {
         item: Object,
+        open: Boolean,
     },
     data() {
         return {
@@ -75,17 +76,19 @@ export default {
         }
     },
     watch: {
-
+        open(){
+            if (this.item) {
+                this.food = this.item.food,
+                    this.quantity = this.item.quantity
+            }
+            else {
+                this.food = { ...this.defaults }
+                this.quantity = 1
+            }
+        }
     },
     mounted() {
-        if(this.item) {
-            this.food = this.item.food,
-            this.quantity = this.item.quantity
-        }
-        else {
-            this.food = { ...this.defaults }
-            this.quantity = 1
-        }
+        
     },
     methods: {
         submit() {

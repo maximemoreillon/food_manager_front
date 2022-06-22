@@ -109,7 +109,7 @@
                   </v-row>
                   <v-row dense>
                     <v-col>
-                      <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
+                      <v-text-field v-model="search" clearable append-icon="mdi-magnify" label="Search" hide-details />
                     </v-col>
 
                   </v-row>
