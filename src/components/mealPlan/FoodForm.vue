@@ -59,7 +59,7 @@ export default {
         return {
             quantity: 1,
             defaults: {
-                name: 'Default',
+                name: '',
                 serving: {
                     calories: 0,
                     size: 0,
@@ -77,6 +77,14 @@ export default {
     },
     watch: {
         open(){
+            this.load_food()
+        }
+    },
+    mounted() {
+        this.load_food()
+    },
+    methods: {
+        load_food(){
             if (this.item) {
                 this.food = this.item.food,
                     this.quantity = this.item.quantity
@@ -85,12 +93,7 @@ export default {
                 this.food = { ...this.defaults }
                 this.quantity = 1
             }
-        }
-    },
-    mounted() {
-        
-    },
-    methods: {
+        },
         submit() {
             this.$emit('submit', { quantity: this.quantity, food: { ...this.food } })
             this.food = { ...this.defaults }
