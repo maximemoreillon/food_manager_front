@@ -13,7 +13,7 @@
             <v-toolbar flat>
                 <v-row align="baseline">
                     <v-col>
-                        <v-card-title>Add food to meal plan</v-card-title>
+                        <v-card-title>Add food</v-card-title>
                     </v-col>
                     <v-spacer />
                     <v-col cols="auto">
