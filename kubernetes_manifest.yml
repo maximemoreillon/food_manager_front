@@ -25,6 +25,11 @@ spec:
         #   value: https://api.users.maximemoreillon.com/v2/auth/login
         # - name: PROXY_IDENTIFICATION
         #   value: https://api.users.maximemoreillon.com/v2/users/self
+        # Get environment variables from secret
+        envFrom:
+        - secretRef:
+           name: environment-variables
+
 
 ---
 apiVersion: v1
