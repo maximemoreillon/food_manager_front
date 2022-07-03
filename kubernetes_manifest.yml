@@ -18,10 +18,8 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: PROXY_AUTHENTICATION
-          value: http://authentication
-        - name: PROXY_API
-          value: http://food-manager
+        - name: VUE_APP_FOOD_MANAGER_API_URL
+          value: https://api.food.home.maximemoreillon.com/
 
 ---
 apiVersion: v1
