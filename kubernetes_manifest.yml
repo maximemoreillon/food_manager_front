@@ -18,8 +18,13 @@ spec:
         ports:
         - containerPort: 80
         env:
-        - name: VUE_APP_FOOD_MANAGER_API_URL
-          value: https://api.food.home.maximemoreillon.com/
+        - name: PROXY_API
+          # Using K8s DNS
+          value: http://food-manager
+        - name: PROXY_LOGIN
+          value: https://api.users.maximemoreillon.com/v2/auth/login
+        - name: PROXY_IDENTIFICATION
+          value: https://api.users.maximemoreillon.com/v2/users/self
 
 ---
 apiVersion: v1
