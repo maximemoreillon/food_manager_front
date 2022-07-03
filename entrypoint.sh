@@ -14,5 +14,5 @@ do
 
 done
 
-echo "Starting Nginx"
-nginx -g 'daemon off;'
+echo "Starting app"
+node main.js
