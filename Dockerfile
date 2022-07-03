@@ -11,3 +11,7 @@ RUN npm run build
 FROM moreillon/api-proxy as production-stage
 COPY --from=build-stage /app/dist /usr/src/app/dist
 
+# Environment variables at runtime
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
