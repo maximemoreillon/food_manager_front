@@ -48,10 +48,6 @@
                 </v-tabs-items>
             </v-card-text>
 
-
-
-
-
         </v-card>
 
 
