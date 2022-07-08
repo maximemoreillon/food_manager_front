@@ -14,8 +14,8 @@
         <v-toolbar-title>Edit food</v-toolbar-title>
         <v-spacer></v-spacer>
       </v-toolbar>
-      <!-- Using v-if dialog so as to refresh food form content -->
-      <FoodForm v-if="dialog" :item="item" @submit="dialog = false"/>
+
+      <FoodForm :item="item" @submit="submit($event)" :open="dialog" />
     </v-card>
 
   </v-dialog>
@@ -38,26 +38,10 @@ export default {
      
     }
   },
-  watch: {
-    // dialog(){
-    //   if (!this.dialog || !this.item) {
-    //     this.food = { ...this.defaults },
-    //       this.quantity = 1
-    //   }
-    //   else if(this.item) {
-    //       this.food = {...this.item.food},
-    //       this.quantity = this.item.quantity
-    //     }
-    // }
-  },
-  mounted(){
-    // this.food = {...this.defaults}
-  },
   methods: {
-    submit(){
-      this.$emit('submit', {quantity: this.quantity, food: {...this.food}})
-      // this.dialog = false
-      // this.food = {...this.defaults}
+    submit($event){
+      this.$emit('submit', $event)
+      this.dialog = false
     }
   }
 

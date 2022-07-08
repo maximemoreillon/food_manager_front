@@ -58,6 +58,7 @@ export default {
     data() {
         return {
             quantity: 1,
+            food: null,
             defaults: {
                 name: '',
                 serving: {
@@ -72,7 +73,7 @@ export default {
                 },
 
             },
-            food: null,
+            
         }
     },
     watch: {
@@ -86,17 +87,20 @@ export default {
     methods: {
         load_food(){
             if (this.item) {
-                this.food = this.item.food,
-                    this.quantity = this.item.quantity
+                this.food = JSON.parse(JSON.stringify(this.item.food))
+                this.quantity = this.item.quantity
             }
             else {
-                this.food = { ...this.defaults }
-                this.quantity = 1
+                this.reset_inputs()
             }
+        },
+        reset_inputs(){
+            this.quantity = 1
+            this.food = JSON.parse(JSON.stringify(this.defaults))
         },
         submit() {
             this.$emit('submit', { quantity: this.quantity, food: { ...this.food } })
-            this.food = { ...this.defaults }
+            this.reset_inputs()
         }
     }
 

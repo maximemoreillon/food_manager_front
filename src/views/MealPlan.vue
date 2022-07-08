@@ -139,7 +139,7 @@
               </template>
 
               <template v-slot:item.edit="{ item }">
-                <FoodEditDialog :item="item" />
+                <FoodEditDialog :item="item" @submit="update_item(item,$event)"/>
               </template>
 
 
@@ -316,10 +316,12 @@ export default {
     item_too_calorific({serving: {calories}}){
       return calories > (this.meal_plan.calories_target - this.calorie_total)
     },
+    update_item(item, {quantity, food}){
+      // Not elegant at all
+      this.$set(item, 'quantity', quantity)
+      this.$set(item, 'food', food)
+    }
 
-    // add_unregistered_food({quantity, food}){
-    //   this.meal_plan.foods.push({food, quantity})
-    // }
 
   },
   computed: {
