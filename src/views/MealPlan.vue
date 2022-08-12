@@ -297,6 +297,8 @@ export default {
       const found_food = this.meal_plan.foods.find(({ food: {_id} }) => _id === new_food._id)
       if(found_food) found_food.quantity ++
       else this.meal_plan.foods.push({ food: new_food, quantity})
+      this.snackbar.text = `${new_food.name} added to meal plan`
+      this.snackbar.show = true
     },
     remove_food_from_plan({food: food_to_delete}){
       const found_index = this.meal_plan.foods.findIndex(({ food: existing_food }) => JSON.stringify(existing_food) === JSON.stringify(food_to_delete))
