@@ -70,8 +70,8 @@
                   </v-col>
                   <v-spacer />
                   <v-col cols="auto">
-                    <v-chip v-for="(value, key) in macros_total" :key="key" class="mx-1" :color="colors[key]">
-                      {{value}}g {{ key }}
+                    <v-chip v-for="(value, key) in macros_total" :key="key" class="ma-1" :color="colors[key]">
+                      {{ value }}g {{ key }}
                     </v-chip>
                   </v-col>
                 </v-row>

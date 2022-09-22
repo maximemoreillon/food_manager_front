@@ -51,14 +51,14 @@
             <v-text-field label="Carbs [g]" v-model="food.serving.macronutrients.carbohydrates" />
           </v-col>
         </v-row>
-        <!-- <v-row>
+        <v-row>
           <v-col>
-            <v-combobox label="Vendor" :items="vendors" v-model="food.vendor" />
+            <v-text-field label="Vendor" v-model="food.vendor" />
           </v-col>
-          <v-col>
+          <!-- <v-col>
             <v-text-field label="Price" v-model="food.price_per_serving" />
-          </v-col>
-        </v-row> -->
+          </v-col> -->
+        </v-row>
 
         <v-row align="center">
           <v-col>
@@ -102,7 +102,6 @@ export default {
   data: () => ({
     food: null,
     loading: false,
-
     image: null,
     snackbar: {
       show: false,
