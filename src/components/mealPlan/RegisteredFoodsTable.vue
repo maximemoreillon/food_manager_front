@@ -93,6 +93,7 @@ export default {
             return [
                 { text: '', value: 'image' },
                 { text: 'Name', value: 'name' },
+                { text: 'Vendor', value: 'vendor' },
                 { text: 'Serving', value: 'serving' },
                 { text: 'Calories', value: 'serving.calories' },
                 { text: 'Protein', value: 'serving.macronutrients.protein' },
