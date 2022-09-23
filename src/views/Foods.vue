@@ -67,6 +67,7 @@ export default {
     base_headers: [
       { text: 'Image', value: 'image' },
       { text: 'Name', value: 'name' },
+      { text: 'Vendor', value: 'vendor' },
       { text: 'Serving', value: 'serving' },
       { text: 'Calories [kcal]', value: 'serving.calories'},
       { text: 'Protein [g]', value: 'serving.macronutrients.protein'},

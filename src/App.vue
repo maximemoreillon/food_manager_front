@@ -46,8 +46,8 @@ export default {
       footer_color: 'grey lighten-3',
     },
     nav: [
-      {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
       {title: 'Meal plans', to: {name: 'meal_plans'}, icon: 'mdi-format-list-bulleted'},
+      {title: 'Foods', to: {name: 'foods'}, icon: 'mdi-food'},
       {title: 'Settings', to: {name: 'settings'}, icon: 'mdi-cogs'},
 
       {title: 'About', to: {name: 'about'}, icon: 'mdi-information-outline'},
