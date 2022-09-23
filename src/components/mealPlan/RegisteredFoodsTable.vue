@@ -61,8 +61,7 @@ export default {
     methods: {
         get_foods() {
             this.loading = true
-            const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
-            this.axios.get(url)
+            this.axios.get('/foods')
                 .then(({ data }) => {
                     this.foods = data.items
                 })
