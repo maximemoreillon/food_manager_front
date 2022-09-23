@@ -53,7 +53,7 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="Vendor" v-model="food.vendor" />
+            <v-combobox label="Vendor" v-model="food.vendor" :items="vendors"/>
           </v-col>
           <!-- <v-col>
             <v-text-field label="Price" v-model="food.price_per_serving" />
@@ -101,6 +101,7 @@ export default {
 
   data: () => ({
     food: null,
+    vendors: [],
     loading: false,
     image: null,
     snackbar: {
@@ -111,6 +112,7 @@ export default {
   }),
   mounted(){
     this.get_food()
+    this.get_vendors()
     document.addEventListener("keydown", this.handle_keydown)
   },
   beforeDestroy() {
@@ -131,8 +133,8 @@ export default {
 
     get_food(){
       this.loading = true
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
-      this.axios.get(url)
+      const route = `/foods/${this.food_id}`
+      this.axios.get(route)
       .then(({data}) => {
         this.food = data
       })
@@ -141,9 +143,19 @@ export default {
       })
       .finally( () => { this.loading = false })
     },
+    get_vendors() {
+      const route = `/foods/vendors`
+      this.axios.get(route)
+        .then(({ data }) => {
+          this.vendors = data
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
     update_food(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
-      this.axios.patch(url, this.food)
+      const route = `/foods/${this.food_id}`
+      this.axios.patch(route, this.food)
       .then(() => { 
         this.snackbar.text = 'Food saved'
         this.snackbar.show = true
@@ -154,18 +166,18 @@ export default {
     },
     delete_food(){
       if(!confirm(`Delete ${this.food.name}?`)) return
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}`
-      this.axios.delete(url)
+      const route = `/foods/${this.food_id}`
+      this.axios.delete(route)
       .then(() => { this.$router.push({name:'foods'}) })
       .catch(error => {
         console.error(error)
       })
     },
     upload_image(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food_id}/image`
+      const route = `/foods/${this.food_id}/image`
       const formData = new FormData()
       formData.append('image', this.image)
-      this.axios.post(url,formData)
+      this.axios.post(route,formData)
       .then(() => { this.get_food() })
       .catch(error => {
         console.error(error)

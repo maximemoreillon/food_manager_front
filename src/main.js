@@ -8,6 +8,8 @@ import VueAxios from 'vue-axios'
 import VueApexCharts from 'vue-apexcharts'
 import './registerServiceWorker'
 
+axios.defaults.baseURL = process.env.VUE_APP_FOOD_MANAGER_API_URL
+
 Vue.use(VueAxios, axios)
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
