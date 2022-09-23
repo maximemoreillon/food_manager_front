@@ -106,12 +106,11 @@ export default {
   methods:{
     get_meal_plans(){
       this.loading = true
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
       const { itemsPerPage, page } = this.options
       const params = { limit: itemsPerPage, skip: ( page - 1 ) * itemsPerPage }
 
       this.axios
-        .get(url, { params })
+        .get('/meal_plans', { params })
         .then(({data}) => {
           this.meal_plans = data.items
           this.total = data.total

@@ -227,8 +227,8 @@ export default {
     },
     get_meal_plan(){
       this.loading = true
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
-      this.axios.get(url)
+      const route = `/meal_plans/${this.meal_plan_id}`
+      this.axios.get(route)
       .then(({data}) => {
         this.meal_plan = data
 
@@ -248,8 +248,8 @@ export default {
       })
     },
     get_foods(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
-      this.axios.get(url)
+      const route = `/foods`
+      this.axios.get(route)
       .then(({data}) => {
         this.foods = data.items
        })
@@ -259,7 +259,7 @@ export default {
       })
     },
     update_meal_plan(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
+      const route = `/meal_plans/${this.meal_plan_id}`
 
 
       const body = {
@@ -268,7 +268,7 @@ export default {
         macronutrients: this.macros_total,
       }
 
-      this.axios.patch(url,body)
+      this.axios.patch(route,body)
       .then(() => {
         this.snackbar.text = 'Meal plan saved'
         this.snackbar.show = true
@@ -280,8 +280,8 @@ export default {
     },
     delete_meal_plan(){
       if(!confirm('Really?')) return
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans/${this.meal_plan_id}`
-      this.axios.delete(url)
+      const route = `/meal_plans/${this.meal_plan_id}`
+      this.axios.delete(route)
       .then(() => { this.$router.push({name: 'meal_plans'}) })
       .catch(error => {
         console.error(error)

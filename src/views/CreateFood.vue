@@ -45,8 +45,8 @@ export default {
   }),
   methods: {
     create_food(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods`
-      this.axios.post(url,this.new_food)
+      const route = `/foods`
+      this.axios.post(route,this.new_food)
       .then(({data}) => {
         this.$router.push({name: 'food', params: {food_id: data._id}})
       })

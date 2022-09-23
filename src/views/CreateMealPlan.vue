@@ -43,9 +43,9 @@ export default {
 
   methods: {
     create_meal_plan(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/meal_plans`
+      const route = `/meal_plans`
       const body = this.meal_plan
-      this.axios.post(url,body)
+      this.axios.post(route,body)
       .then(({data}) => {
         this.$router.push({name: 'meal_plan', params: {meal_plan_id: data._id}})
       })

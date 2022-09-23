@@ -8,6 +8,7 @@
     <v-card-text>
       <v-row>
         <v-col>
+          <!-- TODO: stop mutating store data with v-model -->
           <v-text-field
             label="Current calories target"
             v-model="$store.state.user_configuration.calories_target" />
@@ -52,8 +53,8 @@ export default {
   methods:{
 
     update_settings(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/settings`
-      this.axios.patch(url, this.$store.state.user_configuration)
+      const route = `/settings`
+      this.axios.patch(route, this.$store.state.user_configuration)
       .then(() => {
 
       })
