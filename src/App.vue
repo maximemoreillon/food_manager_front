@@ -63,8 +63,7 @@ export default {
       this.get_settings()
     },
     get_settings(){
-      const url = `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/settings`
-      this.axios.get(url)
+      this.axios.get('/settings')
       .then(({data}) => {
         this.$store.commit('set_user_configuration',data)
       })
