@@ -73,6 +73,7 @@ export default {
       { text: 'Protein [g]', value: 'serving.macronutrients.protein'},
       { text: 'Fat [g]', value: 'serving.macronutrients.fat'},
       { text: 'Carbs [g]', value: 'serving.macronutrients.carbohydrates'},
+      { text: 'Price', value: 'serving.price' },
     ]
   }),
   mounted(){
