@@ -55,9 +55,9 @@
           <v-col>
             <v-combobox label="Vendor" v-model="food.vendor" :items="vendors"/>
           </v-col>
-          <!-- <v-col>
-            <v-text-field label="Price" v-model="food.price_per_serving" />
-          </v-col> -->
+          <v-col>
+            <v-text-field label="Price" v-model="food.serving.price" />
+          </v-col>
         </v-row>
 
         <v-row align="center">
