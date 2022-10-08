@@ -16,6 +16,8 @@
       </v-toolbar>
 
       <FoodForm :item="item" @submit="submit($event)" :open="dialog" />
+
+
     </v-card>
 
   </v-dialog>

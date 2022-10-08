@@ -35,15 +35,34 @@
                 </v-col>
             </v-row>
             <v-row>
-
-                <v-spacer></v-spacer>
+                <v-spacer/>
+                <v-col cols="auto" v-if="!food._id">
+                    <v-btn @click="register_food()" :loading="registering">
+                        <v-icon left>mdi-playlist-plus</v-icon>
+                        <span>Register in food list</span>
+                    </v-btn>
+                </v-col>
                 <v-col cols="auto">
-                    <v-btn type="submit">Submit</v-btn>
+                    
+                    <v-btn type="submit">
+                        <v-icon left>mdi-check</v-icon>
+                        <span>Save</span>
+                    </v-btn>
                 </v-col>
             </v-row>
 
 
         </v-form>
+
+        <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.text }}
+        
+            <template v-slot:action="{ attrs }">
+                <v-btn text dark v-bind="attrs" @click="snackbar.show = false">
+                    Close
+                </v-btn>
+            </template>
+        </v-snackbar>
     </v-card-text>
 
 </template>
@@ -73,6 +92,12 @@ export default {
                 },
 
             },
+            registering: false,
+            snackbar: {
+                show: false,
+                text: null,
+                color: 'green',
+            },
             
         }
     },
@@ -93,6 +118,23 @@ export default {
             else {
                 this.reset_inputs()
             }
+        },
+        register_food() {
+            this.registering = true
+            this.axios.post(`/foods`, this.food)
+            .then(({ data }) => {
+                this.food = data
+                this.snackbar.text = 'Food registered'
+                this.snackbar.show = true
+                this.snackbar.color = 'green'
+            })
+            .catch(error => {
+                console.error(error)
+                this.snackbar.text = 'Food registration failed'
+                this.snackbar.show = true
+                this.snackbar.color = 'red'
+            })
+            .finally(() => { this.registering = false})
         },
         reset_inputs(){
             this.quantity = 1
