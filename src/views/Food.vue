@@ -194,7 +194,7 @@ export default {
     },
     image_src(){
       if (!this.food.image) return require('@/assets/image-off.png')
-      else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/thumbnail`
+      else return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image`
     },
 
   }
