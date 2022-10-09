@@ -36,7 +36,7 @@
             </v-row>
             <v-row>
                 <v-spacer/>
-                <v-col cols="auto" v-if="!food._id">
+                <v-col cols="auto" v-if="!isRegistered">
                     <v-btn @click="register_food()" :loading="registering">
                         <v-icon left>mdi-playlist-plus</v-icon>
                         <span>Register in food list</span>
@@ -78,6 +78,7 @@ export default {
         return {
             quantity: 1,
             food: null,
+            registeredFoods: [],
             defaults: {
                 name: '',
                 serving: {
@@ -108,16 +109,28 @@ export default {
     },
     mounted() {
         this.load_food()
+        this.get_foods()
     },
     methods: {
         load_food(){
             if (this.item) {
+                // Make a copy
                 this.food = JSON.parse(JSON.stringify(this.item.food))
                 this.quantity = this.item.quantity
             }
             else {
                 this.reset_inputs()
             }
+        },
+        get_foods() {
+            this.axios.get('/foods')
+                .then(({ data }) => {
+                    this.registeredFoods = data.items
+                })
+                .catch(error => {
+                    alert('Failed to get foods')
+                    console.error(error)
+                })
         },
         register_food() {
             this.registering = true
@@ -143,6 +156,12 @@ export default {
         submit() {
             this.$emit('submit', { quantity: this.quantity, food: { ...this.food } })
             this.reset_inputs()
+        }
+    },
+    computed: {
+        isRegistered(){
+            if(!this.food) return false
+            return this.registeredFoods.some(({_id}) => _id === this.food._id )
         }
     }
 
