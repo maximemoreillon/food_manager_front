@@ -4,14 +4,31 @@
     <v-card-title>Foods</v-card-title>
 
     <v-card-text>
-      <v-data-table :loading="loading" :search="search" :headers="headers" :items="filtered_foods" :items-per-page="-1" sort-by="name">
+      <v-data-table 
+      :loading="loading" 
+      :search="search" 
+      :headers="headers" 
+      :items="foods" 
+      sort-by="name"
+      :server-items-length="total"
+      :options.sync="options"
+      >
 
         <template v-slot:top>
           <v-container fluid>
 
             <v-row align="baseline">
               <v-col cols="12" md="6">
-                <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" hide-details />
+                <v-form @submit.prevent="get_foods()">
+                  <v-text-field v-model="search" append-icon="mdi-magnify" label="Search">
+                    <template v-slot:append>
+                      <v-btn icon type="submit">
+                        <v-icon>mdi-magnify</v-icon>
+                      </v-btn>
+                    </template>
+                  </v-text-field>
+                  
+                </v-form>
               </v-col>
               <v-col>
                 <v-checkbox label="Show hidden" v-model="show_hidden" />
@@ -63,6 +80,7 @@ export default {
     search: '',
     loading: false,
     foods: [],
+    total: 0,
     show_hidden: false,
     base_headers: [
       { text: 'Image', value: 'image' },
@@ -74,18 +92,44 @@ export default {
       { text: 'Fat [g]', value: 'serving.macronutrients.fat'},
       { text: 'Carbs [g]', value: 'serving.macronutrients.carbohydrates'},
       { text: 'Price', value: 'serving.price' },
-    ]
+      { text: 'Hidden', value: 'hidden' },
+    ],
+    options: {}
   }),
   mounted(){
-    this.get_foodd()
+    this.get_foods()
+  },
+  watch: {
+    options: {
+      handler() {
+        this.get_foods()
+      },
+      deep: true,
+    },
+    show_hidden(){
+      this.get_foods()
+    }
   },
   methods:{
-    get_foodd(){
+    get_foods(){
       this.loading = true
       const route = `/foods`
-      const params = { limit: -1 }
+
+      const { itemsPerPage, page, sortBy, sortDesc } = this.options
+      const params = {
+        limit: String(itemsPerPage),
+        skip: String((page - 1) * itemsPerPage),
+        order: String(sortDesc[0] ? -1 : 1),
+        sort: sortBy[0],
+        search: this.search,
+        hidden: this.show_hidden ? true : undefined,
+      }
+
       this.axios.get(route, {params} )
-        .then( ({data}) => { this.foods = data.items })
+        .then( ({data}) => { 
+          this.foods = data.items
+          this.total = data.total
+        })
         .catch(error => {
           console.error(error)
         })
@@ -103,15 +147,15 @@ export default {
   },
   computed: {
     filtered_foods(){
+      // Unused
       if(this.show_hidden) return this.foods
       else return this.foods.filter(f => !f.hidden)
     },
     headers(){
+      // Unused
       if(this.show_hidden) return [ ...this.base_headers, {text: 'Hidden', value: 'hidden'} ]
       else return this.base_headers
-
-
-    }
+    },
   }
 }
 </script>
