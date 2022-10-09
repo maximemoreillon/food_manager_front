@@ -1,10 +1,21 @@
 <template>
-    <v-data-table :loading="loading" :search="search" height="50vh" :headers="food_list_headers" :items="filtered_foods"
-        :items-per-page="-1" sort-by="name" @click:row="$emit('foodAdded',{food: $event, quantity: 1})">
+    <v-data-table 
+        :loading="loading" 
+        height="50vh" 
+        :headers="headers" 
+        :items="foods"
+        :server-items-length="total"
+        :options.sync="options"
+        @click:row="$emit('foodAdded',{food: $event, quantity: 1})">
 
         <template v-slot:top>
             <v-container fluid>
-                <v-text-field v-model="search" clearable append-icon="mdi-magnify" label="Search" hide-details />
+                <v-text-field 
+                    v-model="search" 
+                    clearable 
+                    append-icon="mdi-magnify" 
+                    label="Search" 
+                    @input="get_foods()"/>
             </v-container>
         </template>
 
@@ -47,6 +58,21 @@ export default {
             foods: [],
             search: '',
             thumbnail_size: '6em',
+            options: {
+                sortBy: ['name']
+            },
+            total: 0,
+            headers: [
+                { text: '', value: 'image' },
+                { text: 'Name', value: 'name' },
+                { text: 'Vendor', value: 'vendor' },
+                { text: 'Serving', value: 'serving' },
+                { text: 'Calories', value: 'serving.calories' },
+                { text: 'Protein', value: 'serving.macronutrients.protein' },
+                { text: 'Fat', value: 'serving.macronutrients.fat' },
+                { text: 'Carbs', value: 'serving.macronutrients.carbohydrates' },
+            ]
+
         }
     },
 
@@ -56,20 +82,38 @@ export default {
     watch: {
         open() {
             this.search = ''
-        }
+        },
+        options: {
+            handler() {
+                this.get_foods()
+            },
+            deep: true,
+        },
     },
     methods: {
         get_foods() {
             this.loading = true
-            this.axios.get('/foods')
-                .then(({ data }) => {
-                    this.foods = data.items
-                })
-                .catch(error => {
-                    alert('Failed to get foods')
-                    console.error(error)
-                })
-                .finally(() => {this.loading = false})
+
+            const { itemsPerPage, page, sortBy, sortDesc } = this.options
+            const params = {
+                limit: String(itemsPerPage),
+                skip: String((page - 1) * itemsPerPage),
+                order: String(sortDesc[0] ? -1 : 1),
+                sort: sortBy[0],
+                search: this.search,
+                hidden: this.show_hidden ? true : undefined,
+            }
+
+            this.axios.get('/foods', { params })
+            .then(({ data }) => {
+                this.foods = data.items
+                this.total = data.total
+            })
+            .catch(error => {
+                alert('Failed to get foods')
+                console.error(error)
+            })
+            .finally(() => {this.loading = false})
         },
         image_src({ _id, image }) {
             if (!_id) return require('@/assets/image-off.png')
@@ -85,21 +129,7 @@ export default {
             const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.calories, 0)
             return Math.round(total * 100) / 100
         },
-        filtered_foods() {
-            return this.foods.filter(f => !f.hidden)
-        },
-        food_list_headers() {
-            return [
-                { text: '', value: 'image' },
-                { text: 'Name', value: 'name' },
-                { text: 'Vendor', value: 'vendor' },
-                { text: 'Serving', value: 'serving' },
-                { text: 'Calories', value: 'serving.calories' },
-                { text: 'Protein', value: 'serving.macronutrients.protein' },
-                { text: 'Fat', value: 'serving.macronutrients.fat' },
-                { text: 'Carbs', value: 'serving.macronutrients.carbohydrates' },
-            ]
-        },
+
     }
 
 

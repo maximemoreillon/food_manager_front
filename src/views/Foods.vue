@@ -6,10 +6,8 @@
     <v-card-text>
       <v-data-table 
       :loading="loading" 
-      :search="search" 
       :headers="headers" 
       :items="foods" 
-      sort-by="name"
       :server-items-length="total"
       :options.sync="options"
       >
@@ -19,17 +17,8 @@
 
             <v-row align="baseline">
               <v-col cols="12" md="6">
-                <v-form @submit.prevent="get_foods()">
-                  <v-text-field v-model="search" append-icon="mdi-magnify" label="Search">
-                    <template v-slot:append>
-                      <v-btn icon type="submit">
-                        <v-icon>mdi-magnify</v-icon>
-                      </v-btn>
-                    </template>
-                  </v-text-field>
-                  
-                </v-form>
-              </v-col>
+                  <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" @change="get_foods()"/>
+                </v-col>
               <v-col>
                 <v-checkbox label="Show hidden" v-model="show_hidden" />
               </v-col>
@@ -94,7 +83,9 @@ export default {
       { text: 'Price', value: 'serving.price' },
       { text: 'Hidden', value: 'hidden' },
     ],
-    options: {}
+    options: {
+      sortBy: ['name']
+    },
   }),
   mounted(){
     this.get_foods()
@@ -113,7 +104,6 @@ export default {
   methods:{
     get_foods(){
       this.loading = true
-      const route = `/foods`
 
       const { itemsPerPage, page, sortBy, sortDesc } = this.options
       const params = {
@@ -125,7 +115,7 @@ export default {
         hidden: this.show_hidden ? true : undefined,
       }
 
-      this.axios.get(route, {params} )
+      this.axios.get('/foods', {params} )
         .then( ({data}) => { 
           this.foods = data.items
           this.total = data.total
