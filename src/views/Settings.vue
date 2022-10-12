@@ -24,18 +24,26 @@
         </v-col>
       </v-row>
 
-
-
-
-
     </v-card-text>
 
+    <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+      {{ snackbar.text }}
+    
+      <template v-slot:action="{ attrs }">
+        <v-btn text dark v-bind="attrs" @click="snackbar.show = false">
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
 
   </v-card>
 </template>
 
 <script>
 
+const {
+  calories_target = 2500
+} = process.env 
 
 export default {
   name: 'Settings',
@@ -44,7 +52,12 @@ export default {
   },
   data: () => ({
     settings: {
-      calories_target: process.env.VUE_APP_DEFAULT_CALORIES_TARGET || 2500
+      calories_target
+    },
+    snackbar: {
+      show: false,
+      text: null,
+      color: 'green',
     },
 
   }),
@@ -56,10 +69,15 @@ export default {
       const route = `/settings`
       this.axios.patch(route, this.$store.state.user_configuration)
       .then(() => {
-
+        this.snackbar.text = 'Settings saved'
+        this.snackbar.color = 'green'
+        this.snackbar.show = true
       })
       .catch(error => {
         console.error(error)
+        this.snackbar.text = 'Error'
+        this.snackbar.color = 'red'
+        this.snackbar.show = true
       })
     }
 
