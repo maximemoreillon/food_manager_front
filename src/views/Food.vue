@@ -133,8 +133,7 @@ export default {
 
     get_food(){
       this.loading = true
-      const route = `/foods/${this.food_id}`
-      this.axios.get(route)
+      this.axios.get(`/foods/${this.food_id}`)
       .then(({data}) => {
         this.food = data
       })
@@ -144,8 +143,7 @@ export default {
       .finally( () => { this.loading = false })
     },
     get_vendors() {
-      const route = `/foods/vendors`
-      this.axios.get(route)
+      this.axios.get(`/foods/vendors`)
         .then(({ data }) => {
           this.vendors = data
         })
@@ -154,10 +152,10 @@ export default {
         })
     },
     update_food(){
-      const route = `/foods/${this.food_id}`
-      this.axios.patch(route, this.food)
+      this.axios.patch(`/foods/${this.food_id}`, this.food)
       .then(() => { 
         this.snackbar.text = 'Food saved'
+        this.snackbar.color = 'green'
         this.snackbar.show = true
        })
       .catch(error => {
@@ -166,18 +164,16 @@ export default {
     },
     delete_food(){
       if(!confirm(`Delete ${this.food.name}?`)) return
-      const route = `/foods/${this.food_id}`
-      this.axios.delete(route)
+      this.axios.delete(`/foods/${this.food_id}`)
       .then(() => { this.$router.push({name:'foods'}) })
       .catch(error => {
         console.error(error)
       })
     },
     upload_image(){
-      const route = `/foods/${this.food_id}/image`
       const formData = new FormData()
       formData.append('image', this.image)
-      this.axios.post(route,formData)
+      this.axios.post(`/foods/${this.food_id}/image`,formData)
       .then(() => { this.get_food() })
       .catch(error => {
         console.error(error)
