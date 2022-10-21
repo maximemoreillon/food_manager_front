@@ -4,18 +4,13 @@
         height="50vh" 
         :headers="headers" 
         :items="foods"
-        :server-items-length="total"
-        :options.sync="options"
+        :search="search" 
         @click:row="$emit('foodAdded',{food: $event, quantity: 1})">
 
         <template v-slot:top>
             <v-container fluid>
-                <v-text-field 
-                    v-model="search" 
-                    clearable 
-                    append-icon="mdi-magnify" 
-                    label="Search" 
-                    @input="get_foods()"/>
+                <v-text-field v-model="search" clearable append-icon="mdi-magnify" label="Search" hide-details />
+
             </v-container>
         </template>
 
@@ -83,26 +78,12 @@ export default {
         open() {
             this.search = ''
         },
-        options: {
-            handler() {
-                this.get_foods()
-            },
-            deep: true,
-        },
     },
     methods: {
         get_foods() {
             this.loading = true
 
-            const { itemsPerPage, page, sortBy, sortDesc } = this.options
-            const params = {
-                limit: String(itemsPerPage),
-                skip: String((page - 1) * itemsPerPage),
-                order: String(sortDesc[0] ? -1 : 1),
-                sort: sortBy[0],
-                search: this.search,
-                hidden: this.show_hidden ? true : undefined,
-            }
+            const params = { limit: -1 }
 
             this.axios.get('/foods', { params })
             .then(({ data }) => {
@@ -129,6 +110,7 @@ export default {
             const total = this.meal_plan.foods.reduce((acc, { quantity, food }) => acc + quantity * food.serving.calories, 0)
             return Math.round(total * 100) / 100
         },
+
 
     }
 
