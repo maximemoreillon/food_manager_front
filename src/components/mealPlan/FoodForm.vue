@@ -34,16 +34,15 @@
                     <v-text-field label="Carbs [g]" type="number" v-model="food.serving.macronutrients.carbohydrates" />
                 </v-col>
             </v-row>
-            <v-row>
-                <v-spacer/>
+
+            <v-row justify="end">
                 <v-col cols="auto" v-if="!isRegistered">
                     <v-btn @click="register_food()" :loading="registering">
                         <v-icon left>mdi-playlist-plus</v-icon>
-                        <span>Register in food list</span>
+                        <span>Register</span>
                     </v-btn>
                 </v-col>
                 <v-col cols="auto">
-                    
                     <v-btn type="submit">
                         <v-icon left>mdi-check</v-icon>
                         <span>Save</span>

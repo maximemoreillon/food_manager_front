@@ -36,6 +36,7 @@
                 </template>
             </v-toolbar>
             <v-divider></v-divider>
+
             <v-card-text>
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
@@ -54,7 +55,7 @@
     </v-dialog>
 </template>
 
-<script>
+<script lang="js">
 import RegisteredFoodsTable from './RegisteredFoodsTable.vue'
 import FoodForm from './FoodForm.vue'
 export default {

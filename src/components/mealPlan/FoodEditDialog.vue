@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="600px" v-model="dialog">
+  <v-dialog max-width="50rem" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
 
       <v-btn icon v-bind="attrs" v-on="on">
