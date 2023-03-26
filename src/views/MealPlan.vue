@@ -68,8 +68,8 @@
             <v-card outlined>
               <v-card-title>Calories and Macros</v-card-title>
               <v-card-text>
-                <v-row align="baseline">
-                  <v-col cols="auto">
+                <v-row align="baseline" justify="space-between" dense>
+                  <v-col cols="12" md="auto">
                     <v-text-field
                       :error="calorie_total > meal_plan.calories_target"
                       :prefix="`${calorie_total}/`"
@@ -83,14 +83,13 @@
                     />
                   </v-col>
                   <v-spacer />
-                  <v-col cols="auto">
-                    <v-chip
-                      v-for="(value, key) in macros_total"
-                      :key="key"
-                      class="ma-1"
-                      :color="colors[key]"
-                    >
-                      {{ value }}g {{ key }}
+                  <v-col
+                    cols="auto"
+                    v-for="(value, key) in macros_total"
+                    :key="key"
+                  >
+                    <v-chip :color="colors[key]">
+                      {{ value }}g {{ macros_label_lookup[key] }}
                     </v-chip>
                   </v-col>
                 </v-row>
@@ -384,6 +383,13 @@ export default {
         protein: this.total_for_macro("protein"),
         fat: this.total_for_macro("fat"),
         carbohydrates: this.total_for_macro("carbohydrates"),
+      }
+    },
+    macros_label_lookup() {
+      return {
+        protein: "protein",
+        fat: "fat",
+        carbohydrates: "carbs",
       }
     },
 
