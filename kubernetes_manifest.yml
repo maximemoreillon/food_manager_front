@@ -63,4 +63,4 @@ spec:
               service:
                 name: ${APPLICATION_NAME}
                 port:
-                  nunmber: 80
+                  number: 80
