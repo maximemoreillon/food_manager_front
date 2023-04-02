@@ -61,6 +61,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                service: ${APPLICATION_NAME}
+                name: ${APPLICATION_NAME}
                 port:
                   nunmber: 80
