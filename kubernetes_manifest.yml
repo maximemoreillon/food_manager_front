@@ -54,10 +54,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${CERTIFICATE_DOMAIN}
+        - ${K8S_INGRESS_HOST}
       secretName: ${APPLICATION_NAME}
   rules:
-    - host: ${CERTIFICATE_DOMAIN}
+    - host: ${K8S_INGRESS_HOST}
       http:
         paths:
           - path: /
