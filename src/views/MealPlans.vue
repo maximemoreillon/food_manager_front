@@ -10,7 +10,7 @@
         </v-col>
         <v-spacer />
         <v-col cols="auto">
-          <v-btn :to="{name: 'new_meal_plan'}">
+          <v-btn :to="{name: 'new_meal_plan'}" color="primary">
             <v-icon>mdi-plus</v-icon>
             <span class="ml-2">New meal plan</span>
           </v-btn>

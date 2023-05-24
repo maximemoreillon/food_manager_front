@@ -13,8 +13,6 @@
       >
 
         <template v-slot:top>
-          <v-container fluid>
-
             <v-row align="baseline">
               <v-col cols="12" md="6">
                   <v-text-field v-model="search" append-icon="mdi-magnify" label="Search" @change="get_foods()"/>
@@ -24,14 +22,12 @@
               </v-col>
               <v-spacer />
               <v-col cols="auto">
-                <v-btn :to="{name: 'create_food'}">
-                  <v-icon>mdi-plus</v-icon>
-                  <span class="ml-2">Add</span>
+                <v-btn :to="{name: 'create_food'}" color="primary">
+                  <v-icon left>mdi-plus</v-icon>
+                  <span>Add</span>
                 </v-btn>
               </v-col>
             </v-row>
-
-          </v-container>
         </template>
 
         <template v-slot:item.name="{ item }">
