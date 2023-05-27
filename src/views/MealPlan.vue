@@ -1,33 +1,25 @@
 <template>
   <v-card :loading="loading">
     <v-toolbar flat>
-      <v-row align="center">
-        <v-col cols="auto">
-          <v-btn icon exact :to="{ name: 'meal_plans' }">
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col>
-          <v-toolbar-title>Meal plan</v-toolbar-title>
-        </v-col>
-        <v-spacer />
-        <v-col cols="auto">
-          <v-btn icon @click="save_meal_plan()" :loading="saving">
-            <v-icon>mdi-content-save</v-icon>
-          </v-btn>
-        </v-col>
-        <v-col cols="auto">
-          <v-btn
-            icon
-            color="#c00000"
-            v-if="meal_plan_id"
-            @click="delete_meal_plan()"
-            :loading="deleting"
-          >
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+      <v-btn icon exact :to="{ name: 'meal_plans' }">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+
+      <v-toolbar-title>Meal plan</v-toolbar-title>
+      <v-spacer />
+      <v-btn icon @click="save_meal_plan()" :loading="saving">
+        <v-icon>mdi-content-save</v-icon>
+      </v-btn>
+
+      <v-btn
+        icon
+        color="#c00000"
+        v-if="meal_plan_id"
+        @click="delete_meal_plan()"
+        :loading="deleting"
+      >
+        <v-icon>mdi-delete</v-icon>
+      </v-btn>
     </v-toolbar>
     <v-divider />
 
@@ -45,16 +37,15 @@
                       v-model="meal_plan.name"
                     />
                   </v-col>
-                  <v-spacer></v-spacer>
+                  <v-spacer />
                   <v-col cols="auto">
                     <v-checkbox
                       label="Incomplete"
                       v-model="meal_plan.incomplete"
                     />
                   </v-col>
-                  <v-spacer></v-spacer>
                   <v-col cols="auto">
-                    <v-icon>mdi-calendar</v-icon>
+                    <v-icon left>mdi-calendar</v-icon>
                     <span>{{ new Date(meal_plan.date).toDateString() }}</span>
                   </v-col>
                 </v-row>
@@ -114,29 +105,27 @@
               :items-per-page="-1"
             >
               <template v-slot:top>
-                <v-container fluid>
-                  <v-row>
-                    <v-col class="text-h6"> Foods </v-col>
-                    <v-spacer></v-spacer>
-                    <v-col cols="auto">
-                      <AddFoodDialog
-                        :meal_plan="meal_plan"
-                        @submit="add_food_to_plan($event)"
-                      />
-                    </v-col>
-                  </v-row>
-                  <v-row dense>
-                    <v-col>
-                      <v-text-field
-                        v-model="search"
-                        clearable
-                        append-icon="mdi-magnify"
-                        label="Search"
-                        hide-details
-                      />
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <v-row>
+                  <v-col class="text-h6"> Foods </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col cols="auto">
+                    <AddFoodDialog
+                      :meal_plan="meal_plan"
+                      @submit="add_food_to_plan($event)"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row dense>
+                  <v-col>
+                    <v-text-field
+                      v-model="search"
+                      clearable
+                      append-icon="mdi-magnify"
+                      label="Search"
+                      hide-details
+                    />
+                  </v-col>
+                </v-row>
               </template>
 
               <template v-slot:item.image="{ item }">
