@@ -25,7 +25,8 @@ export default {
     target: {
       type: Number,
       default() {
-        return this.$store.state.user_configuration.calorie_target
+        const target = localStorage.getItem("calorieTarget") || 2500
+        return Number(target)
       },
     },
     macronutrients: {

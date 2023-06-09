@@ -71,6 +71,7 @@
                       dense
                       rounded
                       v-model.number="meal_plan.calories_target"
+                      @input="calories_target_change_handler($event)"
                     />
                   </v-col>
                   <v-spacer />
@@ -236,17 +237,9 @@ export default {
         .get(route)
         .then(({ data }) => {
           this.meal_plan = data
+          this.setCalorieTarget()
 
           // Calorie target
-          if (!this.meal_plan.calories_target) {
-            const current_calories_target =
-              this.$store.state.user_configuration.calories_target
-            this.$set(
-              this.meal_plan,
-              "calories_target",
-              current_calories_target
-            )
-          }
         })
         .catch((error) => {
           alert("Failed to load meal plan")
@@ -255,6 +248,13 @@ export default {
         .finally(() => {
           this.loading = false
         })
+    },
+
+    setCalorieTarget() {
+      // No need to do anything if meal plan already has a calorie target
+      if (this.meal_plan.calories_target) return
+      const target = localStorage.getItem("caloriesTarget") || 2500
+      this.$set(this.meal_plan, "calories_target", Number(target))
     },
     get_foods() {
       const route = `/foods`
@@ -353,6 +353,9 @@ export default {
       // Not elegant at all
       this.$set(item, "quantity", quantity)
       this.$set(item, "food", food)
+    },
+    calories_target_change_handler(event) {
+      localStorage.setItem("caloriesTarget", Number(event))
     },
   },
   computed: {
