@@ -389,7 +389,7 @@ export default {
       return [
         { text: "", value: "image" },
         { text: "Name", value: "food.name" },
-        { text: "Vendor", value: "food.vendor" },
+        // { text: "Vendor", value: "food.vendor" },
         { text: "Calories [kcal]", value: "food.serving.calories" },
         { text: "Protein [g]", value: "food.serving.macronutrients.protein" },
         { text: "Fat [g]", value: "food.serving.macronutrients.fat" },
