@@ -41,7 +41,8 @@
           <v-col cols="5">
             <v-text-field
               label="Calories per serving"
-              v-model="food.serving.calories"
+              v-model.number="food.serving.calories"
+              type="number"
             />
           </v-col>
         </v-row>
@@ -49,19 +50,22 @@
           <v-col>
             <v-text-field
               label="Protein [g]"
-              v-model="food.serving.macronutrients.protein"
+              v-model.number="food.serving.macronutrients.protein"
+              type="number"
             />
           </v-col>
           <v-col>
             <v-text-field
               label="Fat [g]"
-              v-model="food.serving.macronutrients.fat"
+              v-model.number="food.serving.macronutrients.fat"
+              type="number"
             />
           </v-col>
           <v-col>
             <v-text-field
               label="Carbs [g]"
-              v-model="food.serving.macronutrients.carbohydrates"
+              v-model.number="food.serving.macronutrients.carbohydrates"
+              type="number"
             />
           </v-col>
         </v-row>
@@ -70,16 +74,25 @@
             <v-combobox label="Vendor" v-model="food.vendor" :items="vendors" />
           </v-col>
           <v-col>
-            <v-text-field label="Price" v-model="food.serving.price" />
+            <v-text-field
+              label="Price"
+              v-model.number="food.serving.price"
+              type="number"
+            />
           </v-col>
         </v-row>
 
+        <!-- TODO: make a component -->
         <v-row align="center">
           <v-col>
             <v-file-input v-model="image" label="image" />
           </v-col>
           <v-col cols="auto">
-            <v-btn :disabled="!image" @click="upload_image()">
+            <v-btn
+              :disabled="!image"
+              @click="upload_image()"
+              :loading="imageUploading"
+            >
               <v-icon>mdi-upload</v-icon>
             </v-btn>
           </v-col>
@@ -118,6 +131,7 @@ export default {
     vendors: [],
     loading: false,
     image: null,
+    imageUploading: false,
     snackbar: {
       show: false,
       text: null,
@@ -192,6 +206,7 @@ export default {
         })
     },
     upload_image() {
+      this.imageUploading = true
       const formData = new FormData()
       formData.append("image", this.image)
       this.axios
@@ -201,6 +216,9 @@ export default {
         })
         .catch((error) => {
           console.error(error)
+        })
+        .finally(() => {
+          this.imageUploading = false
         })
     },
     delete_food_image() {
