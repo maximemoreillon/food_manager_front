@@ -81,7 +81,7 @@
                     :key="key"
                   >
                     <v-chip :color="colors[key]">
-                      {{ value }}g {{ macros_label_lookup[key] }}
+                      {{ Math.round(value) }}g {{ macros_label_lookup[key] }}
                     </v-chip>
                   </v-col>
                 </v-row>
