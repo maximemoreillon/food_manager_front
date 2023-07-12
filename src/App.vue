@@ -44,10 +44,10 @@ export default {
       {
         title: "Meal plans",
         to: { name: "meal_plans" },
-        icon: "mdi-format-list-bulleted",
+        icon: "mdi-silverware-fork-knife",
       },
       { title: "Foods", to: { name: "foods" }, icon: "mdi-food" },
-      { title: "Settings", to: { name: "settings" }, icon: "mdi-cogs" },
+      // { title: "Settings", to: { name: "settings" }, icon: "mdi-cogs" },
 
       {
         title: "About",
