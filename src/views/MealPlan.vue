@@ -238,8 +238,6 @@ export default {
         .then(({ data }) => {
           this.meal_plan = data
           this.setCalorieTarget()
-
-          // Calorie target
         })
         .catch((error) => {
           alert("Failed to load meal plan")

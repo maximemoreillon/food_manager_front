@@ -17,7 +17,7 @@
           </v-col>
           <v-col cols="auto">
             <v-btn type="submit" color="primary" :loading="loading">
-              <v-icon>mdi-plus</v-icon>
+              <v-icon left>mdi-plus</v-icon>
               <span>Create</span>
             </v-btn>
           </v-col>

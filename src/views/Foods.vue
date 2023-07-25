@@ -76,7 +76,6 @@ export default {
       { text: "Fat [g]", value: "serving.macronutrients.fat" },
       { text: "Carbs [g]", value: "serving.macronutrients.carbohydrates" },
       { text: "Price", value: "serving.price" },
-      { text: "Hidden", value: "hidden" },
     ],
     options: {
       sortBy: ["name"],

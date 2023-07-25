@@ -51,7 +51,7 @@
         </template>
 
         <template v-slot:item.incomplete="{ item }">
-          <v-icon color="#c00000" v-if="item.incomplete"> mdi-alert </v-icon>
+          <v-icon v-if="item.incomplete"> mdi-alert </v-icon>
         </template>
       </v-data-table>
     </v-card-text>
