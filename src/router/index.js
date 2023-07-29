@@ -15,11 +15,7 @@ const routes = [
     name: "foods",
     component: () => import("../views/Foods.vue"),
   },
-  {
-    path: "/foods/new",
-    name: "create_food",
-    component: () => import("../views/CreateFood.vue"),
-  },
+
   {
     path: "/foods/:food_id",
     name: "food",
@@ -29,11 +25,6 @@ const routes = [
     path: "/meal_plans",
     name: "meal_plans",
     component: MealPlans,
-  },
-  {
-    path: "/meal_plans/new",
-    name: "new_meal_plan",
-    component: () => import("../views/CreateMealPlan.vue"),
   },
   {
     path: "/meal_plans/:meal_plan_id",

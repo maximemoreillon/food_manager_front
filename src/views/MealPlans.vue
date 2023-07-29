@@ -7,10 +7,11 @@
         </v-col>
         <v-spacer />
         <v-col cols="auto">
-          <v-btn :to="{ name: 'new_meal_plan' }" color="primary">
+          <!-- <v-btn :to="{ name: 'new_meal_plan' }" color="primary">
             <v-icon left>mdi-plus</v-icon>
             <span>New</span>
-          </v-btn>
+          </v-btn> -->
+          <NewMealPlanDialog />
         </v-col>
       </v-row>
     </v-toolbar>
@@ -60,11 +61,12 @@
 
 <script>
 import CalorieMacros from "../components/CalorieMacros.vue"
-
+import NewMealPlanDialog from "../components/NewMealPlanDialog.vue"
 export default {
   name: "Foods",
   components: {
     CalorieMacros,
+    NewMealPlanDialog,
   },
   data: () => ({
     search: "",

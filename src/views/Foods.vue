@@ -3,10 +3,7 @@
     <v-toolbar flat>
       <v-toolbar-title>Foods</v-toolbar-title>
       <v-spacer />
-      <v-btn :to="{ name: 'create_food' }" color="primary">
-        <v-icon left>mdi-plus</v-icon>
-        <span>Add food</span>
-      </v-btn>
+      <NewFoodDialog />
     </v-toolbar>
 
     <v-card-text>
@@ -57,8 +54,12 @@
 </template>
 
 <script>
+import NewFoodDialog from "../components/NewFoodDialog.vue"
 export default {
   name: "Foods",
+  components: {
+    NewFoodDialog,
+  },
 
   data: () => ({
     search: "",
