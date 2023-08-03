@@ -1,6 +1,6 @@
 <template>
-  <v-btn icon>
-    <v-icon @click="toggleTheme()">mdi-theme-light-dark</v-icon>
+  <v-btn icon @click="toggleTheme()">
+    <v-icon>mdi-theme-light-dark</v-icon>
   </v-btn>
 </template>
 
