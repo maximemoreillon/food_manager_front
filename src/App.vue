@@ -1,5 +1,8 @@
 <template>
   <AppTemplate :options="options">
+    <template v-slot:header>
+      <ThemeToggler />
+    </template>
     <template v-slot:nav>
       <v-list dense nav>
         <v-list-item
@@ -23,12 +26,14 @@
 
 <script>
 import AppTemplate from "@moreillon/vue_application_template_vuetify"
+import ThemeToggler from "./components/ThemeToggler.vue"
 const { VUE_APP_LOGIN_URL, VUE_APP_IDENTIFICATION_URL } = process.env
 export default {
   name: "App",
 
   components: {
     AppTemplate,
+    ThemeToggler,
   },
 
   data: () => ({
