@@ -1,7 +1,7 @@
 <template>
   <v-dialog max-width="50rem" v-model="dialog">
-    <template v-slot:activator="{ on, attrs }" color="primary">
-      <v-btn v-bind="attrs" v-on="on" color="#c00000" dark>
+    <template v-slot:activator="{ on, attrs }">
+      <v-btn v-bind="attrs" v-on="on" color="primary" dark>
         <v-icon left>mdi-plus</v-icon>
         <span>New</span>
       </v-btn>
