@@ -55,6 +55,7 @@
 
 <script>
 import NewFoodDialog from "../components/NewFoodDialog.vue"
+const { VUE_APP_FOOD_MANAGER_API_URL } = process.env
 export default {
   name: "Foods",
   components: {
@@ -125,8 +126,10 @@ export default {
     },
     image_src({ _id, image }) {
       if (!image) return require("@/assets/image-off.png")
-      else
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
+      else {
+        const token = this.$cookies.get("jwt")
+        return `${VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail?jwt=${token}`
+      }
     },
   },
   computed: {

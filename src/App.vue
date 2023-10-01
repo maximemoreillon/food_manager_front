@@ -1,8 +1,5 @@
 <template>
   <AppTemplate :options="options">
-    <template v-slot:header>
-      <ThemeToggler />
-    </template>
     <template v-slot:nav>
       <v-list dense nav>
         <v-list-item

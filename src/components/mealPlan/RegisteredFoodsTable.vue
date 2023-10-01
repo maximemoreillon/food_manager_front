@@ -112,8 +112,10 @@ export default {
     image_src({ _id, image }) {
       if (!_id) return require("@/assets/image-off.png")
       if (!image) return require("@/assets/image-off.png")
-      else
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail`
+      else {
+        const token = this.$cookies.get("jwt")
+        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail?jwt=${token}`
+      }
     },
     item_too_calorific({ serving: { calories } }) {
       return calories > this.meal_plan.calories_target - this.calorie_total

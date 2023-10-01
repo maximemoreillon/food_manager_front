@@ -231,8 +231,10 @@ export default {
     },
     image_src() {
       if (!this.food.image) return require("@/assets/image-off.png")
-      else
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image`
+      else {
+        const token = this.$cookies.get("jwt")
+        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image?jwt=${token}`
+      }
     },
   },
 }
