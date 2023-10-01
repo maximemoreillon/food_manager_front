@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: "Foods",
+  name: "NewMealPlanDialog",
 
   data: () => ({
     loading: false,
@@ -54,7 +54,7 @@ export default {
         })
         .catch((error) => {
           console.error(error)
-          alert("Failed")
+          alert("Meal plan creation failed")
         })
         .finally(() => {
           this.loading = false

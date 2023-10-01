@@ -50,6 +50,7 @@ export default {
           this.$router.push({ name: "food", params: { food_id: data._id } })
         })
         .catch((error) => {
+          alert(`Food creation failed`)
           console.error(error)
         })
         .finally(() => {

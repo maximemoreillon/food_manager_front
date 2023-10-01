@@ -18,14 +18,8 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: PROXY_API
-              # Using K8s DNS
-              value: http://food-manager
-          # - name: PROXY_LOGIN
-          #   value: https://api.users.maximemoreillon.com/v2/auth/login
-          # - name: PROXY_IDENTIFICATION
-          #   value: https://api.users.maximemoreillon.com/v2/users/self
-          # Get environment variables from secret
+            - name: VUE_APP_FOOD_MANAGER_API_URL
+              value: https://api.food.home.maximemoreillon.com
           envFrom:
             - secretRef:
                 name: environment-variables
