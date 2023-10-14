@@ -23,7 +23,7 @@
     </v-toolbar>
     <v-divider />
 
-    <template v-if="this.meal_plan">
+    <template v-if="this.meal_plan && !loading">
       <v-card-text>
         <v-row>
           <v-col>
@@ -71,7 +71,6 @@
                       dense
                       rounded
                       v-model.number="meal_plan.calories_target"
-                      @input="calories_target_change_handler($event)"
                     />
                   </v-col>
                   <v-spacer />
@@ -230,29 +229,31 @@ export default {
         this.save_meal_plan()
       }
     },
-    get_meal_plan() {
+    async get_meal_plan() {
       this.loading = true
       const route = `/meal_plans/${this.meal_plan_id}`
-      this.axios
-        .get(route)
-        .then(({ data }) => {
-          this.meal_plan = data
-          this.setCalorieTarget()
-        })
-        .catch((error) => {
-          alert("Failed to load meal plan")
+
+      try {
+        const {data} = await this.axios.get(route)
+      this.meal_plan = data
+      if(!this.meal_plan.calories_target) await this.setCalorieTarget()
+
+      } catch (error) {
+        alert("Failed to load meal plan")
           console.error(error)
-        })
-        .finally(() => {
-          this.loading = false
-        })
+      } finally {
+        this.loading = false
+      }
+      
+
     },
 
-    setCalorieTarget() {
+    async setCalorieTarget() {
       // No need to do anything if meal plan already has a calorie target
       if (this.meal_plan.calories_target) return
-      const target = localStorage.getItem("caloriesTarget") || 2500
-      this.$set(this.meal_plan, "calories_target", Number(target))
+      const {data} = await this.axios.get('/settings')
+      const {calories_target = 2500} = data
+      this.$set(this.meal_plan, "calories_target", calories_target)
     },
     get_foods() {
       const route = `/foods`
@@ -354,9 +355,7 @@ export default {
       this.$set(item, "quantity", quantity)
       this.$set(item, "food", food)
     },
-    calories_target_change_handler(event) {
-      localStorage.setItem("caloriesTarget", Number(event))
-    },
+
   },
   computed: {
     meal_plan_id() {

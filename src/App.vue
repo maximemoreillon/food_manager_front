@@ -47,7 +47,7 @@ export default {
         icon: "mdi-silverware-fork-knife",
       },
       { title: "Foods", to: { name: "foods" }, icon: "mdi-food" },
-      // { title: "Settings", to: { name: "settings" }, icon: "mdi-cogs" },
+      { title: "Settings", to: { name: "settings" }, icon: "mdi-cogs" },
 
       {
         title: "About",
