@@ -10,7 +10,7 @@
         <v-btn icon @click="update_food()" :loading="saving">
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
-        <v-btn icon color="#c00000" @click="delete_food()">
+        <v-btn icon color="#c00000" @click="delete_food()" :loading="deleting">
           <v-icon>mdi-delete</v-icon>
         </v-btn>
       </v-toolbar>
@@ -133,6 +133,7 @@ export default {
     image: null,
     imageUploading: false,
     saving: false,
+    deleting: false,
     snackbar: {
       show: false,
       text: null,
@@ -201,6 +202,7 @@ export default {
     },
     delete_food() {
       if (!confirm(`Delete ${this.food.name}?`)) return
+      this.deleting = true
       this.axios
         .delete(`/foods/${this.food_id}`)
         .then(() => {
@@ -208,6 +210,9 @@ export default {
         })
         .catch((error) => {
           console.error(error)
+        })
+        .finally(() => {
+          this.deleting = false
         })
     },
     upload_image() {
