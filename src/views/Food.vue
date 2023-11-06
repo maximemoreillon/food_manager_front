@@ -7,7 +7,7 @@
         </v-btn>
         <v-toolbar-title>{{ food.name || "unnnamed food" }}</v-toolbar-title>
         <v-spacer />
-        <v-btn icon @click="update_food()">
+        <v-btn icon @click="update_food()" :loading="saving">
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
         <v-btn icon color="#c00000" @click="delete_food()">
@@ -132,6 +132,7 @@ export default {
     loading: false,
     image: null,
     imageUploading: false,
+    saving: false,
     snackbar: {
       show: false,
       text: null,
@@ -183,6 +184,7 @@ export default {
         })
     },
     update_food() {
+      this.saving = true
       this.axios
         .patch(`/foods/${this.food_id}`, this.food)
         .then(() => {
@@ -192,6 +194,9 @@ export default {
         })
         .catch((error) => {
           console.error(error)
+        })
+        .finally(() => {
+          this.saving = false
         })
     },
     delete_food() {
