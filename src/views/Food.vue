@@ -190,11 +190,14 @@ export default {
         .patch(`/foods/${this.food_id}`, this.food)
         .then(() => {
           this.snackbar.text = "Food saved"
-          this.snackbar.color = "green"
+          this.snackbar.color = "success"
           this.snackbar.show = true
         })
         .catch((error) => {
           console.error(error)
+          this.snackbar.text = "Food update failed"
+          this.snackbar.color = "error"
+          this.snackbar.show = true
         })
         .finally(() => {
           this.saving = false
@@ -210,6 +213,9 @@ export default {
         })
         .catch((error) => {
           console.error(error)
+          this.snackbar.text = "Food deletion failed"
+          this.snackbar.color = "error"
+          this.snackbar.show = true
         })
         .finally(() => {
           this.deleting = false
