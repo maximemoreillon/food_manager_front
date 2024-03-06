@@ -60,7 +60,7 @@
           </v-btn>
         </v-col>
         <v-col cols="auto">
-          <v-btn type="submit">
+          <v-btn type="submit" color="primary">
             <v-icon left>mdi-check</v-icon>
             <span>Save</span>
           </v-btn>
