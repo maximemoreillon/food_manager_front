@@ -11,6 +11,10 @@
         <v-icon>mdi-content-save</v-icon>
       </v-btn>
 
+      <v-btn icon @click="duplicate_meal_plan()" :loading="duplicating">
+        <v-icon>mdi-content-copy</v-icon>
+      </v-btn>
+
       <v-btn
         icon
         color="#c00000"
@@ -195,11 +199,12 @@ export default {
     search: "",
     foods: [],
 
-    // COuld be null at first
     meal_plan: null,
+
     loading: false,
     saving: false,
     deleting: false,
+    duplicating: false,
 
     thumbnail_size: "6em",
     snackbar: {
@@ -234,25 +239,22 @@ export default {
       const route = `/meal_plans/${this.meal_plan_id}`
 
       try {
-        const {data} = await this.axios.get(route)
-      this.meal_plan = data
-      if(!this.meal_plan.calories_target) await this.setCalorieTarget()
-
+        const { data } = await this.axios.get(route)
+        this.meal_plan = data
+        if (!this.meal_plan.calories_target) await this.setCalorieTarget()
       } catch (error) {
         alert("Failed to load meal plan")
-          console.error(error)
+        console.error(error)
       } finally {
         this.loading = false
       }
-      
-
     },
 
     async setCalorieTarget() {
       // No need to do anything if meal plan already has a calorie target
       if (this.meal_plan.calories_target) return
-      const {data} = await this.axios.get('/settings')
-      const {calories_target = 2500} = data
+      const { data } = await this.axios.get("/settings")
+      const { calories_target = 2500 } = data
       this.$set(this.meal_plan, "calories_target", calories_target)
     },
     get_foods() {
@@ -355,7 +357,42 @@ export default {
       this.$set(item, "quantity", quantity)
       this.$set(item, "food", food)
     },
+    async duplicate_meal_plan() {
+      const {
+        incomplete,
+        name,
+        user_id,
+        foods,
+        macronutrients,
+        calories,
+        calories_target,
+      } = this.meal_plan
 
+      if (!confirm(`Duplicate meal plan ${name}?`)) return
+
+      const body = {
+        name: `${name} (copy)`,
+        incomplete,
+        user_id,
+        foods,
+        macronutrients,
+        calories,
+        calories_target,
+      }
+
+      this.duplicating = true
+      try {
+        const { data } = await this.axios.post("/meal_plans", body)
+        this.$router.push({
+          name: "meal_plan",
+          params: { meal_plan_id: data._id },
+        })
+      } catch (error) {
+        alert(error)
+      } finally {
+        this.duplicating = false
+      }
+    },
   },
   computed: {
     meal_plan_id() {
