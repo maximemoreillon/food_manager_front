@@ -368,8 +368,6 @@ export default {
         calories_target,
       } = this.meal_plan
 
-      if (!confirm(`Duplicate meal plan ${name}?`)) return
-
       const body = {
         name: `${name} (copy)`,
         incomplete,
