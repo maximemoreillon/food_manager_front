@@ -358,6 +358,7 @@ export default {
       this.$set(item, "food", food)
     },
     async duplicate_meal_plan() {
+      if (!confirm(`Duplicate meal plan?`)) return
       const {
         incomplete,
         name,
