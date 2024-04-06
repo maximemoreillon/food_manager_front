@@ -30,7 +30,6 @@ export default {
           const { total, items } = data
           if (!total) return
           if (total.length > 1) return alert("Multiple matches found")
-          console.log(items[0])
           this.$emit("foodFound", { food: items[0], quantity: 1 })
         })
         .catch((error) => {
@@ -40,7 +39,6 @@ export default {
         .finally(() => {
           this.loading = false
         })
-      console.log(barcode)
     },
   },
 }
