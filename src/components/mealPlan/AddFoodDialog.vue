@@ -26,6 +26,7 @@
             <v-tabs-slider></v-tabs-slider>
             <v-tab> Registered foods </v-tab>
             <v-tab> New food </v-tab>
+            <v-tab> Barcode </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
@@ -49,6 +50,14 @@
               "
             />
           </v-tab-item>
+          <v-tab-item>
+            <BarcodeReaderTab
+              @foodFound="
+                $emit('submit', $event)
+                dialog = false
+              "
+            />
+          </v-tab-item>
         </v-tabs-items>
       </v-card-text>
     </v-card>
@@ -58,6 +67,7 @@
 <script lang="js">
 import RegisteredFoodsTable from './RegisteredFoodsTable.vue'
 import FoodForm from './FoodForm.vue'
+import BarcodeReaderTab from './BarcodeReaderTab.vue'
 export default {
     name: 'AddFoodDialog',
     props: {
@@ -65,13 +75,13 @@ export default {
     },
     components: {
         RegisteredFoodsTable,
-        FoodForm
+        FoodForm,
+        BarcodeReaderTab
     },
     data() {
         return {
             dialog: false,
             tab: null,
-
         }
     },
 

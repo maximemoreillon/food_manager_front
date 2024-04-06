@@ -1,0 +1,43 @@
+<template>
+  <StreamBarcodeReader @decode="onDecode" />
+</template>
+
+<script>
+import { StreamBarcodeReader } from "vue-barcode-reader"
+
+export default {
+  components: {
+    StreamBarcodeReader,
+  },
+  data() {
+    return {
+      loading: false,
+    }
+  },
+  methods: {
+    onDecode(barcode) {
+      this.loading = true
+
+      const params = { barcode }
+
+      this.axios
+        .get("/foods", { params })
+        .then(({ data }) => {
+          const { total, items } = data
+          if (!total) return
+          if (total.length > 1) return alert("Multiple matches found")
+          console.log(items[0])
+          this.$emit("foodFound", { food: items[0], quantity: 1 })
+        })
+        .catch((error) => {
+          alert("Failed to get foods")
+          console.error(error)
+        })
+        .finally(() => {
+          this.loading = false
+        })
+      console.log(barcode)
+    },
+  },
+}
+</script>

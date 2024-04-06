@@ -107,6 +107,14 @@
             </v-btn>
           </v-col>
         </v-row>
+        <v-row>
+          <v-col>
+            <v-text-field label="Barcode" v-model="food.barcode" />
+          </v-col>
+          <v-col cols="auto">
+            <BarcodeReaderDialog @decode="food.barcode = $event" />
+          </v-col>
+        </v-row>
       </v-card-text>
     </template>
 
@@ -123,9 +131,12 @@
 </template>
 
 <script>
+import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue"
 export default {
   name: "Foods",
-
+  components: {
+    BarcodeReaderDialog,
+  },
   data: () => ({
     food: null,
     vendors: [],
