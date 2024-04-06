@@ -24,9 +24,15 @@
         <template v-slot:extension>
           <v-tabs v-model="tab" align-with-title>
             <v-tabs-slider></v-tabs-slider>
-            <v-tab> Registered foods </v-tab>
-            <v-tab> New food </v-tab>
-            <v-tab> Barcode </v-tab>
+            <v-tab>
+              <v-icon>mdi-database</v-icon>
+            </v-tab>
+            <v-tab>
+              <v-icon>mdi-plus</v-icon>
+            </v-tab>
+            <v-tab>
+              <v-icon>mdi-barcode-scan</v-icon>
+            </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
@@ -52,6 +58,7 @@
           </v-tab-item>
           <v-tab-item>
             <BarcodeReaderTab
+              :active="dialog"
               @foodFound="
                 $emit('submit', $event)
                 dialog = false

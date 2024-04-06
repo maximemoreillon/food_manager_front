@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center" class="mt-4">
     <v-col cols="auto">
-      <StreamBarcodeReader @decode="onDecode" />
+      <StreamBarcodeReader @decode="onDecode" v-if="active" />
     </v-col>
   </v-row>
 </template>
@@ -17,6 +17,9 @@ export default {
     return {
       loading: false,
     }
+  },
+  props: {
+    active: Boolean,
   },
   methods: {
     onDecode(barcode) {
