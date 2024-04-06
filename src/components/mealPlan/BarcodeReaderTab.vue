@@ -1,5 +1,9 @@
 <template>
-  <StreamBarcodeReader @decode="onDecode" />
+  <v-row justify="center" class="mt-4">
+    <v-col cols="auto">
+      <StreamBarcodeReader @decode="onDecode" />
+    </v-col>
+  </v-row>
 </template>
 
 <script>

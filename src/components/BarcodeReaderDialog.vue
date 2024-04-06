@@ -7,11 +7,17 @@
     </template>
 
     <v-card>
-      <v-card-title> Barcode reader </v-card-title>
+      <v-toolbar flat>
+        <v-toolbar-title>Barcode reader</v-toolbar-title>
+        <v-spacer />
+        <v-btn icon @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-toolbar>
 
       <v-card-text>
-        <v-row align="center">
-          <v-col>
+        <v-row align="center" justify="center" class="mt-4">
+          <v-col cols="auto">
             <StreamBarcodeReader @decode="onDecode" />
           </v-col>
         </v-row>
