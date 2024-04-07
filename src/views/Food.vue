@@ -112,7 +112,7 @@
             <v-text-field label="Barcode" v-model="food.barcode" />
           </v-col>
           <v-col cols="auto">
-            <BarcodeReaderDialog @decode="food.barcode = $event" />
+            <BarcodeReaderDialog @decode="$set(food, 'barcode', $event)" />
           </v-col>
         </v-row>
       </v-card-text>
