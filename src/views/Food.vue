@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading" max-width="60rem" class="mx-auto">
+  <v-card :loading="loading" max-width="50rem" class="mx-auto">
     <template v-if="food && !loading">
       <v-toolbar flat>
         <v-btn icon :to="{ name: 'foods' }" exact>
@@ -109,10 +109,22 @@
         </v-row>
         <v-row>
           <v-col>
-            <v-text-field label="Barcode" v-model="food.barcode" />
-          </v-col>
-          <v-col cols="auto">
-            <BarcodeReaderDialog @decode="$set(food, 'barcode', $event)" />
+            <v-row>
+              <v-col>
+                <v-text-field label="Barcode" v-model="food.barcode" />
+              </v-col>
+              <v-col cols="auto">
+                <BarcodeReaderDialog @decode="$set(food, 'barcode', $event)" />
+              </v-col>
+            </v-row>
+            <v-row dense justify="center" v-if="food.barcode">
+              <v-col cols="auto">
+                <VueBarcode
+                  :value="food.barcode"
+                  :options="{ displayValue: false }"
+                />
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card-text>
@@ -132,10 +144,13 @@
 
 <script>
 import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue"
+import VueBarcode from "@chenfengyuan/vue-barcode"
+
 export default {
   name: "Foods",
   components: {
     BarcodeReaderDialog,
+    VueBarcode,
   },
   data: () => ({
     food: null,
