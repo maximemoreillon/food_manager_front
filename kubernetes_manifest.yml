@@ -21,8 +21,10 @@ spec:
             - name: VUE_APP_FOOD_MANAGER_API_URL
               value: https://api.food.home.maximemoreillon.com
           envFrom:
+            # - secretRef:
+            #     name: environment-variables
             - secretRef:
-                name: environment-variables
+                name: auth0-env
 
 ---
 apiVersion: v1
