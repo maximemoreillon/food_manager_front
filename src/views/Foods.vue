@@ -127,7 +127,8 @@ export default {
     image_src({ _id, image }) {
       if (!image) return require("@/assets/image-off.png")
       else {
-        const token = this.$cookies.get("jwt")
+        const token =
+          this.axios.defaults.headers.common["Authorization"]?.split(" ")[1]
         return `${VUE_APP_FOOD_MANAGER_API_URL}/foods/${_id}/thumbnail?jwt=${token}`
       }
     },
