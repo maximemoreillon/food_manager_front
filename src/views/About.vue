@@ -9,7 +9,7 @@
         hide-default-footer
         :itemsPerPage="-1"
         :headers="headers"
-        :items="services"
+        :items="envVars"
       />
     </v-card-text>
   </v-card>
@@ -17,11 +17,6 @@
 
 <script>
 import { version } from "@/../package.json"
-const {
-  VUE_APP_LOGIN_URL,
-  VUE_APP_IDENTIFICATION_URL,
-  VUE_APP_FOOD_MANAGER_API_URL,
-} = process.env
 
 export default {
   name: "About",
@@ -29,26 +24,29 @@ export default {
     return {
       version,
       headers: [
-        { text: "API", value: "name" },
-        { text: "URL", value: "url" },
+        { text: "Environment variable", value: "name" },
+        { text: "Value", value: "value" },
       ],
-      services: [
-        {
-          name: "Back-end",
-          url: VUE_APP_FOOD_MANAGER_API_URL,
-        },
-        {
-          name: "Login",
-          url: VUE_APP_LOGIN_URL,
-        },
-        {
-          name: "Identification",
-          url: VUE_APP_IDENTIFICATION_URL,
-        },
-      ],
+      envVars: [],
     }
   },
-  mounted() {},
+  mounted() {
+    const names = [
+      "VUE_APP_FOOD_MANAGER_API_URL",
+      "VUE_APP_LOGIN_URL",
+      "VUE_APP_IDENTIFICATION_URL",
+      "VUE_APP_OIDC_AUTHORITY",
+    ]
+
+    names.forEach((name) => {
+      const value = process.env[name]
+      if (value)
+        this.envVars.push({
+          name,
+          value,
+        })
+    })
+  },
   methods: {},
 }
 </script>
