@@ -69,7 +69,6 @@ export default {
   }),
   methods: {
     handleUserChanged(user) {
-      if (user.access_token) console.log(user.access_token)
       this.axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${user.access_token}`
