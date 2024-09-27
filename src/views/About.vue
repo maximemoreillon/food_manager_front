@@ -36,6 +36,7 @@ export default {
       "VUE_APP_LOGIN_URL",
       "VUE_APP_IDENTIFICATION_URL",
       "VUE_APP_OIDC_AUTHORITY",
+      "VUE_APP_OIDC_AUDIENCE",
     ]
 
     names.forEach((name) => {

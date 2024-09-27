@@ -28,6 +28,7 @@ const {
   VUE_APP_IDENTIFICATION_URL,
   VUE_APP_OIDC_AUTHORITY,
   VUE_APP_OIDC_CLIENT_ID,
+  VUE_APP_OIDC_AUDIENCE,
 } = process.env
 export default {
   name: "App",
@@ -42,11 +43,13 @@ export default {
       authenticate: true,
       login_url: VUE_APP_LOGIN_URL,
       identification_url: VUE_APP_IDENTIFICATION_URL,
-      oidc_authority: VUE_APP_OIDC_AUTHORITY,
-      oidc_client_id: VUE_APP_OIDC_CLIENT_ID,
-
-      main_class: "grey lighten-3",
-      footer_color: "grey lighten-3",
+      oidc: {
+        authority: VUE_APP_OIDC_AUTHORITY,
+        client_id: VUE_APP_OIDC_CLIENT_ID,
+        extraQueryParams: {
+          audience: VUE_APP_OIDC_AUDIENCE,
+        },
+      },
     },
     nav: [
       {
@@ -66,10 +69,10 @@ export default {
   }),
   methods: {
     handleUserChanged(user) {
-      if (user.id_token)
-        this.axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.id_token}`
+      if (user.access_token) console.log(user.access_token)
+      this.axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${user.access_token}`
     },
   },
 }
