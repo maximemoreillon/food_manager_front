@@ -1,5 +1,5 @@
 <template>
-  <AppTemplate :options="options" @user="handleUserChanged($event)">
+  <AppTemplate :options="options">
     <template v-slot:nav>
       <v-list dense nav>
         <v-list-item
@@ -67,14 +67,5 @@ export default {
       },
     ],
   }),
-  methods: {
-    handleUserChanged(user) {
-      if (!user) return
-      if (user.access_token)
-        this.axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user.access_token}`
-    },
-  },
 }
 </script>
