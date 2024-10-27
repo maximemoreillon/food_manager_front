@@ -2,8 +2,7 @@
   <v-dialog max-width="90vw" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" color="#c00000" dark>
-        <v-icon left>mdi-plus</v-icon>
-        <span>Add food</span>
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
     </template>
 
