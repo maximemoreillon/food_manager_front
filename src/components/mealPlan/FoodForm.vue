@@ -53,7 +53,7 @@
       </v-row>
 
       <v-row>
-        <v-col cols="auto">
+        <v-col cols="auto" v-if="openAiEnabled">
           <LabelParsing @parsed="handleParsedLabel" />
         </v-col>
         <v-spacer></v-spacer>
@@ -103,6 +103,7 @@ export default {
       quantity: 1,
       food: null,
       registeredFoods: [],
+      openAiEnabled: false,
       defaults: {
         name: "",
         serving: {
@@ -132,6 +133,7 @@ export default {
   mounted() {
     this.load_food()
     this.get_foods()
+    this.checkOpenAI()
   },
   methods: {
     load_food() {
@@ -153,6 +155,10 @@ export default {
           alert("Failed to get foods")
           console.error(error)
         })
+    },
+    async checkOpenAI() {
+      const { data } = await this.axios.get("/")
+      this.openAiEnabled = data.openAi
     },
     register_food() {
       this.registering = true
