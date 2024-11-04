@@ -1,9 +1,9 @@
 <template>
   <v-dialog max-width="30rem" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" color="#c00000" dark>
-        <v-icon left>mdi-label</v-icon>
-        <span>Parse label</span>
+      <v-btn v-bind="attrs" v-on="on" outlined>
+        <v-icon>mdi-label</v-icon>
+        <!-- <span>Parse label</span> -->
       </v-btn>
     </template>
 

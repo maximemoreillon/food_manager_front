@@ -8,17 +8,12 @@
 
     <v-card>
       <v-toolbar flat>
-        <v-row align="baseline">
-          <v-col>
-            <v-card-title>Add food</v-card-title>
-          </v-col>
-          <v-spacer />
-          <v-col cols="auto">
-            <v-btn icon @click="dialog = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+        <v-toolbar-title>Add food</v-toolbar-title>
+        <v-spacer />
+
+        <v-btn icon @click="dialog = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
 
         <template v-slot:extension>
           <v-tabs v-model="tab" align-with-title>
