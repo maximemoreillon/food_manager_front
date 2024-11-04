@@ -82,7 +82,7 @@ export default {
     components: {
         RegisteredFoodsTable,
         FoodForm,
-        BarcodeReaderTab
+        BarcodeReaderTab,
     },
     data() {
         return {

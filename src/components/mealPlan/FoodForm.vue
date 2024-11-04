@@ -52,7 +52,11 @@
         </v-col>
       </v-row>
 
-      <v-row justify="end">
+      <v-row>
+        <v-col cols="auto">
+          <LabelParsing @parsed="handleParsedLabel" />
+        </v-col>
+        <v-spacer></v-spacer>
         <v-col cols="auto" v-if="!isRegistered">
           <v-btn @click="register_food()" :loading="registering">
             <v-icon left>mdi-playlist-plus</v-icon>
@@ -81,11 +85,16 @@
 </template>
 
 <script>
+import LabelParsing from "./LabelParsing.vue"
+
 export default {
   name: "FoodForm",
   props: {
     item: Object,
     open: Boolean,
+  },
+  components: {
+    LabelParsing,
   },
   data() {
     return {
@@ -170,6 +179,13 @@ export default {
     submit() {
       this.$emit("submit", { quantity: this.quantity, food: { ...this.food } })
       this.reset_inputs()
+    },
+    handleParsedLabel(event) {
+      const { calories, protein, fat, carbohydrates } = event
+      this.food.serving.calories = calories
+      this.food.serving.macronutrients.fat = fat
+      this.food.serving.macronutrients.protein = protein
+      this.food.serving.macronutrients.carbohydrates = carbohydrates
     },
   },
   computed: {
