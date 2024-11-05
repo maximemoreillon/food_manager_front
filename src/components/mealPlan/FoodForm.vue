@@ -59,15 +59,11 @@
         <v-spacer></v-spacer>
         <v-col cols="auto" v-if="!isRegistered">
           <v-btn @click="register_food()" :loading="registering" outlined>
-            <!-- <v-icon left>mdi-playlist-plus</v-icon>
-            <span>Register</span> -->
             <v-icon>mdi-playlist-plus</v-icon>
           </v-btn>
         </v-col>
         <v-col cols="auto">
           <v-btn type="submit" color="primary">
-            <!-- <v-icon left>mdi-check</v-icon>
-            <span>Save</span> -->
             <v-icon>mdi-check</v-icon>
           </v-btn>
         </v-col>
@@ -189,7 +185,6 @@ export default {
       this.reset_inputs()
     },
     handleParsedLabel(event) {
-      console.log(event)
       const {
         calories,
         protein,
@@ -199,11 +194,11 @@ export default {
         servingUnit,
       } = event
       this.food.serving.calories = calories
+      this.food.serving.size = servingSize
+      this.food.serving.unit = servingUnit
       this.food.serving.macronutrients.fat = fat
       this.food.serving.macronutrients.protein = protein
       this.food.serving.macronutrients.carbohydrates = carbohydrates
-      this.food.serving.size = servingSize
-      this.food.serving.unit = servingUnit
     },
   },
   computed: {

@@ -3,7 +3,6 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" outlined>
         <v-icon>mdi-label</v-icon>
-        <!-- <span>Parse label</span> -->
       </v-btn>
     </template>
 
