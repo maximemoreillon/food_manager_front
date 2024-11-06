@@ -18,8 +18,9 @@
               :disabled="!image"
               @click="parseLabel()"
               :loading="imageUploading"
+              color="primary"
             >
-              <v-icon>mdi-upload</v-icon>
+              <v-icon>mdi-brain</v-icon>
             </v-btn>
           </v-col>
         </v-row>
