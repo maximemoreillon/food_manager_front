@@ -9,15 +9,17 @@
     @click:row="$emit('foodAdded', { food: $event, quantity: 1 })"
   >
     <template v-slot:top>
-      <v-container fluid>
-        <v-text-field
-          v-model="search"
-          clearable
-          append-icon="mdi-magnify"
-          label="Search"
-          hide-details
-        />
-      </v-container>
+      <v-row class="">
+        <v-col>
+          <v-text-field
+            v-model="search"
+            clearable
+            append-icon="mdi-magnify"
+            label="Search"
+            autofocus
+          />
+        </v-col>
+      </v-row>
     </template>
 
     <template v-slot:item.image="{ item }">
