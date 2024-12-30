@@ -9,7 +9,7 @@
     @click:row="$emit('foodAdded', { food: $event, quantity: 1 })"
   >
     <template v-slot:top>
-      <v-row class="">
+      <v-row class="mt-2">
         <v-col>
           <v-text-field
             v-model="search"
