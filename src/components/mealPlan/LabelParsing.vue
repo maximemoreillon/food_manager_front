@@ -1,7 +1,7 @@
 <template>
   <v-dialog max-width="30rem" v-model="dialog">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" :outlined="outlined">
+      <v-btn v-bind="attrs" v-on="on" :outlined="outlined" :icon="icon">
         <v-icon>mdi-label</v-icon>
       </v-btn>
     </template>
@@ -34,6 +34,10 @@ export default {
   name: "LabelParsing",
   props: {
     outlined: {
+      type: Boolean,
+      default: false,
+    },
+    icon: {
       type: Boolean,
       default: false,
     },

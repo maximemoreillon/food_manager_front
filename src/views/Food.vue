@@ -8,7 +8,7 @@
         <v-toolbar-title>{{ food.name || "unnnamed food" }}</v-toolbar-title>
         <v-spacer />
 
-        <LabelParsing @parsed="handleParsedLabel" />
+        <LabelParsing @parsed="handleParsedLabel" icon />
 
         <v-btn icon @click="update_food()" :loading="saving">
           <v-icon>mdi-content-save</v-icon>
@@ -301,7 +301,9 @@ export default {
       else {
         const token =
           this.axios.defaults.headers.common["Authorization"]?.split(" ")[1]
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image?jwt=${token}`
+        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${
+          this.food._id
+        }/image?jwt=${token}&dummy=${Math.random()}`
       }
     },
   },
