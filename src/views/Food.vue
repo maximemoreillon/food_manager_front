@@ -7,6 +7,9 @@
         </v-btn>
         <v-toolbar-title>{{ food.name || "unnnamed food" }}</v-toolbar-title>
         <v-spacer />
+
+        <LabelParsing @parsed="handleParsedLabel" />
+
         <v-btn icon @click="update_food()" :loading="saving">
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
@@ -145,12 +148,13 @@
 <script>
 import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue"
 import VueBarcode from "@chenfengyuan/vue-barcode"
-
+import LabelParsing from "../components/mealPlan/LabelParsing.vue"
 export default {
   name: "Foods",
   components: {
     BarcodeReaderDialog,
     VueBarcode,
+    LabelParsing,
   },
   data: () => ({
     food: null,
@@ -253,8 +257,13 @@ export default {
       formData.append("image", this.image)
       this.axios
         .post(`/foods/${this.food_id}/image`, formData)
-        .then(() => {
-          this.get_food()
+        .then(({ data }) => {
+          // TODO: don't do this as this overwrites unsaved edits
+          // this.get_food()
+          this.food.image = null
+          setTimeout(() => {
+            this.food.image = data.image
+          }, 10)
         })
         .catch((error) => {
           console.error(error)
@@ -265,6 +274,22 @@ export default {
     },
     delete_food_image() {
       this.food.image = null
+    },
+    handleParsedLabel(event) {
+      const {
+        calories,
+        protein,
+        fat,
+        carbohydrates,
+        servingSize,
+        servingUnit,
+      } = event
+      this.food.serving.calories = calories
+      this.food.serving.size = servingSize
+      this.food.serving.unit = servingUnit
+      this.food.serving.macronutrients.fat = fat
+      this.food.serving.macronutrients.protein = protein
+      this.food.serving.macronutrients.carbohydrates = carbohydrates
     },
   },
   computed: {

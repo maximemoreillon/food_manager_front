@@ -54,7 +54,7 @@
 
       <v-row>
         <v-col cols="auto" v-if="openAiEnabled">
-          <LabelParsing @parsed="handleParsedLabel" />
+          <LabelParsing @parsed="handleParsedLabel" outlined />
         </v-col>
         <v-spacer></v-spacer>
         <v-col cols="auto" v-if="!isRegistered">
