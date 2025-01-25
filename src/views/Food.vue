@@ -162,6 +162,7 @@ export default {
     loading: false,
     image: null,
     imageUploading: false,
+    imageRefresher: 0,
     saving: false,
     deleting: false,
     snackbar: {
@@ -257,13 +258,10 @@ export default {
       formData.append("image", this.image)
       this.axios
         .post(`/foods/${this.food_id}/image`, formData)
-        .then(({ data }) => {
+        .then(() => {
           // TODO: don't do this as this overwrites unsaved edits
           // this.get_food()
-          this.food.image = null
-          setTimeout(() => {
-            this.food.image = data.image
-          }, 10)
+          this.imageRefresher++
         })
         .catch((error) => {
           console.error(error)
@@ -301,9 +299,7 @@ export default {
       else {
         const token =
           this.axios.defaults.headers.common["Authorization"]?.split(" ")[1]
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${
-          this.food._id
-        }/image?jwt=${token}&dummy=${Math.random()}`
+        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image?jwt=${token}&refresher=${this.imageRefresher}`
       }
     },
   },
