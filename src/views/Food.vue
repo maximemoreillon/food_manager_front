@@ -146,9 +146,9 @@
 </template>
 
 <script>
-import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue"
-import VueBarcode from "@chenfengyuan/vue-barcode"
-import LabelParsing from "../components/mealPlan/LabelParsing.vue"
+import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue";
+import VueBarcode from "@chenfengyuan/vue-barcode";
+import LabelParsing from "../components/mealPlan/LabelParsing.vue";
 export default {
   name: "Foods",
   components: {
@@ -172,12 +172,12 @@ export default {
     },
   }),
   mounted() {
-    this.get_food()
-    this.get_vendors()
-    document.addEventListener("keydown", this.handle_keydown)
+    this.get_food();
+    this.get_vendors();
+    document.addEventListener("keydown", this.handle_keydown);
   },
   beforeDestroy() {
-    document.removeEventListener("keydown", this.handle_keydown)
+    document.removeEventListener("keydown", this.handle_keydown);
   },
 
   methods: {
@@ -186,92 +186,95 @@ export default {
 
       // CTRL S
       if (e.key === "s" && e.ctrlKey) {
-        e.preventDefault()
-        this.update_food()
+        e.preventDefault();
+        this.update_food();
       }
     },
 
     get_food() {
-      this.loading = true
+      this.loading = true;
       this.axios
         .get(`/foods/${this.food_id}`)
         .then(({ data }) => {
-          this.food = data
+          this.food = data;
         })
         .catch((error) => {
-          console.error(error)
+          console.error(error);
         })
         .finally(() => {
-          this.loading = false
-        })
+          this.loading = false;
+        });
     },
     get_vendors() {
       this.axios
         .get(`/foods/vendors`)
         .then(({ data }) => {
-          this.vendors = data
+          this.vendors = data;
         })
         .catch((error) => {
-          console.error(error)
-        })
+          console.error(error);
+        });
     },
     update_food() {
-      this.saving = true
+      this.saving = true;
       this.axios
         .patch(`/foods/${this.food_id}`, this.food)
         .then(() => {
-          this.snackbar.text = "Food saved"
-          this.snackbar.color = "success"
-          this.snackbar.show = true
+          this.snackbar.text = "Food saved";
+          this.snackbar.color = "success";
+          this.snackbar.show = true;
         })
         .catch((error) => {
-          console.error(error)
-          this.snackbar.text = "Food update failed"
-          this.snackbar.color = "error"
-          this.snackbar.show = true
+          console.error(error);
+          this.snackbar.text = "Food update failed";
+          this.snackbar.color = "error";
+          this.snackbar.show = true;
         })
         .finally(() => {
-          this.saving = false
-        })
+          this.saving = false;
+        });
     },
     delete_food() {
-      if (!confirm(`Delete ${this.food.name}?`)) return
-      this.deleting = true
+      if (!confirm(`Delete ${this.food.name}?`)) return;
+      this.deleting = true;
       this.axios
         .delete(`/foods/${this.food_id}`)
         .then(() => {
-          this.$router.push({ name: "foods" })
+          this.$router.push({ name: "foods" });
         })
         .catch((error) => {
-          console.error(error)
-          this.snackbar.text = "Food deletion failed"
-          this.snackbar.color = "error"
-          this.snackbar.show = true
+          console.error(error);
+          this.snackbar.text = "Food deletion failed";
+          this.snackbar.color = "error";
+          this.snackbar.show = true;
         })
         .finally(() => {
-          this.deleting = false
-        })
+          this.deleting = false;
+        });
     },
     upload_image() {
-      this.imageUploading = true
-      const formData = new FormData()
-      formData.append("image", this.image)
+      this.imageUploading = true;
+      const formData = new FormData();
+      formData.append("image", this.image);
       this.axios
         .post(`/foods/${this.food_id}/image`, formData)
-        .then(() => {
-          // TODO: don't do this as this overwrites unsaved edits
-          // this.get_food()
-          this.imageRefresher++
+        .then(({ data }) => {
+          const { image } = data;
+          this.food.image = null;
+          setTimeout(() => {
+            this.imageRefresher++;
+            this.food.image = image;
+          }, 10);
         })
         .catch((error) => {
-          console.error(error)
+          console.error(error);
         })
         .finally(() => {
-          this.imageUploading = false
-        })
+          this.imageUploading = false;
+        });
     },
     delete_food_image() {
-      this.food.image = null
+      this.food.image = null;
     },
     handleParsedLabel(event) {
       const {
@@ -281,27 +284,27 @@ export default {
         carbohydrates,
         servingSize,
         servingUnit,
-      } = event
-      this.food.serving.calories = calories
-      this.food.serving.size = servingSize
-      this.food.serving.unit = servingUnit
-      this.food.serving.macronutrients.fat = fat
-      this.food.serving.macronutrients.protein = protein
-      this.food.serving.macronutrients.carbohydrates = carbohydrates
+      } = event;
+      this.food.serving.calories = calories;
+      this.food.serving.size = servingSize;
+      this.food.serving.unit = servingUnit;
+      this.food.serving.macronutrients.fat = fat;
+      this.food.serving.macronutrients.protein = protein;
+      this.food.serving.macronutrients.carbohydrates = carbohydrates;
     },
   },
   computed: {
     food_id() {
-      return this.$route.params.food_id
+      return this.$route.params.food_id;
     },
     image_src() {
-      if (!this.food.image) return require("@/assets/image-off.png")
+      if (!this.food.image) return require("@/assets/image-off.png");
       else {
         const token =
-          this.axios.defaults.headers.common["Authorization"]?.split(" ")[1]
-        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image?jwt=${token}&refresher=${this.imageRefresher}`
+          this.axios.defaults.headers.common["Authorization"]?.split(" ")[1];
+        return `${process.env.VUE_APP_FOOD_MANAGER_API_URL}/foods/${this.food._id}/image?jwt=${token}&refresher=${this.imageRefresher}`;
       }
     },
   },
-}
+};
 </script>
