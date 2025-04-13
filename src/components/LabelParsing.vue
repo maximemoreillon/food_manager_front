@@ -11,7 +11,7 @@
       <v-card-text>
         <v-row align="center">
           <v-col>
-            <v-file-input v-model="image" label="image" />
+            <v-file-input v-model="image" label="image" accept="image/*" />
           </v-col>
           <v-col cols="auto">
             <v-btn
@@ -50,19 +50,20 @@ export default {
 
   methods: {
     async parseLabel() {
-      this.imageUploading = true
-      const formData = new FormData()
-      formData.append("image", this.image)
+      this.imageUploading = true;
+      const formData = new FormData();
+      formData.append("image", this.image);
       try {
-        const { data } = await this.axios.post(`/label`, formData)
-        this.$emit("parsed", data)
-        this.dialog = false
+        const { data } = await this.axios.post(`/label`, formData);
+        this.$emit("parsed", data);
+        this.dialog = false;
+        this.image = null;
       } catch (error) {
-        alert("Label parsing failed")
+        alert("Label parsing failed");
       } finally {
-        this.imageUploading = false
+        this.imageUploading = false;
       }
     },
   },
-}
+};
 </script>

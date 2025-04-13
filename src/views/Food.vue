@@ -148,7 +148,7 @@
 <script>
 import BarcodeReaderDialog from "../components/BarcodeReaderDialog.vue";
 import VueBarcode from "@chenfengyuan/vue-barcode";
-import LabelParsing from "../components/mealPlan/LabelParsing.vue";
+import LabelParsing from "@/components/LabelParsing.vue";
 export default {
   name: "Foods",
   components: {

@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import LabelParsing from "./LabelParsing.vue"
+import LabelParsing from "@/components/LabelParsing.vue";
 
 export default {
   name: "FoodForm",
@@ -119,70 +119,70 @@ export default {
         text: null,
         color: "green",
       },
-    }
+    };
   },
   watch: {
     open() {
-      this.load_food()
+      this.load_food();
     },
   },
   mounted() {
-    this.load_food()
-    this.get_foods()
-    this.checkOpenAI()
+    this.load_food();
+    this.get_foods();
+    this.checkOpenAI();
   },
   methods: {
     load_food() {
       if (this.item) {
         // Make a copy
-        this.food = JSON.parse(JSON.stringify(this.item.food))
-        this.quantity = this.item.quantity
+        this.food = JSON.parse(JSON.stringify(this.item.food));
+        this.quantity = this.item.quantity;
       } else {
-        this.reset_inputs()
+        this.reset_inputs();
       }
     },
     get_foods() {
       this.axios
         .get("/foods")
         .then(({ data }) => {
-          this.registeredFoods = data.items
+          this.registeredFoods = data.items;
         })
         .catch((error) => {
-          alert("Failed to get foods")
-          console.error(error)
-        })
+          alert("Failed to get foods");
+          console.error(error);
+        });
     },
     async checkOpenAI() {
-      const { data } = await this.axios.get("/")
-      this.openAiEnabled = data.openAi
+      const { data } = await this.axios.get("/");
+      this.openAiEnabled = data.openAi;
     },
     register_food() {
-      this.registering = true
+      this.registering = true;
       this.axios
         .post(`/foods`, this.food)
         .then(({ data }) => {
-          this.food = data
-          this.snackbar.text = "Food registered"
-          this.snackbar.show = true
-          this.snackbar.color = "green"
+          this.food = data;
+          this.snackbar.text = "Food registered";
+          this.snackbar.show = true;
+          this.snackbar.color = "green";
         })
         .catch((error) => {
-          console.error(error)
-          this.snackbar.text = "Food registration failed"
-          this.snackbar.show = true
-          this.snackbar.color = "red"
+          console.error(error);
+          this.snackbar.text = "Food registration failed";
+          this.snackbar.show = true;
+          this.snackbar.color = "red";
         })
         .finally(() => {
-          this.registering = false
-        })
+          this.registering = false;
+        });
     },
     reset_inputs() {
-      this.quantity = 1
-      this.food = JSON.parse(JSON.stringify(this.defaults))
+      this.quantity = 1;
+      this.food = JSON.parse(JSON.stringify(this.defaults));
     },
     submit() {
-      this.$emit("submit", { quantity: this.quantity, food: { ...this.food } })
-      this.reset_inputs()
+      this.$emit("submit", { quantity: this.quantity, food: { ...this.food } });
+      this.reset_inputs();
     },
     handleParsedLabel(event) {
       const {
@@ -192,20 +192,20 @@ export default {
         carbohydrates,
         servingSize,
         servingUnit,
-      } = event
-      this.food.serving.calories = calories
-      this.food.serving.size = servingSize
-      this.food.serving.unit = servingUnit
-      this.food.serving.macronutrients.fat = fat
-      this.food.serving.macronutrients.protein = protein
-      this.food.serving.macronutrients.carbohydrates = carbohydrates
+      } = event;
+      this.food.serving.calories = calories;
+      this.food.serving.size = servingSize;
+      this.food.serving.unit = servingUnit;
+      this.food.serving.macronutrients.fat = fat;
+      this.food.serving.macronutrients.protein = protein;
+      this.food.serving.macronutrients.carbohydrates = carbohydrates;
     },
   },
   computed: {
     isRegistered() {
-      if (!this.food) return false
-      return this.registeredFoods.some(({ _id }) => _id === this.food._id)
+      if (!this.food) return false;
+      return this.registeredFoods.some(({ _id }) => _id === this.food._id);
     },
   },
-}
+};
 </script>
