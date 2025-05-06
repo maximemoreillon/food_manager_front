@@ -15,8 +15,6 @@ spec:
       containers:
         - name: ${APPLICATION_NAME}
           image: ${CONTAINER_IMAGE_TAGGED}
-          ports:
-            - containerPort: 80
           env:
             - name: VUE_APP_FOOD_MANAGER_API_URL
               value: https://api.food.home.maximemoreillon.com
@@ -25,7 +23,6 @@ spec:
             #     name: environment-variables
             - secretRef:
                 name: auth0-env
-
 ---
 apiVersion: v1
 kind: Service
@@ -36,29 +33,30 @@ spec:
     - port: 80
   selector:
     app: ${APPLICATION_NAME}
-  type: ClusterIP
+  #type: ClusterIP
+  type: NodePort
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ${APPLICATION_NAME}
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/proxy-body-size: 5g
-    nginx/client_max_body_size: 5g
-spec:
-  tls:
-    - hosts:
-        - ${K8S_INGRESS_HOST}
-      secretName: ${APPLICATION_NAME}
-  rules:
-    - host: ${K8S_INGRESS_HOST}
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: ${APPLICATION_NAME}
-                port:
-                  number: 80
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: ${APPLICATION_NAME}
+#   annotations:
+#     cert-manager.io/cluster-issuer: letsencrypt
+#     nginx.ingress.kubernetes.io/proxy-body-size: 5g
+#     nginx/client_max_body_size: 5g
+# spec:
+#   tls:
+#     - hosts:
+#         - ${K8S_INGRESS_HOST}
+#       secretName: ${APPLICATION_NAME}
+#   rules:
+#     - host: ${K8S_INGRESS_HOST}
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: ${APPLICATION_NAME}
+#                 port:
+#                   number: 80
